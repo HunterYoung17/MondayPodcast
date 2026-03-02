@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAS Standings</title>
+    <style>
+        :root {
+            /* --- THEME: DARK MODE (RED & BLACK) --- */
+            --bg-color: #000000;       /* Pure Black Background */
+            --card-bg: #1a1a1a;        /* Dark Grey Card */
+            --card-border: #333333;    /* Subtle borders */
+            --text-main: #ffffff;      /* White Text */
+            --text-muted: #aaaaaa;     
+            
+            --primary-red: #E60000;    /* CAS Red */
+            --header-bg: #222222;      /* Header Background */
+            
+            --trend-up: #4ade80;       /* Bright Green */
+            --trend-down: #f87171;     /* Bright Red */
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 4px solid var(--primary-red);
+            background: var(--header-bg);
+            color: white;
+            border-radius: 8px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .header h1 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-red);
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.1;
+        }
+        .header h2 {
+            margin: 10px 0 5px 0;
+            color: #ffffff;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-size: 1rem;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* --- Layout Grid (Side by Side) --- */
+        .standings-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .division-wrapper {
+            flex: 1;
+            min-width: 550px;
+        }
+
+        /* --- Division Headers --- */
+        .division-title {
+            background: var(--primary-red);
+            color: #fff; /* White text on Red background */
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+
+        /* --- Table Styling --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            overflow: hidden;
+            margin-bottom: 10px;
+            border-top: 2px solid #444;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead { background-color: #2c2c2c; }
+
+        th {
+            color: var(--primary-red);
+            text-align: center;
+            padding: 14px 6px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            border-bottom: 1px solid #444;
+        }
+        th.team-header { text-align: left; padding-left: 14px; }
+
+        td {
+            padding: 12px 6px;
+            border-bottom: 1px solid var(--card-border);
+            vertical-align: middle;
+            font-size: 0.95rem;
+            text-align: center;
+            color: #eee;
+        }
+        td.team-data { text-align: left; padding-left: 14px; }
+
+        /* Dark Mode Alternating Rows */
+        tr:nth-child(even) { background-color: #222; }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- Team Cell --- */
+        .team-cell {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .team-logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 12px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid #444; /* Default border, JS updates this */
+        }
+
+        /* Stats */
+        .rank { font-weight: 900; font-size: 1.1rem; color: #666; width: 30px; }
+        .stat { font-weight: 500; }
+        
+        /* Highlight the Main Win % Column */
+        .pct-main { 
+            font-weight: 900; 
+            color: var(--primary-red); 
+            background: #252525; 
+            border-left: 1px solid #333;
+            border-right: 1px solid #333;
+        }
+
+        .diff-pos { color: var(--trend-up); font-weight: 600; }
+        .diff-neg { color: var(--trend-down); font-weight: 600; }
+        .trend-up { color: var(--trend-up); font-weight: bold; }
+        .trend-down { color: var(--trend-down); font-weight: bold; }
+        .trend-neutral { color: #555; }
+
+        #loading { text-align: center; padding: 40px; color: #888; font-style: italic; width: 100%; }
+
+        @media (max-width: 1150px) {
+            .division-wrapper {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <h1>Clutch Amateur Series</h1>
+            <h2>League Standings</h2>
+            <p>After Week 1</p>
+        </div>
+
+        <div class="standings-row">
+
+            <div class="division-wrapper">
+                <div class="division-title">American Division</div>
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="team-header">Team</th>
+                                    <th>Pct</th> <th>W</th> <th>L</th>
+                                    <th>Gm%</th> <th>GW</th>  <th>GL</th>
+                                    <th>Diff</th> <th>Trnd</th>
+                                </tr>
+                            </thead>
+                            <tbody id="american-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="division-wrapper">
+                <div class="division-title">International Division</div>
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="team-header">Team</th>
+                                    <th>Pct</th> <th>W</th> <th>L</th>
+                                    <th>Gm%</th> <th>GW</th> <th>GL</th>
+                                    <th>Diff</th> <th>Trnd</th>
+                                </tr>
+                            </thead>
+                            <tbody id="international-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="loading">Loading data...</div>
+
+    </div>
+
+    <script>
+        // ---------------------------------------------------------
+        // 1. CONFIGURATION
+        // ---------------------------------------------------------
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=776140404&single=true&output=csv"; 
+
+        // ---------------------------------------------------------
+        // 2. TEAM CONFIG (CAS Teams)
+        // ---------------------------------------------------------
+        const teamDatabase = {
+            // --- AMERICAN DIVISION ---
+            "BlackBears":  { division: "American", color: "#D2B48C" }, // Tan
+            "Cannons":     { division: "American", color: "#FF8C00" }, // Orange
+            "Wolfpack":    { division: "American", color: "#FF69B4" }, // Pink
+            "Conquerors":  { division: "American", color: "#8B4513" }, // Brown
+            "Astronauts":  { division: "American", color: "#663399" }, // Purple
+            "Surge":       { division: "American", color: "#0047AB" }, // Blue
+
+            // --- INTERNATIONAL DIVISION ---
+            "Prowlers":    { division: "International", color: "#FFD700" }, // Gold
+            "Skyhawks":    { division: "International", color: "#FF8C00" }, // Orange
+            "Behemoths":   { division: "International", color: "#008080" }, // Teal
+            "Copperheads": { division: "International", color: "#FFFF00" }, // Yellow
+            "Elephants":   { division: "International", color: "#FFFFFF" }, // White
+            "Shaman":      { division: "International", color: "#E60000" }, // Red
+            
+            // Fallback
+            "default":     { division: "American", color: "#333" }
+        };
+
+        // ---------------------------------------------------------
+        // 3. LOGIC
+        // ---------------------------------------------------------
+
+        function findTeamConfig(rawName) {
+            if (!rawName) return { config: teamDatabase["default"], officialName: "Unknown" };
+            
+            const cleanName = rawName.trim().toLowerCase();
+            const dbKeys = Object.keys(teamDatabase);
+            
+            for (let key of dbKeys) {
+                if (key.toLowerCase() === cleanName) {
+                    return { config: teamDatabase[key], officialName: key };
+                }
+            }
+            return { config: teamDatabase["default"], officialName: rawName };
+        }
+
+        async function init() {
+            const americanBody = document.getElementById('american-body');
+            const internationalBody = document.getElementById('international-body');
+            const loading = document.getElementById('loading');
+            
+            try {
+                const response = await fetch(SHEET_URL);
+                const csvText = await response.text();
+
+                // Parse CSV
+                const rows = csvText.trim().split('\n').map(r => r.split(','));
+                const data = rows.slice(1); // skip header
+
+                // Clear tables
+                americanBody.innerHTML = '';
+                internationalBody.innerHTML = '';
+
+                data.forEach(row => {
+                    if(row.length < 2) return;
+
+                    // CSV Order: Rank (0), Team (1), Pct (2), W (3), L (4), Gm% (5), GW (6), GL (7), Diff (8), Trend (9)
+                    const [rank, teamNameRaw, winPct, w, l, gamePct, gameW, gameL, diff, trend] = row.map(c => c ? c.trim() : "");
+                    
+                    // Filter out non-team rows (headers/empty/titles)
+                    if (!teamNameRaw || 
+                        teamNameRaw.toLowerCase().includes("standings") || 
+                        teamNameRaw.toLowerCase().includes("division")) {
+                        return;
+                    }
+
+                    const match = findTeamConfig(teamNameRaw);
+                    
+                    if (match.officialName === "Unknown") return; // Skip unknown rows
+
+                    const config = match.config;
+                    const teamName = match.officialName; 
+                    
+                    // Logo Folder: CASlogos
+                    const logoPath = `CASlogos/${teamName}.png`;
+
+                    // Logic: Trend Arrows
+                    let trendHTML = '<span class="trend-neutral">-</span>';
+                    const t = trend ? trend.toLowerCase() : "";
+                    if(t.includes('up')) trendHTML = '<span class="trend-up">▲</span>';
+                    if(t.includes('down')) trendHTML = '<span class="trend-down">▼</span>';
+
+                    // Logic: Diff Color
+                    const diffClass = (diff && diff.includes('-')) ? 'diff-neg' : 'diff-pos';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="rank">${rank}</td>
+                        <td class="team-data">
+                            <div class="team-cell">
+                                <img src="${logoPath}" class="team-logo" alt="${teamName}" style="border-color: ${config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'">
+                                ${teamName}
+                            </div>
+                        </td>
+                        <td class="stat pct-main">${winPct}</td>
+                        <td class="stat">${w}</td>
+                        <td class="stat">${l}</td>
+                        <td class="stat">${gamePct}</td>
+                        <td class="stat">${gameW}</td>
+                        <td class="stat">${gameL}</td>
+                        <td class="stat ${diffClass}">${diff}</td>
+                        <td class="stat">${trendHTML}</td>
+                    `;
+
+                    if(config.division === "International") {
+                        internationalBody.appendChild(tr);
+                    } else {
+                        americanBody.appendChild(tr);
+                    }
+                });
+
+                loading.style.display = 'none';
+
+            } catch (error) {
+                loading.innerHTML = "Error loading data. Check console for details.";
+                console.error(error);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

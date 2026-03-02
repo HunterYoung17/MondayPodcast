@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Topics Overlay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --gold-light: #FFD700;
+            --gold-dark: #B8860B;
+            --grey-dark: #2C2C2C;
+            --grey-light: #4f4f4f;
+            --text-color: #ffffff;
+            --topic-height: 80px;
+            --topic-gap: 20px;
+            --visible-height: 500px; 
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 1920px;
+            height: 1080px;
+            
+            /* --- CRITICAL CHANGE FOR WINDOW CAPTURE --- */
+            /* We use a distinct "Chroma Green" color here. */
+            background-color: #00b140; 
+
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- TOPICS COLUMN --- */
+        .topics-column {
+            width: 450px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 40px;
+            box-sizing: border-box;
+            background: transparent; 
+            position: relative;
+        }
+
+        /* The Gold Line */
+        .topics-column::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 100px;
+            bottom: 100px;
+            width: 4px;
+            background: linear-gradient(to bottom, transparent, var(--gold-dark), var(--gold-light), var(--gold-dark), transparent);
+            box-shadow: 0 0 10px var(--gold-dark);
+            z-index: 5;
+        }
+
+        .topic-window {
+            height: var(--visible-height);
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .topic-slider {
+            display: flex;
+            flex-direction: column;
+            gap: var(--topic-gap);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .topic {
+            height: var(--topic-height);
+            background: var(--grey-dark);
+            color: #888;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            border-radius: 0 10px 10px 0;
+            border-left: 6px solid var(--grey-light);
+            width: 80%;
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            flex-shrink: 0; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .topic.active {
+            width: 95%;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+            color: #000;
+            border-left: 6px solid white;
+            box-shadow: 10px 0 30px rgba(255, 215, 0, 0.3);
+            font-weight: bold;
+            text-shadow: 0 0 2px rgba(255,255,255,0.5);
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topics-column">
+        <div class="topic-window">
+            <div class="topic-slider" id="slider">
+                <div class="topic active">Intro</div>
+                <div class="topic">CCS Recap</div>
+                <div class="topic">CPL Recap</div>
+                <div class="topic">CAS Recap</div>
+                <div class="topic">CNL Recap</div>
+                <div class="topic">Player of the Week</div>
+                <div class="topic">Week 1 FA Moves</div>
+                <div class="topic">2v2 Tourney</div>
+                <div class="topic">Outro</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const channel = new BroadcastChannel('stream-control');
+        const slider = document.getElementById('slider');
+        const topics = document.querySelectorAll('.topic');
+        
+        let currentIndex = 0;
+        const slideAmount = 100;
+
+        function updateDisplay() {
+            slider.style.transform = `translateY(-${currentIndex * slideAmount}px)`;
+            topics.forEach(t => t.classList.remove('active'));
+            if(topics[currentIndex]) {
+                topics[currentIndex].classList.add('active');
+            }
+        }
+
+        function goNext() {
+            if (currentIndex < topics.length - 1) {
+                currentIndex++;
+                updateDisplay();
+            }
+        }
+
+        function goPrev() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateDisplay();
+            }
+        }
+
+        channel.onmessage = (event) => {
+            if (event.data === 'next') goNext();
+            if (event.data === 'prev') goPrev();
+        };
+
+        window.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' || event.code === 'Enter' || event.code === 'ArrowDown') {
+                event.preventDefault(); 
+                goNext();
+            }
+            if (event.code === 'ArrowUp') {
+                event.preventDefault();
+                goPrev();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CCS Recap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* COLORS */
+            --gold-color: #D4AF37;
+            --grey-color: #f0f0f0; /* Brighter grey for readability */
+            --card-bg: #141414;
+            --card-border: #333;
+            --score-bg: #000;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b0b0b; /* Deep black/grey background */
+            font-family: 'Rajdhani', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main-logo {
+            height: 120px; /* Adjust size */
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+            margin-bottom: 10px;
+        }
+
+        /* Fallback Text if Image Fails */
+        .logo-fallback {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gold-color);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            display: none; 
+        }
+
+        .sub-header {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: white;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            padding: 5px 40px;
+            border-radius: 4px;
+            border-bottom: 2px solid var(--gold-color);
+        }
+
+        /* --- GRID --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 25px;
+            width: 95%;
+            max-width: 1750px;
+            flex-grow: 1;
+            margin-bottom: 30px;
+        }
+
+        .series-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-top: 4px solid var(--gold-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+
+        /* Top Series Label */
+        .match-header {
+            font-size: 0.9rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #888;
+            font-weight: 700;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* --- SCOREBOARD LAYOUT --- */
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%; /* Fill the middle space */
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .team-container {
+            display: flex;
+            flex-direction: column; /* Stack Name under Logo */
+            align-items: center;
+            justify-content: center;
+            width: 35%; /* Fixed width for teams */
+            position: relative;
+            z-index: 2;
+        }
+
+        .team-logo {
+            height: 80px;
+            width: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            margin-bottom: 5px;
+        }
+
+        .team-name {
+            font-size: 1.6rem; /* Slightly smaller to fit */
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+            text-align: center;
+            width: 100%;
+            /* Prevent text disappearing */
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+        }
+
+        /* Colors */
+        .color-gold { color: var(--gold-color); text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        .color-white { color: var(--grey-color); text-shadow: 0 0 10px rgba(255,255,255, 0.2); }
+
+        /* Center Score Box */
+        .score-box {
+            background: var(--score-bg);
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: 2px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 10px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15); /* Gold Glow */
+            min-width: 140px;
+        }
+
+        .score-num {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .score-divider {
+            color: #444;
+            font-size: 2rem;
+            position: relative;
+            top: -3px;
+        }
+
+        /* --- MVP FOOTER --- */
+        .mvp-section {
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto; /* Push to bottom */
+            border-top: 1px solid #222;
+        }
+
+        .mvp-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .mvp-name {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: white; font-size: 1.5rem;
+            background: rgba(0,0,0,0.9);
+            padding: 20px; border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <img src="Clutch Competitor Series CCS.png" alt="CCS Logo" class="main-logo" onerror="document.querySelector('.logo-fallback').style.display='block'; this.style.display='none'">
+        <div class="logo-fallback">CLUTCH COMPETITOR SERIES</div>
+        
+        <div class="sub-header">Week 1 Recap</div>
+    </div>
+
+    <div id="loading">Loading Data...</div>
+    <div class="grid-container" id="mainGrid" style="display: none;"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        // *** YOUR SHEET LINK ***
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=0&single=true&output=csv'; 
+
+        function init() {
+            Papa.parse(SHEET_URL, {
+                download: true,
+                header: false,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.data.length === 0) {
+                        showError("No data found.");
+                        return;
+                    }
+                    renderCards(results.data);
+                },
+                error: function(err) {
+                    showError("Error loading Sheet.");
+                }
+            });
+        }
+
+        function showError(msg) {
+            document.getElementById('loading').innerHTML = `<span style="color:red;">${msg}</span>`;
+        }
+
+        function renderCards(data) {
+            const container = document.getElementById('mainGrid');
+            container.innerHTML = ''; 
+
+            let validCards = 0;
+
+            // Loop skipping headers
+            for(let i = 1; i < data.length; i++) {
+                const row = data[i];
+                if (validCards >= 6) break;
+
+                const teamA = row[0]; // Col A
+                const scoreA = row[1]; // Col B
+                const teamB = row[2]; // Col C
+                const scoreB = row[3]; // Col D
+                const mvp   = row[4]; // Col E (MVP)
+
+                if(!teamA) continue; 
+
+                validCards++;
+
+                const card = document.createElement('div');
+                card.className = 'series-card';
+
+                // Image Paths
+                const logoA = `CCSlogos/${teamA.trim()}.png`;
+                const logoB = `CCSlogos/${teamB.trim()}.png`;
+
+                // MVP Display
+                let mvpHtml = '';
+                if (mvp && mvp.trim() !== "") {
+                    mvpHtml = `
+                        <div class="mvp-section">
+                            <span class="mvp-label">Series MVP</span>
+                            <span class="mvp-name">${mvp}</span>
+                        </div>
+                    `;
+                } else {
+                     // Empty spacer
+                     mvpHtml = `<div class="mvp-section" style="visibility:hidden;"><span class="mvp-name">-</span></div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="match-header">Series ${validCards}</div>
+                    
+                    <div class="scoreboard">
+                        <div class="team-container">
+                            <img src="${logoA}" class="team-logo" onerror="this.style.opacity='0.2'">
+                            <div class="team-name color-gold">${teamA}</div>
+                        </div>
+                        
+                        <div class="score-box">
+                            <span class="score-num color-gold">${scoreA || 0}</span>
+                            <span class="score-divider">-</span>
+                            <span class="score-num color-white">${scoreB || 0}</span>
+                        </div>
+
+                        <div class="team-container">
+                            <img src="${logoB}" class="team-logo" onerror="this.style.opacity='0.2'">
+                            <div class="team-name color-white">${teamB}</div>
+                        </div>
+                    </div>
+
+                    ${mvpHtml}
+                `;
+
+                container.appendChild(card);
+            }
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('mainGrid').style.display = 'grid';
+        }
+
+        setInterval(init, 30000);
+        init();
+    </script>
+</body>
+</html>

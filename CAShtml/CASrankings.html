@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CAS Power Rankings</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --card-border: #333333;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --primary-red: #E60000; /* CAS Red */
+            --rank-col-width: 30px;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        .main-header { text-align: center; margin-bottom: 40px; border-bottom: 4px solid var(--primary-red); }
+        .main-header h1 { margin: 0; text-transform: uppercase; letter-spacing: 4px; color: var(--primary-red); font-size: 3rem; }
+        .main-header h2 { margin: 10px 0 0 0; color: #fff; text-transform: uppercase; font-size: 1.5rem; letter-spacing: 2px; }
+        .rankings-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+        .ranking-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; }
+        .ranker-header { background: var(--primary-red); color: #fff; padding: 15px; text-align: center; font-weight: 800; text-transform: uppercase; font-size: 1.2rem; }
+        .rank-row { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #222; height: 50px; }
+        .rank-row:nth-child(even) { background-color: #161616; }
+        .rank-num { font-weight: 900; color: #444; width: var(--rank-col-width); font-size: 1.2rem; text-align: center; margin-right: 5px; }
+        .team-info { display: flex; align-items: center; flex-grow: 1; overflow: hidden; }
+        .team-logo { width: 34px; height: 34px; object-fit: contain; margin-right: 12px; background: #000; border-radius: 50%; border: 2px solid #555; }
+        .team-name { font-weight: 700; font-size: 1rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <h1>Clutch Amateur Series</h1>
+            <h2>Official Power Rankings</h2>
+        </div>
+        <div class="rankings-grid" id="grid-container">
+            <div class="ranking-card"><div class="ranker-header">Sports</div><div id="list-sports"></div></div>
+            <div class="ranking-card"><div class="ranker-header">Ren</div><div id="list-ren"></div></div>
+            <div class="ranking-card"><div class="ranker-header">Cryptid</div><div id="list-cryptid"></div></div>
+            <div class="ranking-card"><div class="ranker-header">Burner</div><div id="list-burner"></div></div>
+            <div class="ranking-card"><div class="ranker-header">Penguin</div><div id="list-penguin"></div></div>
+        </div>
+    </div>
+    <script>
+        // *** PASTE YOUR CAS RANKINGS SHEET LINK HERE ***
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=1007173982&single=true&output=csv"; 
+
+        const teamDatabase = {
+            "BlackBears":  { color: "#D2B48C" },
+            "Cannons":     { color: "#FF8C00" },
+            "Wolfpack":    { color: "#FF69B4" },
+            "Conquerors":  { color: "#8B4513" },
+            "Astronauts":  { color: "#663399" },
+            "Surge":       { color: "#0047AB" },
+            "Prowlers":    { color: "#FFD700" },
+            "Skyhawks":    { color: "#FF8C00" },
+            "Behemoths":   { color: "#008080" },
+            "Copperheads": { color: "#FFFF00" },
+            "Elephants":   { color: "#FFFFFF" },
+            "Shaman":      { color: "#E60000" },
+            "default":     { color: "#555" }
+        };
+
+        function findTeamConfig(rawName) {
+            if (!rawName) return { config: teamDatabase["default"], officialName: "Unknown" };
+            const cleanName = rawName.trim().toLowerCase();
+            const dbKeys = Object.keys(teamDatabase);
+            for (let key of dbKeys) {
+                if (key.toLowerCase() === cleanName) return { config: teamDatabase[key], officialName: key };
+            }
+            return { config: teamDatabase["default"], officialName: rawName };
+        }
+
+        async function init() {
+            const columnIds = ["list-sports", "list-ren", "list-cryptid", "list-burner", "list-penguin"];
+            if (!SHEET_URL) { console.log("No Sheet URL"); return; }
+            const response = await fetch(SHEET_URL);
+            const csvText = await response.text();
+            const rows = csvText.trim().split('\n').map(r => r.split(','));
+            const data = rows.slice(1); 
+
+            data.forEach(row => {
+                if(row.length < 2) return;
+                const rank = row[0];
+                for (let i = 0; i < 5; i++) {
+                    const teamRaw = row[i+1];
+                    if (!teamRaw) continue;
+                    const match = findTeamConfig(teamRaw);
+                    const logoPath = `CASlogos/${match.officialName}.png`;
+                    const item = document.createElement('div');
+                    item.className = 'rank-row';
+                    item.innerHTML = `<div class="rank-num">${rank}</div><div class="team-info"><img src="${logoPath}" class="team-logo" style="border-color:${match.config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'"><span class="team-name">${match.officialName}</span></div>`;
+                    document.getElementById(columnIds[i]).appendChild(item);
+                }
+            });
+        }
+        init();
+    </script>
+</body>
+</html>

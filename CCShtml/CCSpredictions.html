@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCS Predictions</title>
+    <style>
+        :root {
+            /* --- THEME: DARK MODE --- */
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --card-border: #333333;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --primary-gold: #c5a059;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* --- Main Header --- */
+        .main-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid var(--primary-gold);
+        }
+        .main-header h1 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary-gold);
+            font-size: 3rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            line-height: 1;
+        }
+        .main-header h2 {
+            margin: 15px 0 0 0;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        /* --- Predictions Table --- */
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background: var(--card-bg);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        /* Header Row */
+        thead th {
+            background-color: #1a1a1a;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            padding: 20px 10px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border-bottom: 3px solid #000;
+            width: 13%;
+        }
+        thead th:first-child {
+            width: 15%;
+            text-align: left;
+            padding-left: 20px;
+            color: #fff;
+        }
+
+        /* Game Rows */
+        tbody tr {
+            border-bottom: 1px solid #222;
+            height: 90px;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #161616;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+        }
+
+        /* Matchup Column Styles */
+        .matchup-cell {
+            text-align: left;
+            padding-left: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #ddd;
+            text-transform: uppercase;
+        }
+
+        /* Pick Cell Styles */
+        .pick-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .winner-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .team-logo {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid #555;
+        }
+
+        .team-name {
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .score-row {
+            font-weight: 400;
+            font-size: 0.95rem;
+            color: var(--primary-gold); /* Gold color for score */
+            letter-spacing: 1px;
+        }
+
+        /* --- Points Row Styles --- */
+        .points-row {
+            background-color: var(--primary-gold) !important;
+            height: 80px;
+        }
+        .points-row td {
+            color: #000;
+            font-weight: 900;
+            font-size: 1.8rem;
+            border-bottom: none;
+        }
+        .points-label {
+            text-align: left;
+            padding-left: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.5rem !important;
+        }
+
+        /* Loading */
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="main-header">
+            <h1>Clutch Competitor Series</h1>
+            <h2>Week 2 Predictions</h2>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Matchup</th>
+                        <th>Sports</th>
+                        <th>Ren</th>
+                        <th>Cryptid</th>
+                        <th>Burner</th>
+                        <th>Penguin</th>
+                        <th>Chat</th>
+                    </tr>
+                </thead>
+                <tbody id="predictions-body">
+                    </tbody>
+            </table>
+            <div id="loading">Loading Data...</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ---------------------------------------------------------
+        // 1. CONFIGURATION
+        // ---------------------------------------------------------
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=1574501881&single=true&output=csv";
+
+        // ---------------------------------------------------------
+        // 2. TEAM DATABASE
+        // ---------------------------------------------------------
+        const teamDatabase = {
+            "Ninjas":    { color: "#000000", border: "#FFD700" },
+            "Shockwave": { color: "#0047AB", border: "#FFFFFF" },
+            "Samurai":   { color: "#DC143C", border: "#DC143C" },
+            "Zebras":    { color: "#FFFFFF", border: "#FFFFFF" },
+            "Blasters":  { color: "#FF8C00", border: "#FF8C00" },
+            "Stars":     { color: "#663399", border: "#FFFFFF" },
+            "Howlers":   { color: "#E05297", border: "#E05297" },
+            "Vipers":    { color: "#000080", border: "#FFD700" },
+            "Pirates":   { color: "#8B4513", border: "#FFFFFF" },
+            "Flyers":    { color: "#008000", border: "#008000" },
+            "Moose":     { color: "#D2B48C", border: "#556B2F" },
+            "Anglers":   { color: "#008080", border: "#008080" },
+            
+            "default":   { color: "#333", border: "#555" }
+        };
+
+        // ---------------------------------------------------------
+        // 3. LOGIC
+        // ---------------------------------------------------------
+
+        function findTeamConfig(rawName) {
+            if (!rawName) return { config: teamDatabase["default"], officialName: "Unknown" };
+            const cleanName = rawName.trim().toLowerCase();
+            const dbKeys = Object.keys(teamDatabase);
+            for (let key of dbKeys) {
+                if (key.toLowerCase() === cleanName) {
+                    return { config: teamDatabase[key], officialName: key };
+                }
+            }
+            return { config: teamDatabase["default"], officialName: rawName };
+        }
+
+        // Helper to parse "TeamName Score"
+        function parsePick(cellContent) {
+            if (!cellContent) return { team: "", score: "" };
+            const content = cellContent.trim();
+            const lastSpaceIndex = content.lastIndexOf(' ');
+            if (lastSpaceIndex === -1) {
+                return { team: content, score: "" };
+            }
+            const team = content.substring(0, lastSpaceIndex);
+            const score = content.substring(lastSpaceIndex + 1);
+            return { team, score };
+        }
+
+        async function init() {
+            const tbody = document.getElementById('predictions-body');
+            const loading = document.getElementById('loading');
+            
+            try {
+                let csvText = "";
+                if (SHEET_URL) {
+                    const response = await fetch(SHEET_URL);
+                    csvText = await response.text();
+                }
+
+                const rows = csvText.trim().split('\n').map(r => r.split(','));
+                const data = rows.slice(1); // skip header
+
+                tbody.innerHTML = ''; // Clear loading
+
+                // 1. Process Spreadsheet Data (Matchups)
+                data.forEach(row => {
+                    if(row.length < 2) return;
+
+                    const matchupName = row[0].trim();
+                    
+                    // Skip if accidentally processing a points row from sheet
+                    if (matchupName.toLowerCase().includes("points")) return;
+
+                    const tr = document.createElement('tr');
+                    let html = `<td class="matchup-cell">${matchupName}</td>`;
+
+                    // Loop through Predictors (Cols 1-6)
+                    for (let i = 1; i <= 6; i++) {
+                        const rawCell = row[i];
+                        if (!rawCell || rawCell.trim() === "") {
+                            html += `<td>-</td>`;
+                            continue;
+                        }
+
+                        // Parse "TeamName Score"
+                        const { team, score } = parsePick(rawCell);
+                        const match = findTeamConfig(team);
+                        const config = match.config;
+                        const officialName = match.officialName;
+                        const logoPath = `CCSlogos/${officialName}.png`;
+
+                        html += `
+                            <td>
+                                <div class="pick-container">
+                                    <div class="winner-row">
+                                        <img src="${logoPath}" class="team-logo" style="border-color:${config.border}" onerror="this.src='https://placehold.co/40/333/fff?text=?'">
+                                        <span class="team-name">${officialName}</span>
+                                    </div>
+                                    <div class="score-row">${score}</div>
+                                </div>
+                            </td>
+                        `;
+                    }
+
+                    tr.innerHTML = html;
+                    tbody.appendChild(tr);
+                });
+
+                // 2. Manually Add Points Row at the Bottom
+                const pointsTr = document.createElement('tr');
+                pointsTr.className = 'points-row';
+                let pointsHtml = `<td class="points-label">Points</td>`;
+                
+                // Add 6 columns of "0"
+                for (let i = 0; i < 6; i++) {
+                    pointsHtml += `<td>0</td>`;
+                }
+                
+                pointsTr.innerHTML = pointsHtml;
+                tbody.appendChild(pointsTr);
+
+                loading.style.display = 'none';
+
+            } catch (error) {
+                loading.innerHTML = "Error loading data.";
+                console.error(error);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

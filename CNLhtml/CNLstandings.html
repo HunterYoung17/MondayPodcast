@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNL Standings</title>
+    <style>
+        :root {
+            /* --- THEME: DARK MODE (BLUE & GREY) --- */
+            --bg-color: #000000;
+            --card-bg: #1a1a1a;
+            --card-border: #333333;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            
+            --primary-blue: #007bff;
+            --header-bg: #222222;
+            
+            --trend-up: #4ade80;
+            --trend-down: #f87171;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 4px solid var(--primary-blue);
+            background: var(--header-bg);
+            color: white;
+            border-radius: 8px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .header h1 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.1;
+        }
+        .header h2 {
+            margin: 10px 0 5px 0;
+            color: #ffffff;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-size: 1rem;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* --- Layout Grid --- */
+        .standings-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .division-wrapper {
+            flex: 1;
+            min-width: 550px;
+        }
+
+        .division-title {
+            background: var(--primary-blue);
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+
+        /* --- Table Styling --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            overflow: hidden;
+            margin-bottom: 10px;
+            border-top: 2px solid #444;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead { background-color: #2c2c2c; }
+
+        th {
+            color: var(--primary-blue);
+            text-align: center;
+            padding: 14px 6px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            border-bottom: 1px solid #444;
+        }
+        th.team-header { text-align: left; padding-left: 14px; }
+
+        td {
+            padding: 12px 6px;
+            border-bottom: 1px solid var(--card-border);
+            vertical-align: middle;
+            font-size: 0.95rem;
+            text-align: center;
+            color: #eee;
+        }
+        td.team-data { text-align: left; padding-left: 14px; }
+
+        tr:nth-child(even) { background-color: #222; }
+        tr:last-child td { border-bottom: none; }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .team-logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 12px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid #444;
+        }
+
+        .rank { font-weight: 900; font-size: 1.1rem; color: #666; width: 30px; }
+        .stat { font-weight: 500; }
+        .pct-main { 
+            font-weight: 900; 
+            color: var(--primary-blue); 
+            background: #252525; 
+            border-left: 1px solid #333;
+            border-right: 1px solid #333;
+        }
+
+        .diff-pos { color: var(--trend-up); font-weight: 600; }
+        .diff-neg { color: var(--trend-down); font-weight: 600; }
+        .trend-up { color: var(--trend-up); font-weight: bold; }
+        .trend-down { color: var(--trend-down); font-weight: bold; }
+        .trend-neutral { color: #555; }
+
+        #loading { text-align: center; padding: 40px; color: #888; font-style: italic; width: 100%; }
+        #error-msg { text-align: center; padding: 20px; color: #f87171; display: none; }
+
+        @media (max-width: 1150px) {
+            .division-wrapper { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <h1>Clutch Novice League</h1>
+            <h2>League Standings</h2>
+            <p>After Week 1</p>
+        </div>
+
+        <div class="standings-row">
+            <div class="division-wrapper">
+                <div class="division-title">American Division</div>
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="team-header">Team</th>
+                                    <th>Pct</th> <th>W</th> <th>L</th>
+                                    <th>Gm%</th> <th>GW</th>  <th>GL</th>
+                                    <th>Diff</th> <th>Trnd</th>
+                                </tr>
+                            </thead>
+                            <tbody id="american-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="division-wrapper">
+                <div class="division-title">International Division</div>
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="team-header">Team</th>
+                                    <th>Pct</th> <th>W</th> <th>L</th>
+                                    <th>Gm%</th> <th>GW</th> <th>GL</th>
+                                    <th>Diff</th> <th>Trnd</th>
+                                </tr>
+                            </thead>
+                            <tbody id="international-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="loading">Loading data...</div>
+        <div id="error-msg"></div>
+
+    </div>
+
+    <script>
+        // ---------------------------------------------------------
+        // 1. CONFIGURATION
+        // ---------------------------------------------------------
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=1920673402&single=true&output=csv"; 
+
+        // ---------------------------------------------------------
+        // 2. TEAM CONFIG (CNL Teams)
+        // ---------------------------------------------------------
+        const teamDatabase = {
+            // "aliases" allows the sheet to use a different name (e.g. TIMBERWOLVE)
+            // while keeping the official name (Timberwolves) for the Logo File.
+            
+            // --- AMERICAN DIVISION ---
+            "Sound":        { division: "American", color: "#0047AB" },
+            "Ballistics":   { division: "American", color: "#FF8C00" },
+            "Rovers":       { division: "American", color: "#663399" },
+            "Timberwolves": { division: "American", color: "#FF69B4", aliases: ["TIMBERWOLVE"] }, 
+            "Shipwreck":    { division: "American", color: "#8B4513" },
+            "Ducks":        { division: "American", color: "#D2B48C" },
+
+            // --- INTERNATIONAL DIVISION ---
+            "Thieves":      { division: "International", color: "#FFD700" },
+            "Bushido":       { division: "International", color: "#E60000", aliases: ["BUSHIDO"] },
+            "Rhinos":       { division: "International", color: "#FFFFFF" },
+            "Anacondas":    { division: "International", color: "#FFFF00" },
+            "Redwings":     { division: "International", color: "#008000" },
+            "Leviathans":   { division: "International", color: "#008080" },
+            
+            "default":      { division: "American", color: "#333" }
+        };
+
+        // ---------------------------------------------------------
+        // 3. LOGIC
+        // ---------------------------------------------------------
+
+        function findTeamConfig(rawName) {
+            if (!rawName) return { config: teamDatabase["default"], officialName: "Unknown" };
+            
+            // Remove quotes if present and trim
+            const cleanName = rawName.replace(/["']/g, "").trim().toLowerCase();
+            const dbKeys = Object.keys(teamDatabase);
+            
+            for (let key of dbKeys) {
+                const config = teamDatabase[key];
+                
+                // 1. Check exact key match
+                if (key.toLowerCase() === cleanName) {
+                    return { config: config, officialName: key };
+                }
+                // 2. Check Aliases (e.g. TIMBERWOLVE -> Timberwolves)
+                if (config.aliases) {
+                    for (let alias of config.aliases) {
+                        if (alias.toLowerCase() === cleanName) {
+                            return { config: config, officialName: key };
+                        }
+                    }
+                }
+            }
+            return { config: teamDatabase["default"], officialName: "Unknown" };
+        }
+
+        async function init() {
+            const americanBody = document.getElementById('american-body');
+            const internationalBody = document.getElementById('international-body');
+            const loading = document.getElementById('loading');
+            const errorMsg = document.getElementById('error-msg');
+            
+            try {
+                const response = await fetch(SHEET_URL);
+                if (!response.ok) throw new Error("Failed to fetch sheet.");
+                const csvText = await response.text();
+
+                const rows = csvText.trim().split('\n').map(r => r.split(','));
+                const data = rows.slice(1); 
+
+                americanBody.innerHTML = '';
+                internationalBody.innerHTML = '';
+                let rowsProcessed = 0;
+
+                data.forEach(row => {
+                    if(row.length < 2) return;
+
+                    // SMART COLUMN DETECTOR
+                    let teamName = "Unknown";
+                    let config = null;
+                    let statsStart = 0; 
+                    let rank = "-";
+
+                    // Check Column B (Index 1) - Most likely based on your screenshot
+                    let check1 = findTeamConfig(row[1]);
+                    if (check1.officialName !== "Unknown") {
+                        teamName = check1.officialName;
+                        config = check1.config;
+                        rank = row[0];
+                        statsStart = 2; 
+                    } 
+                    // Fallback to Column A (Index 0)
+                    else {
+                        let check0 = findTeamConfig(row[0]);
+                        if (check0.officialName !== "Unknown") {
+                            teamName = check0.officialName;
+                            config = check0.config;
+                            rank = "-"; 
+                            statsStart = 1; 
+                        }
+                    }
+
+                    if (teamName === "Unknown") return; // Skip title rows/headers
+
+                    rowsProcessed++;
+
+                    // Extract Data
+                    const winPct = row[statsStart] ? row[statsStart].trim() : "";
+                    const w      = row[statsStart+1] ? row[statsStart+1].trim() : "";
+                    const l      = row[statsStart+2] ? row[statsStart+2].trim() : "";
+                    const gamePct= row[statsStart+3] ? row[statsStart+3].trim() : "";
+                    const gameW  = row[statsStart+4] ? row[statsStart+4].trim() : "";
+                    const gameL  = row[statsStart+5] ? row[statsStart+5].trim() : "";
+                    const diff   = row[statsStart+6] ? row[statsStart+6].trim() : "";
+                    const trend  = row[statsStart+7] ? row[statsStart+7].trim() : "";
+
+                    const logoPath = `CNLlogos/${teamName}.png`;
+
+                    // HTML Generation
+                    let trendHTML = '<span class="trend-neutral">-</span>';
+                    const t = trend ? trend.toLowerCase() : "";
+                    if(t.includes('up')) trendHTML = '<span class="trend-up">▲</span>';
+                    if(t.includes('down')) trendHTML = '<span class="trend-down">▼</span>';
+
+                    const diffClass = (diff && diff.includes('-')) ? 'diff-neg' : 'diff-pos';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="rank">${rank}</td>
+                        <td class="team-data">
+                            <div class="team-cell">
+                                <img src="${logoPath}" class="team-logo" alt="${teamName}" style="border-color: ${config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'">
+                                ${teamName}
+                            </div>
+                        </td>
+                        <td class="stat pct-main">${winPct}</td>
+                        <td class="stat">${w}</td>
+                        <td class="stat">${l}</td>
+                        <td class="stat">${gamePct}</td>
+                        <td class="stat">${gameW}</td>
+                        <td class="stat">${gameL}</td>
+                        <td class="stat ${diffClass}">${diff}</td>
+                        <td class="stat">${trendHTML}</td>
+                    `;
+
+                    if(config.division === "International") {
+                        internationalBody.appendChild(tr);
+                    } else {
+                        americanBody.appendChild(tr);
+                    }
+                });
+
+                loading.style.display = 'none';
+                if (rowsProcessed === 0) {
+                    errorMsg.style.display = 'block';
+                    errorMsg.innerHTML = "Connected, but no team names matched.<br>Check spelling in sheet (e.g. TIMBERWOLVE vs Timberwolves).";
+                }
+
+            } catch (error) {
+                loading.style.display = 'none';
+                errorMsg.style.display = 'block';
+                errorMsg.innerHTML = "Error: " + error.message;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCS 5 Minute Timer</title>
+    <style>
+        /* --- RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- THE BOUNDARY BOX --- */
+        #game-box {
+            position: relative;
+            width: 85vw;  
+            height: 85vh; 
+            /* CHANGED: Border is now Gold/Yellow */
+            border: 8px solid #D4AF37; 
+            border-radius: 20px;
+            /* Cool tech background pattern */
+            background: 
+                radial-gradient(circle at center, rgba(60, 60, 60, 0.8) 0%, rgba(20, 20, 20, 1) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 1px, #222 1px, #222 2px);
+            background-size: cover;
+            /* CHANGED: Box shadow now glows Gold/Yellow */
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), inset 0 0 50px rgba(0,0,0,0.8);
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- TEXT CONTAINER (Centers Title & Timer) --- */
+        .content-wrapper {
+            z-index: 1; /* Behind the bouncer */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Space between title and timer */
+        }
+
+        /* --- THE TITLE --- */
+        #title {
+            color: #D4AF37; /* Gold */
+            font-size: 4vw;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 0px #000, 0 0 20px rgba(212, 175, 55, 0.4);
+            margin-bottom: 20px;
+        }
+
+        /* --- THE TIMER --- */
+        #timer {
+            color: #eee; /* White/Grey for contrast */
+            font-size: 10vw; 
+            line-height: 1;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* --- THE BOUNCER --- */
+        #bouncer {
+            position: absolute;
+            top: 0; 
+            left: 0;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid #D4AF37; /* Gold border */
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5); /* Glowing Gold Effect */
+            background-color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10; /* Always on top */
+            will-change: transform;
+        }
+
+        #bouncer img {
+            width: 75%;
+            height: 75%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-box">
+        
+        <div class="content-wrapper">
+            <div id="title">Clutch Competitor Series</div>
+            <div id="timer">05:00</div>
+        </div>
+        
+        <div id="bouncer">
+            <img src="CCS.png" alt="CCS" onerror="this.style.display='none'; this.parentElement.innerText='CCS'"> 
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const bouncer = document.getElementById('bouncer');
+        const gameBox = document.getElementById('game-box');
+        const ballSize = 130; 
+        
+        // Initial Velocity
+        let dx = 4;
+        let dy = 4;
+
+        // Start Position (Center of the BOX)
+        let x = (gameBox.clientWidth / 2) - (ballSize / 2);
+        let y = (gameBox.clientHeight / 2) - (ballSize / 2);
+
+        function animate() {
+            // 1. Get current size of the container
+            const boxWidth = gameBox.clientWidth;
+            const boxHeight = gameBox.clientHeight;
+
+            // 2. Update Position
+            x += dx;
+            y += dy;
+
+            // 3. Collision Detection (Bounce off walls)
+            
+            // Right Wall
+            if (x + ballSize >= boxWidth) {
+                x = boxWidth - ballSize;
+                dx = -dx;
+            } 
+            // Left Wall
+            else if (x <= 0) {
+                x = 0;
+                dx = -dx;
+            }
+
+            // Bottom Wall
+            if (y + ballSize >= boxHeight) {
+                y = boxHeight - ballSize;
+                dy = -dy;
+            } 
+            // Top Wall
+            else if (y <= 0) {
+                y = 0;
+                dy = -dy;
+            }
+
+            // 4. Apply Position
+            bouncer.style.transform = `translate(${x}px, ${y}px)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- TIMER LOGIC ---
+        let timeLeft = 5 * 60; 
+        const timerElement = document.getElementById('timer');
+
+        const timerInterval = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerElement.textContent = `${minutes}:${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerElement.textContent = "0:00";
+            } else {
+                timeLeft--;
+            }
+        }, 1000);
+
+        // Start Animation
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

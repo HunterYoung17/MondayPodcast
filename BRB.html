@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCS Be Right Back</title>
+    <style>
+        /* --- RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- THE BOUNDARY BOX --- */
+        #game-box {
+            position: relative;
+            width: 85vw;  
+            height: 85vh; 
+            /* Gold/Yellow Border */
+            border: 8px solid #D4AF37; 
+            border-radius: 20px;
+            /* Cool tech background pattern */
+            background: 
+                radial-gradient(circle at center, rgba(60, 60, 60, 0.8) 0%, rgba(20, 20, 20, 1) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 1px, #222 1px, #222 2px);
+            background-size: cover;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), inset 0 0 50px rgba(0,0,0,0.8);
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- TEXT CONTAINER --- */
+        .content-wrapper {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* --- TOP BRANDING --- */
+        #top-title {
+            color: #D4AF37; /* Gold */
+            font-size: 3vw;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 0px #000, 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- MAIN STATUS --- */
+        #main-message {
+            color: #eee; 
+            font-size: 8vw; 
+            line-height: 1;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+            margin: 20px 0;
+        }
+
+        /* --- SPECIFIC EVENT (ORANGE) --- */
+        #sub-message {
+            color: #FF8C00; /* Dark Orange */
+            font-size: 3vw;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000, 0 0 15px rgba(255, 140, 0, 0.6); /* Orange Glow */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-box">
+        
+        <div class="content-wrapper">
+            <div id="top-title">Clutch Competitor Series</div>
+            <div id="main-message">Be Right Back</div>
+            <div id="sub-message">Clutch Prospect League Draft Up Next</div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

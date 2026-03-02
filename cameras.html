@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cameras Overlay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --gold-light: #FFD700;
+            --gold-dark: #B8860B;
+            --text-color: #ffffff;
+            --grey-dark: #2C2C2C;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1920px;
+            height: 1080px;
+            background-color: transparent;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: flex-end; 
+        }
+
+        /* --- CAMERAS COLUMN --- */
+        .cameras-column {
+            width: 1470px; /* 1920 - 450 (Topic width) */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .cam-row-top {
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            align-items: center;
+        }
+
+        .cam-row-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 150px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .cam-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px; 
+        }
+
+        .cam-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: 3px solid var(--gold-dark);
+            background: rgba(44, 44, 44, 0.5);
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.2);
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .cam-frame::after {
+            content: '';
+            position: absolute;
+            top: -5px; right: -5px;
+            width: 30px; height: 30px;
+            border-top: 4px solid var(--gold-light);
+            border-right: 4px solid var(--gold-light);
+        }
+        .cam-frame::before {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: -5px;
+            width: 30px; height: 30px;
+            border-bottom: 4px solid var(--gold-light);
+            border-left: 4px solid var(--gold-light);
+        }
+
+        .cam-label {
+            margin-top: 15px;
+            font-size: 1.4rem;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.8), transparent);
+            padding: 8px 40px;
+            border-bottom: 2px solid var(--gold-dark);
+            font-family: 'Cinzel', serif;
+            text-shadow: 2px 2px 5px black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cameras-column">
+        <div class="cam-row-top">
+            <div class="cam-box">
+                <div class="cam-frame"></div>
+                <div class="cam-label">Sports</div>
+            </div>
+            <div class="cam-box">
+                <div class="cam-frame"></div>
+                <div class="cam-label">Burner</div>
+            </div>
+            <div class="cam-box">
+                <div class="cam-frame"></div>
+                <div class="cam-label">Penguin</div>
+            </div>
+        </div>
+
+        <div class="cam-row-bottom">
+            <div class="cam-box">
+                <div class="cam-frame"></div>
+                <div class="cam-label">Ren</div>
+            </div>
+            <div class="cam-box">
+                <div class="cam-frame"></div>
+                <div class="cam-label">Cryptid</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wireless Transmitter
+        const channel = new BroadcastChannel('stream-control');
+
+        // If you press keys while this window is focused, it still updates the topics!
+        window.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' || event.code === 'Enter' || event.code === 'ArrowDown') {
+                event.preventDefault(); 
+                channel.postMessage('next');
+            }
+            if (event.code === 'ArrowUp') {
+                event.preventDefault();
+                channel.postMessage('prev');
+            }
+        });
+    </script>
+</body>
+</html>

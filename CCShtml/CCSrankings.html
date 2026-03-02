@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCS Power Rankings</title>
+    <style>
+        :root {
+            /* --- THEME: DARK MODE --- */
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --card-border: #333333;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --primary-gold: #c5a059;
+            
+            --rank-col-width: 30px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* --- Main Header --- */
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid var(--primary-gold);
+        }
+        .main-header h1 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary-gold);
+            font-size: 3rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            line-height: 1;
+        }
+        .main-header h2 {
+            margin: 10px 0 0 0;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- Rankings Grid --- */
+        .rankings-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 Equal Columns */
+            gap: 20px;
+        }
+
+        /* --- Individual Column Card --- */
+        .ranking-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .ranker-header {
+            background: var(--primary-gold);
+            color: #000;
+            padding: 15px 5px;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            border-bottom: 4px solid #000;
+        }
+
+        /* --- List Items --- */
+        .rank-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 10px;
+            border-bottom: 1px solid #222;
+            height: 50px; /* Fixed height for alignment */
+        }
+        .rank-row:last-child {
+            border-bottom: none;
+        }
+        .rank-row:nth-child(even) {
+            background-color: #161616;
+        }
+
+        .rank-num {
+            font-weight: 900;
+            color: #444;
+            width: var(--rank-col-width);
+            font-size: 1.2rem;
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .team-logo {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            margin-right: 12px;
+            background: #000;
+            border-radius: 50%;
+            border: 2px solid #555; /* Default border, changed via JS */
+            flex-shrink: 0;
+        }
+
+        .team-name {
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Loading State */
+        #loading {
+            grid-column: span 5;
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 1100px) {
+            .rankings-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="main-header">
+            <h1>Clutch Competitor Series</h1>
+            <h2>Official Power Rankings</h2>
+        </div>
+
+        <div class="rankings-grid" id="grid-container">
+            
+            <div class="ranking-card">
+                <div class="ranker-header">Sports</div>
+                <div id="list-sports"></div>
+            </div>
+
+            <div class="ranking-card">
+                <div class="ranker-header">Ren</div>
+                <div id="list-ren"></div>
+            </div>
+
+            <div class="ranking-card">
+                <div class="ranker-header">Cryptid</div>
+                <div id="list-cryptid"></div>
+            </div>
+
+            <div class="ranking-card">
+                <div class="ranker-header">Burner</div>
+                <div id="list-burner"></div>
+            </div>
+
+            <div class="ranking-card">
+                <div class="ranker-header">Penguin</div>
+                <div id="list-penguin"></div>
+            </div>
+
+            <div id="loading">Loading Spreadsheet Data...</div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ---------------------------------------------------------
+        // 1. CONFIGURATION
+        // ---------------------------------------------------------
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=1108526011&single=true&output=csv"; 
+
+        // ---------------------------------------------------------
+        // 2. TEAM DATABASE (Colors & Assets)
+        // ---------------------------------------------------------
+        const teamDatabase = {
+            "Ninjas":    { color: "#000000", border: "#FFD700" }, // Gold Border
+            "Shockwave": { color: "#0047AB", border: "#FFFFFF" }, // White Border
+            "Samurai":   { color: "#DC143C", border: "#DC143C" }, // Red Border (Black invisible on dark)
+            "Zebras":    { color: "#FFFFFF", border: "#FFFFFF" }, // White Border
+            "Blasters":  { color: "#FF8C00", border: "#FF8C00" }, // Orange Border
+            "Stars":     { color: "#663399", border: "#FFFFFF" }, // White Border
+            "Howlers":   { color: "#E05297", border: "#E05297" }, // Pink Border
+            "Vipers":    { color: "#000080", border: "#FFD700" }, // Yellow Border
+            "Pirates":   { color: "#8B4513", border: "#FFFFFF" }, // White Border
+            "Flyers":    { color: "#008000", border: "#008000" }, // Green Border
+            "Moose":     { color: "#D2B48C", border: "#556B2F" }, // Green Border
+            "Anglers":   { color: "#008080", border: "#008080" }, // Teal Border
+            
+            "default":   { color: "#333", border: "#555" }
+        };
+
+        // ---------------------------------------------------------
+        // 3. LOGIC
+        // ---------------------------------------------------------
+
+        // Helper: Matches "ninjas", "Ninjas ", "NINJAS" to official key
+        function findTeamConfig(rawName) {
+            if (!rawName) return { config: teamDatabase["default"], officialName: "Unknown" };
+            
+            const cleanName = rawName.trim().toLowerCase();
+            const dbKeys = Object.keys(teamDatabase);
+            
+            for (let key of dbKeys) {
+                if (key.toLowerCase() === cleanName) {
+                    return { config: teamDatabase[key], officialName: key };
+                }
+            }
+            return { config: teamDatabase["default"], officialName: rawName };
+        }
+
+        async function init() {
+            // IDs correspond to the columns in the HTML above
+            const columnIds = ["list-sports", "list-ren", "list-cryptid", "list-burner", "list-penguin"];
+            const loading = document.getElementById('loading');
+            
+            try {
+                const response = await fetch(SHEET_URL);
+                const csvText = await response.text();
+
+                // Parse CSV
+                // We expect headers in row 0, data starts row 1
+                const rows = csvText.trim().split('\n').map(r => r.split(','));
+                const data = rows.slice(1); 
+
+                // Clear previous content
+                columnIds.forEach(id => document.getElementById(id).innerHTML = '');
+
+                // Iterate through the rows (Should be 12 rows for 12 ranks)
+                data.forEach(row => {
+                    if(row.length < 2) return;
+
+                    // Col A = Rank (Index 0)
+                    const rank = row[0];
+
+                    // Loop through the 5 people (Col B=Index 1 to Col F=Index 5)
+                    for (let i = 0; i < 5; i++) {
+                        const teamRaw = row[i+1]; // Shift by 1 to skip Rank column
+                        
+                        if (!teamRaw) continue;
+
+                        // Identify Team
+                        const match = findTeamConfig(teamRaw);
+                        const config = match.config;
+                        const officialName = match.officialName;
+                        const logoPath = `CCSlogos/${officialName}.png`;
+
+                        // Create Row HTML
+                        const item = document.createElement('div');
+                        item.className = 'rank-row';
+                        item.innerHTML = `
+                            <div class="rank-num">${rank}</div>
+                            <div class="team-info">
+                                <img src="${logoPath}" class="team-logo" style="border-color:${config.border}" onerror="this.src='https://placehold.co/40/333/fff?text=?'">
+                                <span class="team-name" style="color:#fff">${officialName}</span>
+                            </div>
+                        `;
+
+                        // Append to the correct column ID
+                        const container = document.getElementById(columnIds[i]);
+                        if(container) container.appendChild(item);
+                    }
+                });
+
+                loading.style.display = 'none';
+
+            } catch (error) {
+                loading.innerHTML = "Error loading data. Check console (F12) for details.";
+                console.error(error);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

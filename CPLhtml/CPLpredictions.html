@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPL Predictions</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --card-border: #333333;
+            --text-main: #ffffff;
+            --primary-orange: #ff8c00; /* CPL Orange */
+        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        .main-header { text-align: center; margin-bottom: 30px; border-bottom: 4px solid var(--primary-orange); padding-bottom: 20px; }
+        .main-header h1 { margin: 0; text-transform: uppercase; letter-spacing: 4px; color: var(--primary-orange); font-size: 3rem; }
+        .main-header h2 { margin: 15px 0 0 0; color: #fff; text-transform: uppercase; font-size: 1.8rem; letter-spacing: 2px; font-weight: 300; }
+        .table-container { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 8px; background: var(--card-bg); }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        thead th { background-color: #1a1a1a; color: var(--primary-orange); text-transform: uppercase; padding: 20px 10px; border-bottom: 3px solid #000; }
+        thead th:first-child { text-align: left; padding-left: 20px; color: #fff; }
+        tbody tr { border-bottom: 1px solid #222; height: 90px; }
+        tbody tr:nth-child(even) { background-color: #161616; }
+        td { text-align: center; vertical-align: middle; padding: 10px; }
+        .matchup-cell { text-align: left; padding-left: 20px; font-weight: 700; font-size: 1.1rem; color: #ddd; text-transform: uppercase; }
+        .pick-container { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .winner-row { display: flex; align-items: center; gap: 8px; }
+        .team-logo { width: 30px; height: 30px; object-fit: contain; border-radius: 50%; background: #000; border: 2px solid #555; }
+        .team-name { font-weight: 700; font-size: 1rem; text-transform: uppercase; color: #fff; }
+        .score-row { font-weight: 400; font-size: 0.95rem; color: var(--primary-orange); letter-spacing: 1px; }
+        .points-row { background-color: var(--primary-orange) !important; height: 80px; }
+        .points-row td { color: #000; font-weight: 900; font-size: 1.8rem; border-bottom: none; }
+        .points-label { text-align: left; padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; font-size: 1.5rem !important; }
+        #loading { text-align: center; padding: 40px; color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <h1>Clutch Prospect League</h1>
+            <h2>Week 2 Predictions</h2>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Matchup</th><th>Sports</th><th>Ren</th><th>Cryptid</th><th>Burner</th><th>Penguin</th><th>Chat</th></tr>
+                </thead>
+                <tbody id="predictions-body"></tbody>
+            </table>
+            <div id="loading">Loading Data...</div>
+        </div>
+    </div>
+    <script>
+        // *** PASTE CPL PREDICTIONS SHEET LINK HERE ***
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxUUtzyhPFW4OlvZki7jcqNCY4I1LvjpQsybXYFlGp-LilDkuvPFWHFak-ci1OXtIZGyOyrge91fQl/pub?gid=114681964&single=true&output=csv"; 
+
+        const teamDatabase = {
+            "Sonic Boom": { color: "#0047AB" },
+            "Supernova":  { color: "#663399" },
+            "Mortars":    { color: "#FF8C00" },
+            "Coyotes":    { color: "#E05297" },
+            "Groundhogs": { color: "#D2B48C" },
+            "Marauders":  { color: "#8B4513" },
+            "Shadows":    { color: "#FFFFFF" },
+            "Warriors":   { color: "#DC143C" },
+            "Buffalo":    { color: "#FFFFFF" },
+            "Cobras":     { color: "#FFD700" },
+            "Lory":       { color: "#008000" },
+            "Fishermen":  { color: "#008080" },
+            "default":    { color: "#333" }
+        };
+
+        function findTeamConfig(rawName) {
+            if (!rawName) return { config: teamDatabase["default"], officialName: "Unknown" };
+            const cleanName = rawName.trim().toLowerCase();
+            const dbKeys = Object.keys(teamDatabase);
+            for (let key of dbKeys) {
+                if (key.toLowerCase() === cleanName) return { config: teamDatabase[key], officialName: key };
+            }
+            return { config: teamDatabase["default"], officialName: rawName };
+        }
+
+        function parsePick(cellContent) {
+            if (!cellContent) return { team: "", score: "" };
+            const content = cellContent.trim();
+            const lastSpaceIndex = content.lastIndexOf(' ');
+            if (lastSpaceIndex === -1) return { team: content, score: "" };
+            return { team: content.substring(0, lastSpaceIndex), score: content.substring(lastSpaceIndex + 1) };
+        }
+
+        async function init() {
+            if (!SHEET_URL) { console.log("No Sheet URL"); return; }
+            const response = await fetch(SHEET_URL);
+            const csvText = await response.text();
+            const rows = csvText.trim().split('\n').map(r => r.split(','));
+            const data = rows.slice(1);
+            const tbody = document.getElementById('predictions-body');
+            tbody.innerHTML = '';
+
+            data.forEach(row => {
+                if(row.length < 2) return;
+                const matchupName = row[0].trim();
+                if (matchupName.toLowerCase().includes("points")) return;
+
+                let html = `<td class="matchup-cell">${matchupName}</td>`;
+                for (let i = 1; i <= 6; i++) {
+                    const rawCell = row[i];
+                    if (!rawCell || rawCell.trim() === "") { html += `<td>-</td>`; continue; }
+                    const { team, score } = parsePick(rawCell);
+                    const match = findTeamConfig(team);
+                    const logoPath = `CPLlogos/${match.officialName}.png`;
+                    html += `<td><div class="pick-container"><div class="winner-row"><img src="${logoPath}" class="team-logo" style="border-color:${match.config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'"><span class="team-name">${match.officialName}</span></div><div class="score-row">${score}</div></div></td>`;
+                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = html;
+                tbody.appendChild(tr);
+            });
+
+            // Manual Points Row
+            const pointsTr = document.createElement('tr');
+            pointsTr.className = 'points-row';
+            let pointsHtml = `<td class="points-label">Points</td>`;
+            for (let i = 0; i < 6; i++) pointsHtml += `<td>0</td>`;
+            pointsTr.innerHTML = pointsHtml;
+            tbody.appendChild(pointsTr);
+            document.getElementById('loading').style.display = 'none';
+        }
+        init();
+    </script>
+</body>
+</html>
