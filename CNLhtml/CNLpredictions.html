@@ -115,7 +115,8 @@
                     if (!rawCell || rawCell.trim() === "") { html += `<td>-</td>`; continue; }
                     const { team, score } = parsePick(rawCell);
                     const match = findTeamConfig(team);
-                    const logoPath = `CNLlogos/${match.officialName}.png`;
+                    let logoName = match.officialName.toLowerCase();
+                    const logoPath = `CNLLogos/${logoName}.png`;
                     html += `<td><div class="pick-container"><div class="winner-row"><img src="${logoPath}" class="team-logo" style="border-color:${match.config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'"><span class="team-name">${match.officialName}</span></div><div class="score-row">${score}</div></div></td>`;
                 }
                 const tr = document.createElement('tr');

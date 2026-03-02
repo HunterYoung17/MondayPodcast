@@ -303,7 +303,8 @@
                         const match = findTeamConfig(team);
                         const config = match.config;
                         const officialName = match.officialName;
-                        const logoPath = `CCSlogos/${officialName}.png`;
+                        let logoName = match.officialName.toLowerCase();
+                        const logoPath = `CCSLogos/${logoName}.png`;
 
                         html += `
                             <td>
