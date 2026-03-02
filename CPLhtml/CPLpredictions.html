@@ -109,15 +109,8 @@
                     if (!rawCell || rawCell.trim() === "") { html += `<td>-</td>`; continue; }
                     const { team, score } = parsePick(rawCell);
                     const match = findTeamConfig(team);
-                    
-                    // NEW CODE: Converts the name to lowercase for the image path
                     let logoName = match.officialName.toLowerCase();
-                    
-                    // NOTE: If you also removed spaces (e.g., "sonicboom.png" instead of "sonic boom.png"), uncomment the line below:
-                    // logoName = logoName.replace(/\s+/g, '');
-
                     const logoPath = `CPLLogos/${logoName}.png`;
-                    
                     html += `<td><div class="pick-container"><div class="winner-row"><img src="${logoPath}" class="team-logo" style="border-color:${match.config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'"><span class="team-name">${match.officialName}</span></div><div class="score-row">${score}</div></div></td>`;
                 }
                 const tr = document.createElement('tr');
