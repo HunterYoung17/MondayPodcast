@@ -93,8 +93,8 @@
                 for (let i = 0; i < 5; i++) {
                     const teamRaw = row[i+1];
                     if (!teamRaw) continue;
-                    const match = findTeamConfig(teamRaw);
-                    const logoPath = `CNLlogos/${match.officialName}.png`;
+                    let logoName = match.officialName.toLowerCase();
+                    const logoPath = `CNLlogos/${logoName}.png`;
                     const item = document.createElement('div');
                     item.className = 'rank-row';
                     item.innerHTML = `<div class="rank-num">${rank}</div><div class="team-info"><img src="${logoPath}" class="team-logo" style="border-color:${match.config.color}" onerror="this.src='https://placehold.co/40/333/fff?text=?'"><span class="team-name">${match.officialName}</span></div>`;

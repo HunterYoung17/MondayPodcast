@@ -274,7 +274,8 @@
                         const match = findTeamConfig(teamRaw);
                         const config = match.config;
                         const officialName = match.officialName;
-                        const logoPath = `CCSlogos/${officialName}.png`;
+                        let logoName = match.officialName.toLowerCase();
+                        const logoPath = `CCSlogos/${logoName}.png`;
 
                         // Create Row HTML
                         const item = document.createElement('div');
