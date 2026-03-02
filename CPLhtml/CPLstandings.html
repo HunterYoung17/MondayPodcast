@@ -326,7 +326,8 @@
                     const teamName = match.officialName; 
                     
                     // Logo Path: Uses the EXACT name from the database (with space for Sonic Boom)
-                    const logoPath = `CPLlogos/${teamName}.png`;
+                    let logoName = match.officialName.toLowerCase();
+                    const logoPath = `CPLLogos/${logoName}.png`;
 
                     let trendHTML = '<span class="trend-neutral">-</span>';
                     const t = trend ? trend.toLowerCase() : "";

@@ -320,7 +320,8 @@
                     const config = match.config;
                     const teamName = match.officialName; 
                     
-                    const logoPath = `CCSlogos/${teamName}.png`;
+                    let logoName = match.officialName.toLowerCase();
+                    const logoPath = `CCSlogos/${logoName}.png`;
 
                     // Logic: Trend Arrows
                     let trendHTML = '<span class="trend-neutral">-</span>';

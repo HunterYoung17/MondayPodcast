@@ -331,7 +331,8 @@
                     const teamName = match.officialName; 
                     
                     // Logo Folder: CASlogos
-                    const logoPath = `CASlogos/${teamName}.png`;
+                    let logoName = match.officialName.toLowerCase();
+                    const logoPath = `CASlogos/${logoName}.png`;
 
                     // Logic: Trend Arrows
                     let trendHTML = '<span class="trend-neutral">-</span>';

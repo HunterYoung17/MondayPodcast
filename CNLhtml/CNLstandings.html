@@ -359,7 +359,8 @@
                     const diff   = row[statsStart+6] ? row[statsStart+6].trim() : "";
                     const trend  = row[statsStart+7] ? row[statsStart+7].trim() : "";
 
-                    const logoPath = `CNLlogos/${teamName}.png`;
+                    let logoName = match.officialName.toLowerCase();
+                    const logoPath = `CNLlogos/${logoName}.png`;
 
                     // HTML Generation
                     let trendHTML = '<span class="trend-neutral">-</span>';
