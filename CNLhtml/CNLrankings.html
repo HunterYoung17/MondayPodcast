@@ -55,7 +55,7 @@
             "Shipwreck":    { color: "#8B4513" },
             "Ducks":        { color: "#D2B48C" },
             "Thieves":      { color: "#FFD700" },
-            "Bushido":       { color: "#E60000", aliases: ["BUSHIDO"] },
+            "Bushido":      { color: "#E60000", aliases: ["BUSHIDO"] },
             "Rhinos":       { color: "#FFFFFF" },
             "Anacondas":    { color: "#FFFF00" },
             "Redwings":     { color: "#008000" },
@@ -93,6 +93,10 @@
                 for (let i = 0; i < 5; i++) {
                     const teamRaw = row[i+1];
                     if (!teamRaw) continue;
+                    
+                    // Added this missing line!
+                    const match = findTeamConfig(teamRaw);
+                    
                     let logoName = match.officialName.toLowerCase();
                     const logoPath = `CNLlogos/${logoName}.png`;
                     const item = document.createElement('div');
