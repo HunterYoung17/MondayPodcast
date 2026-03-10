@@ -63,7 +63,7 @@
             "Shipwreck":    { color: "#8B4513" },
             "Ducks":        { color: "#D2B48C" },
             "Thieves":      { color: "#FFD700" },
-            "Bushido":       { color: "#E60000", aliases: ["BUSHIDO"] },
+            "Bushido":      { color: "#E60000", aliases: ["BUSHIDO"] },
             "Rhinos":       { color: "#FFFFFF" },
             "Anacondas":    { color: "#FFFF00" },
             "Redwings":     { color: "#008000" },
@@ -104,10 +104,17 @@
             const tbody = document.getElementById('predictions-body');
             tbody.innerHTML = '';
 
+            let pointsData = ["0", "0", "0", "0", "0", "0"]; // Default points
+
             data.forEach(row => {
                 if(row.length < 2) return;
                 const matchupName = row[0].trim();
-                if (matchupName.toLowerCase().includes("points")) return;
+                
+                // 1. Catch the points row, save the data, and skip the rest of the loop
+                if (matchupName.toLowerCase().includes("points")) {
+                    pointsData = row.slice(1, 7); 
+                    return;
+                }
 
                 let html = `<td class="matchup-cell">${matchupName}</td>`;
                 for (let i = 1; i <= 6; i++) {
@@ -124,11 +131,14 @@
                 tbody.appendChild(tr);
             });
 
-            // Manual Points Row
+            // 2. Build the Manual Points Row using the data from the sheet
             const pointsTr = document.createElement('tr');
             pointsTr.className = 'points-row';
             let pointsHtml = `<td class="points-label">Points</td>`;
-            for (let i = 0; i < 6; i++) pointsHtml += `<td>0</td>`;
+            for (let i = 0; i < 6; i++) {
+                // Use the data from the sheet, or default to 0 if empty
+                pointsHtml += `<td>${pointsData[i] ? pointsData[i].trim() : "0"}</td>`; 
+            }
             pointsTr.innerHTML = pointsHtml;
             tbody.appendChild(pointsTr);
             document.getElementById('loading').style.display = 'none';

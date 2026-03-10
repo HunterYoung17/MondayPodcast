@@ -227,7 +227,7 @@
             "Vipers":    { color: "#000080", border: "#FFD700" },
             "Pirates":   { color: "#8B4513", border: "#FFFFFF" },
             "Flyers":    { color: "#008000", border: "#008000" },
-            "Moose":     { color: "#D2B48C", border: "#556B2F" },
+            "Moose":     { color: "#D2B48C", border: "#4c5757" },
             "Anglers":   { color: "#008080", border: "#008080" },
             
             "default":   { color: "#333", border: "#555" }
@@ -278,14 +278,19 @@
 
                 tbody.innerHTML = ''; // Clear loading
 
+                let pointsData = ["0", "0", "0", "0", "0", "0"]; // Default points
+
                 // 1. Process Spreadsheet Data (Matchups)
                 data.forEach(row => {
                     if(row.length < 2) return;
 
                     const matchupName = row[0].trim();
                     
-                    // Skip if accidentally processing a points row from sheet
-                    if (matchupName.toLowerCase().includes("points")) return;
+                    // Catch the points row, save the data, and skip the rest of the loop
+                    if (matchupName.toLowerCase().includes("points")) {
+                        pointsData = row.slice(1, 7);
+                        return;
+                    }
 
                     const tr = document.createElement('tr');
                     let html = `<td class="matchup-cell">${matchupName}</td>`;
@@ -328,9 +333,9 @@
                 pointsTr.className = 'points-row';
                 let pointsHtml = `<td class="points-label">Points</td>`;
                 
-                // Add 6 columns of "0"
+                // Add 6 columns using sheet data
                 for (let i = 0; i < 6; i++) {
-                    pointsHtml += `<td>0</td>`;
+                    pointsHtml += `<td>${pointsData[i] ? pointsData[i].trim() : "0"}</td>`;
                 }
                 
                 pointsTr.innerHTML = pointsHtml;
