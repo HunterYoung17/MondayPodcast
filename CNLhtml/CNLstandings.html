@@ -171,6 +171,10 @@
         .trend-up { color: var(--trend-up); font-weight: bold; }
         .trend-down { color: var(--trend-down); font-weight: bold; }
         .trend-neutral { color: #555; }
+        
+        /* New Streak Classes */
+        .streak-pos { color: var(--trend-up); font-weight: 600; }
+        .streak-neg { color: var(--trend-down); font-weight: 600; }
 
         #loading { text-align: center; padding: 40px; color: #888; font-style: italic; width: 100%; }
         #error-msg { text-align: center; padding: 20px; color: #f87171; display: none; }
@@ -187,7 +191,7 @@
         <div class="header">
             <h1>Clutch Novice League</h1>
             <h2>League Standings</h2>
-            <p>After Week 5</p>
+            <p>After First Half</p>
         </div>
 
         <div class="standings-row">
@@ -202,7 +206,7 @@
                                     <th class="team-header">Team</th>
                                     <th>Pct</th> <th>W</th> <th>L</th>
                                     <th>Gm%</th> <th>GW</th>  <th>GL</th>
-                                    <th>Diff</th> <th>Trnd</th>
+                                    <th>Diff</th> <th>Trnd</th> <th>Strk</th>
                                 </tr>
                             </thead>
                             <tbody id="american-body"></tbody>
@@ -222,7 +226,7 @@
                                     <th class="team-header">Team</th>
                                     <th>Pct</th> <th>W</th> <th>L</th>
                                     <th>Gm%</th> <th>GW</th> <th>GL</th>
-                                    <th>Diff</th> <th>Trnd</th>
+                                    <th>Diff</th> <th>Trnd</th> <th>Strk</th>
                                 </tr>
                             </thead>
                             <tbody id="international-body"></tbody>
@@ -358,6 +362,7 @@
                     const gameL  = row[statsStart+5] ? row[statsStart+5].trim() : "";
                     const diff   = row[statsStart+6] ? row[statsStart+6].trim() : "";
                     const trend  = row[statsStart+7] ? row[statsStart+7].trim() : "";
+                    const streak = row[statsStart+8] ? row[statsStart+8].trim() : ""; // Added Streak (Col K)
 
                     let logoName = teamName.toLowerCase();
                     const logoPath = `CNLlogos/${logoName}.png`;
@@ -369,6 +374,14 @@
                     if(t.includes('down')) trendHTML = '<span class="trend-down">▼</span>';
 
                     const diffClass = (diff && diff.includes('-')) ? 'diff-neg' : 'diff-pos';
+                    
+                    // Streak Logic
+                    let streakClass = '';
+                    if (streak.includes('+')) {
+                        streakClass = 'streak-pos';
+                    } else if (streak.includes('-')) {
+                        streakClass = 'streak-neg';
+                    }
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -387,6 +400,7 @@
                         <td class="stat">${gameL}</td>
                         <td class="stat ${diffClass}">${diff}</td>
                         <td class="stat">${trendHTML}</td>
+                        <td class="stat ${streakClass}">${streak}</td>
                     `;
 
                     if(config.division === "International") {
