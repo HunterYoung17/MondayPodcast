@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNL Playoff Race - American Div Week 8</title>
+    <title>CNL Playoff Race - American Div Week 9</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -272,7 +272,7 @@
         }
 
         .matchup-card::before {
-            content: "WEEK 8 MATCHUP";
+            content: "WEEK 9 MATCHUP";
             position: absolute;
             top: 3px;
             left: 50%;
@@ -438,12 +438,12 @@
         .t-purple { color: #c084fc; }
         .t-white { color: #ffffff; }
 
-        /* SOS Styles */
+        /* SOS Styles with Tabular Column Layout */
         .sos-header {
             display: grid;
-            grid-template-columns: 28% 12% 60%;
+            grid-template-columns: 22% 8% 17.5% 17.5% 17.5% 17.5%;
             align-items: flex-end;
-            font-size: 20px;
+            font-size: 14px;
             color: var(--league-dim);
             font-weight: 700;
             text-transform: uppercase;
@@ -451,10 +451,17 @@
             padding-bottom: 4px;
             margin-bottom: 4px;
         }
+        
+        .sos-header span {
+            text-align: center;
+        }
+        .sos-header span:first-child {
+            text-align: left;
+        }
 
         .sos-row {
             display: grid;
-            grid-template-columns: 28% 12% 60%;
+            grid-template-columns: 22% 8% 17.5% 17.5% 17.5% 17.5%;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             padding: 5px 0;
@@ -467,7 +474,7 @@
 
         .sos-team { font-weight: bold; font-size: 15px; }
         .sos-stat { font-family: monospace; font-size: 17px; font-weight: bold; text-align: center; }
-        .sos-matches { font-size: 15px; color: #ffffff; font-weight: bold; text-align: right; line-height: 1.2; }
+        .sos-match { font-size: 13px; color: #ffffff; font-weight: bold; text-align: center; line-height: 1.2; }
 
     </style>
 </head>
@@ -479,7 +486,7 @@
         <div class="header-main">
             <h1>CLUTCH NOVICE LEAGUE</h1>
             <h2>PLAYOFF IMPLICATIONS</h2>
-            <div class="subtitle">American Div. Week 8 Update - The Playoff Push</div>
+            <div class="subtitle">American Div. Week 9 Update - The Playoff Push</div>
         </div>
     </div>
 
@@ -500,26 +507,26 @@
                     <tr class="team-row">
                         <td class="rank t-orange">1</td>
                         <td><div class="team-info"><img src="CNLlogos/ballistics.png" alt="" onerror="this.style.display='none'">BEDFORD BALLISTICS</div></td>
-                        <td class="record" style="text-align: center;">5-2</td>
+                        <td class="record" style="text-align: center;">6-2</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-blue">2</td>
                         <td><div class="team-info"><img src="CNLlogos/sound.png" alt="" onerror="this.style.display='none'">SAN BERNARDINO SOUND</div></td>
-                        <td class="record" style="text-align: center;">5-2</td>
+                        <td class="record" style="text-align: center;">6-2</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-brown">3</td>
                         <td><div class="team-info"><img src="CNLlogos/shipwreck.png" alt="" onerror="this.style.display='none'">SURFSIDE SHIPWRECK</div></td>
-                        <td class="record" style="text-align: center;">5-2</td>
+                        <td class="record" style="text-align: center;">6-2</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-tan">4</td>
                         <td><div class="team-info"><img src="CNLlogos/ducks.png" alt="" onerror="this.style.display='none'">DETROIT DUCKS</div></td>
-                        <td class="record" style="text-align: center;">5-2</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="record" style="text-align: center;">5-3</td>
+                        <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
                     
                     <tr class="cutoff-row">
@@ -532,13 +539,13 @@
                     <tr class="team-row">
                         <td class="rank t-pink">5</td>
                         <td><div class="team-info"><img src="CNLlogos/timberwolves.png" alt="" onerror="this.style.display='none'">TEMPLE TIMBERWOLVES</div></td>
-                        <td class="record" style="text-align: center;">4-3</td>
+                        <td class="record" style="text-align: center;">4-4</td>
                         <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-purple">6</td>
                         <td><div class="team-info"><img src="CNLlogos/rovers.png" alt="" onerror="this.style.display='none'">RAYMOND ROVERS</div></td>
-                        <td class="record" style="text-align: center;">1-6</td>
+                        <td class="record" style="text-align: center;">1-7</td>
                         <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
                     </tr>
                 </tbody>
@@ -546,7 +553,7 @@
         </div>
 
         <div class="panel">
-            <div class="panel-header">WEEK 8 KEY MATCHUPS & CLINCHING SITUATIONS</div>
+            <div class="panel-header">WEEK 9 KEY MATCHUPS & CLINCHING SITUATIONS</div>
             
             <div class="matchups-wrapper">
                 
@@ -558,8 +565,8 @@
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CNLlogos/sound.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">SAN BERNARDINO<br>SOUND</span>
+                            <img src="CNLlogos/redwings.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">RAKI RAKI<br>REDWINGS</span>
                         </div>
                     </div>
 
@@ -570,8 +577,8 @@
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CNLlogos/ballistics.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">BEDFORD<br>BALLISTICS</span>
+                            <img src="CNLlogos/rovers.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">RAYMOND<br>ROVERS</span>
                         </div>
                     </div>
                 </div>
@@ -584,10 +591,10 @@
 
                 <div class="implication-box-col">
                     <div class="imp-condition">
-                        AMERICAN DIVISION<br>SITUATION:
+                        IF <span style="color: #d2b48c;">DUCKS</span> WIN<br>OR <span style="color: #c084fc;">ROVERS</span> LOSE:
                     </div>
                     <div class="imp-result">
-                        NO CLINCH OR<br>ELIMINATION<br>POSSIBLE THIS WEEK.
+                        RAYMOND ROVERS<br>ELIMINATED FROM<br>PLAYOFF CONTENTION.
                     </div>
                 </div>
 
@@ -606,46 +613,67 @@
             
             <div class="sos-header">
                 <span>Team</span>
-                <span style="text-align: center;">SOS</span>
-                <span style="text-align: right;">Toughest Matches Left</span>
+                <span>SOS</span>
+                <span>Week 9</span>
+                <span>Week 10</span>
+                <span>Week 11</span>
+                <span>Week 12</span>
             </div>
             
             <div style="display: flex; flex-direction: column;">
                 
                 <div class="sos-row">
-                    <span class="sos-team t-white">1. DUCKS <span style="font-size: 10px; color: #ef4444;">(HARDEST)</span></span>
-                    <span class="sos-stat t-white">.543</span>
-                    <span class="sos-matches">vs Sound (5-2), Redwings (4-3), Timberwolves (4-3)</span>
+                    <span class="sos-team t-white">1. ROVERS <span style="font-size: 10px; color: #ef4444;">(HARDEST)</span></span>
+                    <span class="sos-stat t-white">.500</span>
+                    <span class="sos-match">Timberwolves (4-4)</span>
+                    <span class="sos-match">Sound (6-2)</span>
+                    <span class="sos-match">Bushido (2-6)</span>
+                    <span class="sos-match">Leviathans (4-4)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T2. BALLISTICS</span>
-                    <span class="sos-stat t-white">.514</span>
-                    <span class="sos-matches">vs Shipwreck (5-2), Leviathans (4-3), Timberwolves (4-3)</span>
+                    <span class="sos-team t-white">T1. DUCKS</span>
+                    <span class="sos-stat t-white">.500</span>
+                    <span class="sos-match">Redwings (5-3)</span>
+                    <span class="sos-match">Timberwolves (4-4)</span>
+                    <span class="sos-match">Rhinos (4-4)</span>
+                    <span class="sos-match">Anacondas (3-5)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T2. ROVERS</span>
-                    <span class="sos-stat t-white">.514</span>
-                    <span class="sos-matches">vs Leviathans (4-3), Redwings (4-3), Timberwolves (4-3)</span>
+                    <span class="sos-team t-white">3. BALLISTICS</span>
+                    <span class="sos-stat t-white">.469</span>
+                    <span class="sos-match">Leviathans (4-4)</span>
+                    <span class="sos-match">Shipwreck (6-2)</span>
+                    <span class="sos-match">Anacondas (3-5)</span>
+                    <span class="sos-match">Thieves (2-6)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T2. TIMBERWOLVES</span>
-                    <span class="sos-stat t-white">.514</span>
-                    <span class="sos-matches">vs Ballistics (5-2), Ducks (5-2), Redwings (4-3)</span>
+                    <span class="sos-team t-white">T3. TIMBERWOLVES</span>
+                    <span class="sos-stat t-white">.469</span>
+                    <span class="sos-match">Rovers (1-7)</span>
+                    <span class="sos-match">Ducks (5-3)</span>
+                    <span class="sos-match">Redwings (5-3)</span>
+                    <span class="sos-match">Rhinos (4-4)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T5. SHIPWRECK</span>
-                    <span class="sos-stat t-white">.429</span>
-                    <span class="sos-matches">vs Ballistics (5-2), Leviathans (4-3), Rhinos (3-4)</span>
+                    <span class="sos-team t-white">5. SHIPWRECK</span>
+                    <span class="sos-stat t-white">.438</span>
+                    <span class="sos-match">Rhinos (4-4)</span>
+                    <span class="sos-match">Ballistics (6-2)</span>
+                    <span class="sos-match">Thieves (2-6)</span>
+                    <span class="sos-match">Bushido (2-6)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T5. SOUND <span style="font-size: 10px; color: var(--div-glow);">(EASIEST)</span></span>
-                    <span class="sos-stat t-white">.429</span>
-                    <span class="sos-matches">vs Ducks (5-2), Leviathans (4-3), Redwings (4-3)</span>
+                    <span class="sos-team t-white">6. SOUND <span style="font-size: 10px; color: var(--div-glow);">(EASIEST)</span></span>
+                    <span class="sos-stat t-white">.375</span>
+                    <span class="sos-match">Bushido (2-6)</span>
+                    <span class="sos-match">Rovers (1-7)</span>
+                    <span class="sos-match">Leviathans (4-4)</span>
+                    <span class="sos-match">Redwings (5-3)</span>
                 </div>
 
             </div>
