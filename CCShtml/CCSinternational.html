@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCS Playoff Race - Week 8</title>
+    <title>CCS Playoff Race - Week 9</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -215,6 +215,7 @@
             display: inline-block;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
+        .status.clinched { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); border: 1px solid #4ade80; color: #fff; }
         .status.mix { background: linear-gradient(180deg, #0051ff 0%, #002b80 100%); border: 1px solid #4da6ff; }
         .status.bubble { background: linear-gradient(180deg, #00a2ff 0%, #005180 100%); border: 1px solid #80ccff; }
         .status.battling { background: linear-gradient(180deg, #ff3300 0%, #801a00 100%); border: 1px solid #ff8566; }
@@ -272,7 +273,7 @@
         }
 
         .matchup-card::before {
-            content: "WEEK 8 MATCHUP";
+            content: "WEEK 9 MATCHUP";
             position: absolute;
             top: 3px;
             left: 50%;
@@ -386,27 +387,13 @@
             box-shadow: 0 0 15px rgba(234, 179, 8, 0.15);
         }
 
-        .scenario-box h3 {
-            margin: 0 0 10px 0;
-            color: var(--gold-glow);
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .scenario-box h3::before {
-            content: "☑";
-            margin-right: 8px;
-            font-size: 24px;
-        }
-
         /* SOS Custom Box Overrides */
         .sos-box {
-            padding-top: 10px; /* Reduced space at the top */
+            padding-top: 10px; 
         }
         
         .sos-box h3::before {
-            display: none; /* Removes the double checkmark icon */
+            display: none; 
         }
 
         /* BRACKET & TIEBREAKER */
@@ -450,12 +437,12 @@
         .t-yellow { color: #eab308; }
         .t-white { color: #ffffff; }
 
-        /* SOS Styles */
+        /* SOS Tabular Layout Styles */
         .sos-header {
             display: grid;
-            grid-template-columns: 28% 12% 60%;
+            grid-template-columns: 22% 8% 17.5% 17.5% 17.5% 17.5%;
             align-items: flex-end;
-            font-size: 20px;
+            font-size: 14px;
             color: var(--gold-dim);
             font-weight: 700;
             text-transform: uppercase;
@@ -463,10 +450,17 @@
             padding-bottom: 4px;
             margin-bottom: 4px;
         }
+        
+        .sos-header span {
+            text-align: center;
+        }
+        .sos-header span:first-child {
+            text-align: left;
+        }
 
         .sos-row {
             display: grid;
-            grid-template-columns: 28% 12% 60%;
+            grid-template-columns: 22% 8% 17.5% 17.5% 17.5% 17.5%;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             padding: 5px 0;
@@ -479,7 +473,7 @@
 
         .sos-team { font-weight: bold; font-size: 15px; }
         .sos-stat { font-family: monospace; font-size: 17px; font-weight: bold; text-align: center; }
-        .sos-matches { font-size: 15px; color: #ffffff; font-weight: bold; text-align: right; line-height: 1.2; }
+        .sos-match { font-size: 13px; color: #ffffff; font-weight: bold; text-align: center; line-height: 1.2; }
 
     </style>
 </head>
@@ -491,7 +485,7 @@
         <div class="header-main">
             <h1>CLUTCH COMPETITOR SERIES</h1>
             <h2>PLAYOFF IMPLICATIONS</h2>
-            <div class="subtitle">Week 8 of 12 Update - The Playoff Push</div>
+            <div class="subtitle">Week 9 of 12 Update - The Playoff Push</div>
         </div>
     </div>
 
@@ -512,25 +506,25 @@
                     <tr class="team-row">
                         <td class="rank t-green">1</td>
                         <td><div class="team-info"><img src="CCSlogos/flyers.png" alt="" onerror="this.style.display='none'">FIJI FLYERS</div></td>
-                        <td class="record" style="text-align: center;">7-0</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="record" style="text-align: center;">8-0</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-gold">2</td>
-                        <td><div class="team-info"><img src="CCSlogos/ninjas.png" alt="" onerror="this.style.display='none'">NEPAL NINJAS</div></td>
-                        <td class="record" style="text-align: center;">4-3</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-teal">3</td>
+                        <td class="rank t-teal">2</td>
                         <td><div class="team-info"><img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">ATLANTIS ANGLERS</div></td>
-                        <td class="record" style="text-align: center;">4-3</td>
+                        <td class="record" style="text-align: center;">5-3</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-red">4</td>
-                        <td><div class="team-info"><img src="CCSlogos/samurai.png" alt="" onerror="this.style.display='none'">SHANGHAI SAMURAI</div></td>
-                        <td class="record" style="text-align: center;">4-3</td>
+                        <td class="rank t-gold">3</td>
+                        <td><div class="team-info"><img src="CCSlogos/ninjas.png" alt="" onerror="this.style.display='none'">NEPAL NINJAS</div></td>
+                        <td class="record" style="text-align: center;">4-4</td>
+                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                    </tr>
+                    <tr class="team-row">
+                        <td class="rank t-yellow">4</td>
+                        <td><div class="team-info"><img src="CCSlogos/vipers.png" alt="" onerror="this.style.display='none'">VENEZUELA VIPERS</div></td>
+                        <td class="record" style="text-align: center;">4-4</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     
@@ -542,15 +536,15 @@
                     </tr>
 
                     <tr class="team-row">
-                        <td class="rank t-yellow">5</td>
-                        <td><div class="team-info"><img src="CCSlogos/vipers.png" alt="" onerror="this.style.display='none'">VENEZUELA VIPERS</div></td>
-                        <td class="record" style="text-align: center;">3-4</td>
-                        <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
+                        <td class="rank t-red">5</td>
+                        <td><div class="team-info"><img src="CCSlogos/samurai.png" alt="" onerror="this.style.display='none'">SHANGHAI SAMURAI</div></td>
+                        <td class="record" style="text-align: center;">4-4</td>
+                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-white">6</td>
                         <td><div class="team-info"><img src="CCSlogos/zebras.png" alt="" onerror="this.style.display='none'">ZIMBABWE ZEBRAS</div></td>
-                        <td class="record" style="text-align: center;">2-5</td>
+                        <td class="record" style="text-align: center;">3-5</td>
                         <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
                     </tr>
                 </tbody>
@@ -558,32 +552,32 @@
         </div>
 
         <div class="panel">
-            <div class="panel-header">WEEK 8 KEY MATCHUPS & CLINCHING SITUATIONS</div>
+            <div class="panel-header">WEEK 9 KEY MATCHUPS & CLINCHING SITUATIONS</div>
             
             <div class="matchups-wrapper">
                 
                 <div class="matchup-cards-col">
                     <div class="matchup-card matchup-1">
                         <div class="team-block">
-                            <img src="CCSlogos/samurai.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">SHANGHAI<br>SAMURAI</span>
+                            <img src="CCSlogos/flyers.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">FIJI<br>FLYERS</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CCSlogos/flyers.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">FIJI<br>FLYERS</span>
+                            <img src="CCSlogos/blasters.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">BOSTON<br>BLASTERS</span>
                         </div>
                     </div>
 
                     <div class="matchup-card matchup-2">
                         <div class="team-block">
-                            <img src="CCSlogos/vipers.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">VENEZUELA<br>VIPERS</span>
+                            <img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">ATLANTIS<br>ANGLERS</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CCSlogos/moose.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">MICHIGAN<br>MOOSE</span>
+                            <img src="CCSlogos/ninjas.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">NEPAL<br>NINJAS</span>
                         </div>
                     </div>
                 </div>
@@ -596,10 +590,10 @@
 
                 <div class="implication-box-col">
                     <div class="imp-condition">
-                        IF <span style="color: #22c55e;">FLYERS</span> WIN<br>& <span style="color: #eab308;">VIPERS</span> LOSE:
+                        IF <span style="color: #22c55e;">FLYERS</span> WIN<br>& <span style="color: #14b8a6;">ANGLERS</span> LOSE:
                     </div>
                     <div class="imp-result">
-                        FIJI FLYERS CLINCH<br>PLAYOFF BERTH.
+                        FIJI FLYERS CLINCH<br>#1 OVERALL SEED.
                     </div>
                 </div>
 
@@ -618,46 +612,67 @@
             
             <div class="sos-header">
                 <span>Team</span>
-                <span style="text-align: center;">SOS</span>
-                <span style="text-align: right;">Toughest Matches Left</span>
+                <span>SOS</span>
+                <span>Week 9</span>
+                <span>Week 10</span>
+                <span>Week 11</span>
+                <span>Week 12</span>
             </div>
             
             <div style="display: flex; flex-direction: column;">
                 
                 <div class="sos-row">
                     <span class="sos-team t-white">1. ANGLERS <span style="font-size: 10px; color: #ef4444;">(HARDEST)</span></span>
-                    <span class="sos-stat t-white">.629</span>
-                    <span class="sos-matches">vs Flyers (7-0), Ninjas (4-3), Pirates (4-3)</span>
+                    <span class="sos-stat t-white">.656</span>
+                    <span class="sos-match">Ninjas (4-4)</span>
+                    <span class="sos-match">Flyers (8-0)</span>
+                    <span class="sos-match">Pirates (4-4)</span>
+                    <span class="sos-match">Howlers (5-3)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">2. FLYERS</span>
-                    <span class="sos-stat t-white">.543</span>
-                    <span class="sos-matches">vs Moose (4-3), Howlers (4-3), Anglers (4-3)</span>
+                    <span class="sos-team t-white">T2. FLYERS</span>
+                    <span class="sos-stat t-white">.531</span>
+                    <span class="sos-match">Blasters (3-5)</span>
+                    <span class="sos-match">Anglers (5-3)</span>
+                    <span class="sos-match">Howlers (5-3)</span>
+                    <span class="sos-match">Moose (4-4)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">3. SAMURAI</span>
-                    <span class="sos-stat t-white">.514</span>
-                    <span class="sos-matches">vs Flyers (7-0), Ninjas (4-3), Moose (4-3)</span>
+                    <span class="sos-team t-white">T2. ZEBRAS</span>
+                    <span class="sos-stat t-white">.531</span>
+                    <span class="sos-match">Howlers (5-3)</span>
+                    <span class="sos-match">Vipers (4-4)</span>
+                    <span class="sos-match">Moose (4-4)</span>
+                    <span class="sos-match">Ninjas (4-4)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">4. ZEBRAS</span>
-                    <span class="sos-stat t-white">.486</span>
-                    <span class="sos-matches">vs Moose (4-3), Ninjas (4-3), Howlers (4-3)</span>
+                    <span class="sos-team t-white">4. NINJAS</span>
+                    <span class="sos-stat t-white">.500</span>
+                    <span class="sos-match">Anglers (5-3)</span>
+                    <span class="sos-match">Samurai (4-4)</span>
+                    <span class="sos-match">Vipers (4-4)</span>
+                    <span class="sos-match">Zebras (3-5)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T5. NINJAS</span>
-                    <span class="sos-stat t-white">.400</span>
-                    <span class="sos-matches">vs Anglers (4-3), Samurai (4-3), Vipers (3-4)</span>
+                    <span class="sos-team t-white">T5. SAMURAI</span>
+                    <span class="sos-stat t-white">.375</span>
+                    <span class="sos-match">Moose (4-4)</span>
+                    <span class="sos-match">Ninjas (4-4)</span>
+                    <span class="sos-match">Stars (2-6)</span>
+                    <span class="sos-match">Shockwave (2-6)</span>
                 </div>
 
                 <div class="sos-row">
                     <span class="sos-team t-white">T5. VIPERS <span style="font-size: 10px; color: #22c55e;">(EASIEST)</span></span>
-                    <span class="sos-stat t-white">.400</span>
-                    <span class="sos-matches">vs Moose (4-3), Ninjas (4-3), Howlers (4-3)</span>
+                    <span class="sos-stat t-white">.375</span>
+                    <span class="sos-match">Stars (2-6)</span>
+                    <span class="sos-match">Zebras (3-5)</span>
+                    <span class="sos-match">Ninjas (4-4)</span>
+                    <span class="sos-match">Blasters (3-5)</span>
                 </div>
 
             </div>
