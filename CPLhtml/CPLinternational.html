@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPL Playoff Race - Int Div Week 8</title>
+    <title>CPL Playoff Race - Int Div Week 9</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -244,19 +244,22 @@
             z-index: 2;
         }
 
-        /* MATCHUPS PANEL */
+        /* MATCHUPS PANEL - Adjusted for 1 centered matchup */
         .matchups-wrapper {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
+            height: 100%;
         }
 
         .matchup-cards-col {
             flex: 0 0 55%;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            justify-content: center;
+            height: 100%;
+            padding: 20px 0;
         }
 
         .matchup-card {
@@ -264,7 +267,7 @@
             justify-content: space-between;
             align-items: center;
             border-radius: 8px;
-            padding: 12px 15px;
+            padding: 20px 15px;
             border: 1px solid var(--grey-dim);
             position: relative;
             overflow: hidden;
@@ -272,12 +275,12 @@
         }
 
         .matchup-card::before {
-            content: "WEEK 8 MATCHUP";
+            content: "WEEK 9 MATCHUP";
             position: absolute;
-            top: 3px;
+            top: 5px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 10px;
+            font-size: 11px;
             color: var(--league-dim);
             font-weight: 700;
         }
@@ -291,15 +294,15 @@
         }
 
         .team-block img {
-            width: 50px; 
-            height: 50px;
+            width: 60px; 
+            height: 60px;
             object-fit: contain;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
         }
 
         .team-block span {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             text-align: center;
             line-height: 1.1;
@@ -309,14 +312,14 @@
             background: #111;
             border: 2px solid var(--grey-dim);
             color: #fff;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 14px;
             z-index: 2;
         }
 
@@ -437,12 +440,12 @@
         .t-teal { color: #14b8a6; }
         .t-yellow { color: #eab308; }
 
-        /* SOS Styles */
+        /* SOS Styles with Tabular Column Layout */
         .sos-header {
             display: grid;
-            grid-template-columns: 28% 12% 60%;
+            grid-template-columns: 22% 8% 17.5% 17.5% 17.5% 17.5%;
             align-items: flex-end;
-            font-size: 20px;
+            font-size: 14px;
             color: var(--league-dim);
             font-weight: 700;
             text-transform: uppercase;
@@ -450,10 +453,17 @@
             padding-bottom: 4px;
             margin-bottom: 4px;
         }
+        
+        .sos-header span {
+            text-align: center;
+        }
+        .sos-header span:first-child {
+            text-align: left;
+        }
 
         .sos-row {
             display: grid;
-            grid-template-columns: 28% 12% 60%;
+            grid-template-columns: 22% 8% 17.5% 17.5% 17.5% 17.5%;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             padding: 5px 0;
@@ -466,7 +476,7 @@
 
         .sos-team { font-weight: bold; font-size: 15px; }
         .sos-stat { font-family: monospace; font-size: 17px; font-weight: bold; text-align: center; }
-        .sos-matches { font-size: 15px; color: #ffffff; font-weight: bold; text-align: right; line-height: 1.2; }
+        .sos-match { font-size: 13px; color: #ffffff; font-weight: bold; text-align: center; line-height: 1.2; }
 
     </style>
 </head>
@@ -478,7 +488,7 @@
         <div class="header-main">
             <h1>CLUTCH PROSPECT LEAGUE</h1>
             <h2>PLAYOFF IMPLICATIONS</h2>
-            <div class="subtitle">International Div. Week 8 Update - The Playoff Push</div>
+            <div class="subtitle">International Div. Week 9 Update - The Playoff Push</div>
         </div>
     </div>
 
@@ -499,26 +509,26 @@
                     <tr class="team-row">
                         <td class="rank t-red">1</td>
                         <td><div class="team-info"><img src="CPLLogos/warriors.png" alt="" onerror="this.style.display='none'">WUHAN WARRIORS</div></td>
-                        <td class="record" style="text-align: center;">5-2</td>
+                        <td class="record" style="text-align: center;">5-3</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-gold">2</td>
                         <td><div class="team-info"><img src="CPLLogos/shadows.png" alt="" onerror="this.style.display='none'">SAKALA SHADOWS</div></td>
-                        <td class="record" style="text-align: center;">3-4</td>
+                        <td class="record" style="text-align: center;">4-4</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-white">3</td>
                         <td><div class="team-info"><img src="CPLLogos/buffalo.png" alt="" onerror="this.style.display='none'">BULAWAYO BUFFALO</div></td>
-                        <td class="record" style="text-align: center;">3-4</td>
+                        <td class="record" style="text-align: center;">4-4</td>
                         <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-green">4</td>
                         <td><div class="team-info"><img src="CPLLogos/lory.png" alt="" onerror="this.style.display='none'">LAUTOKA LORY</div></td>
-                        <td class="record" style="text-align: center;">3-4</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="record" style="text-align: center;">3-5</td>
+                        <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
                     
                     <tr class="cutoff-row">
@@ -530,14 +540,14 @@
 
                     <tr class="team-row">
                         <td class="rank t-teal">5</td>
-                        <td><div class="team-info"><img src="CPLLogos/fishermen.png" alt="" onerror="this.style.display='none'">F.B. FISHERMEN</div></td>
-                        <td class="record" style="text-align: center;">2-5</td>
+                        <td><div class="team-info"><img src="CPLLogos/fishermen.png" alt="" onerror="this.style.display='none'">Frenchmen Bay FISHERMEN</div></td>
+                        <td class="record" style="text-align: center;">3-5</td>
                         <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-yellow">6</td>
                         <td><div class="team-info"><img src="CPLLogos/cobras.png" alt="" onerror="this.style.display='none'">CARACAS COBRAS</div></td>
-                        <td class="record" style="text-align: center;">2-5</td>
+                        <td class="record" style="text-align: center;">3-5</td>
                         <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
                 </tbody>
@@ -545,25 +555,21 @@
         </div>
 
         <div class="panel">
-            <div class="panel-header">WEEK 8 KEY MATCHUPS & CLINCHING SITUATIONS</div>
+            <div class="panel-header">WEEK 9 KEY MATCHUPS & CLINCHING SITUATIONS</div>
             
             <div class="matchups-wrapper">
                 
                 <div class="matchup-cards-col">
                     <div class="matchup-card matchup-1">
                         <div class="team-block">
-                            <img src="CPLLogos/fishermen.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">Frenchmen Bay<br>FISHERMEN</span>
+                            <img src="CPLLogos/buffalo.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">BULAWAYO<br>BUFFALO</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CPLLogos/warriors.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">WUHAN<br>WARRIORS</span>
+                            <img src="CPLLogos/lory.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">LAUTOKA<br>LORY</span>
                         </div>
-                    </div>
-
-                    <div style="height: 100px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
-                        SINGLE KEY MATCHUP SPECIFIED
                     </div>
                 </div>
 
@@ -597,46 +603,67 @@
             
             <div class="sos-header">
                 <span>Team</span>
-                <span style="text-align: center;">SOS</span>
-                <span style="text-align: right;">Toughest Matches Left</span>
+                <span>SOS</span>
+                <span>Week 9</span>
+                <span>Week 10</span>
+                <span>Week 11</span>
+                <span>Week 12</span>
             </div>
             
             <div style="display: flex; flex-direction: column;">
                 
                 <div class="sos-row">
                     <span class="sos-team t-white">1. SHADOWS <span style="font-size: 10px; color: #ef4444;">(HARDEST)</span></span>
-                    <span class="sos-stat t-white">.657</span>
-                    <span class="sos-matches">vs Sonic Boom (6-1), Warriors (5-2), Coyotes (5-2)</span>
+                    <span class="sos-stat t-white">.625</span>
+                    <span class="sos-match">Mortars (5-3)</span>
+                    <span class="sos-match">Buffalo (4-4)</span>
+                    <span class="sos-match">Sonic Boom (6-2)</span>
+                    <span class="sos-match">Warriors (5-3)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">2. COBRAS</span>
-                    <span class="sos-stat t-white">.600</span>
-                    <span class="sos-matches">vs Sonic Boom (6-1), Marauders (6-1), Warriors (5-2)</span>
+                    <span class="sos-team t-white">2. WARRIORS</span>
+                    <span class="sos-stat t-white">.563</span>
+                    <span class="sos-match">Marauders (6-2)</span>
+                    <span class="sos-match">Cobras (3-5)</span>
+                    <span class="sos-match">Coyotes (5-3)</span>
+                    <span class="sos-match">Shadows (4-4)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T3. WARRIORS</span>
-                    <span class="sos-stat t-white">.514</span>
-                    <span class="sos-matches">vs Marauders (6-1), Coyotes (5-2), Shadows (3-4)</span>
+                    <span class="sos-team t-white">T3. BUFFALO</span>
+                    <span class="sos-stat t-white">.500</span>
+                    <span class="sos-match">Lory (3-5)</span>
+                    <span class="sos-match">Shadows (4-4)</span>
+                    <span class="sos-match">Supernova (4-4)</span>
+                    <span class="sos-match">Coyotes (5-3)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T3. FISHERMEN</span>
-                    <span class="sos-stat t-white">.514</span>
-                    <span class="sos-matches">vs Sonic Boom (6-1), Warriors (5-2), Mortars (4-3)</span>
+                    <span class="sos-team t-white">T3. COBRAS</span>
+                    <span class="sos-stat t-white">.500</span>
+                    <span class="sos-match">Groundhogs (0-8)</span>
+                    <span class="sos-match">Warriors (5-3)</span>
+                    <span class="sos-match">Mortars (5-3)</span>
+                    <span class="sos-match">Marauders (6-2)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T5. LORY</span>
-                    <span class="sos-stat t-white">.400</span>
-                    <span class="sos-matches">vs Marauders (6-1), Supernova (3-4), Buffalo (3-4)</span>
+                    <span class="sos-team t-white">5. FISHERMEN</span>
+                    <span class="sos-stat t-white">.438</span>
+                    <span class="sos-match">Sonic Boom (6-2)</span>
+                    <span class="sos-match">Lory (3-5)</span>
+                    <span class="sos-match">Groundhogs (0-8)</span>
+                    <span class="sos-match">Mortars (5-3)</span>
                 </div>
 
                 <div class="sos-row">
-                    <span class="sos-team t-white">T5. BUFFALO <span style="font-size: 10px; color: var(--div-glow);">(EASIEST)</span></span>
-                    <span class="sos-stat t-white">.400</span>
-                    <span class="sos-matches">vs Coyotes (5-2), Supernova (3-4), Shadows (3-4)</span>
+                    <span class="sos-team t-white">6. LORY <span style="font-size: 10px; color: var(--div-glow);">(EASIEST)</span></span>
+                    <span class="sos-stat t-white">.406</span>
+                    <span class="sos-match">Buffalo (4-4)</span>
+                    <span class="sos-match">Fishermen (3-5)</span>
+                    <span class="sos-match">Marauders (6-2)</span>
+                    <span class="sos-match">Groundhogs (0-8)</span>
                 </div>
 
             </div>
