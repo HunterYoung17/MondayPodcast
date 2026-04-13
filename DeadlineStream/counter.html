@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Deadline Counter</title>
+    <style>
+        :root {
+            --bg-dark: rgba(18, 18, 18, 0.95);
+            --border-accent: #e53935; /* Breaking News Red */
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --number-color: #ffd700; /* Gold */
+        }
+
+        body {
+            /* PURE CHROMA GREEN BACKGROUND */
+            background-color: #00ff00; 
+            font-family: 'Arial Black', sans-serif;
+            margin: 0;
+            padding: 30px;
+            color: var(--text-main);
+        }
+
+        /* --- MAIN WIDGET --- */
+        .tracker-widget {
+            width: 380px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            border-top: 8px solid var(--border-accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER --- */
+        .widget-header {
+            background: linear-gradient(90deg, rgba(229,57,53,0.2) 0%, transparent 100%);
+            padding: 15px 20px;
+            border-bottom: 2px solid #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--border-accent);
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 10px var(--border-accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        .title {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* --- STAT ROWS --- */
+        .stat-container {
+            padding: 10px 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #444;
+            transition: background 0.2s;
+        }
+
+        .stat-label {
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            color: var(--number-color);
+            line-height: 1;
+            min-width: 40px;
+            text-align: right;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Animation when a number changes */
+        .stat-number.flash {
+            transform: scale(1.3);
+            color: #ffffff;
+            text-shadow: 0 0 20px #ffffff;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- CONTROLS INSTRUCTIONS (Hidden on stream) --- */
+        .controls-panel {
+            margin-top: 20px;
+            width: 340px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: opacity 0.3s ease;
+        }
+
+        .controls-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .controls-panel h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff;}
+        .controls-panel p { margin: 5px 0; font-size: 0.9rem; color: #aaa; }
+        .controls-panel kbd { 
+            background: #333; padding: 2px 6px; border-radius: 4px; color: #ffd700; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tracker-widget">
+        <div class="widget-header">
+            <div class="live-dot"></div>
+            <h1 class="title">The Deadline</h1>
+        </div>
+        
+        <div class="stat-container">
+            <div class="stat-row">
+                <div class="stat-label">FA Moves</div>
+                <div class="stat-number" id="val-fa">0</div>
+            </div>
+            
+            <div class="stat-row">
+                <div class="stat-label">Trades</div>
+                <div class="stat-number" id="val-trades">0</div>
+            </div>
+            
+            <div class="stat-row">
+                <div class="stat-label">Roster Moves</div>
+                <div class="stat-number" id="val-roster">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-panel" id="instruction-panel">
+        <h3>Broadcast Controls</h3>
+        <p><kbd>Q</kbd> / <kbd>A</kbd> : FA Moves (+ / -)</p>
+        <p><kbd>W</kbd> / <kbd>S</kbd> : Trades (+ / -)</p>
+        <p><kbd>E</kbd> / <kbd>D</kbd> : Roster Moves (+ / -)</p>
+        <hr style="border-color: #444; margin: 10px 0;">
+        <p><kbd>H</kbd> : Hide/Show these instructions</p>
+        <p><em>*You can also click the numbers directly to add 1.</em></p>
+    </div>
+
+    <script>
+        // State variables
+        let counts = {
+            fa: 0,
+            trades: 0,
+            roster: 0
+        };
+
+        // DOM Elements
+        const elFa = document.getElementById('val-fa');
+        const elTrades = document.getElementById('val-trades');
+        const elRoster = document.getElementById('val-roster');
+        const panel = document.getElementById('instruction-panel');
+
+        // Function to update the number and trigger the flash animation
+        function updateCount(type, amount) {
+            counts[type] += amount;
+            if (counts[type] < 0) counts[type] = 0; // Prevent negative numbers
+
+            let targetElement;
+            if (type === 'fa') targetElement = elFa;
+            if (type === 'trades') targetElement = elTrades;
+            if (type === 'roster') targetElement = elRoster;
+
+            targetElement.innerText = counts[type];
+
+            // Trigger animation
+            targetElement.classList.remove('flash');
+            void targetElement.offsetWidth; // Trigger reflow to restart animation
+            targetElement.classList.add('flash');
+            
+            setTimeout(() => {
+                targetElement.classList.remove('flash');
+            }, 150);
+        }
+
+        // --- MOUSE CONTROLS (Click the number to +1) ---
+        elFa.addEventListener('click', () => updateCount('fa', 1));
+        elTrades.addEventListener('click', () => updateCount('trades', 1));
+        elRoster.addEventListener('click', () => updateCount('roster', 1));
+
+        // --- KEYBOARD CONTROLS ---
+        window.addEventListener('keydown', (e) => {
+            // FA Moves
+            if (e.code === 'KeyQ') updateCount('fa', 1);
+            if (e.code === 'KeyA') updateCount('fa', -1);
+            
+            // Trades
+            if (e.code === 'KeyW') updateCount('trades', 1);
+            if (e.code === 'KeyS') updateCount('trades', -1);
+            
+            // Roster Moves
+            if (e.code === 'KeyE') updateCount('roster', 1);
+            if (e.code === 'KeyD') updateCount('roster', -1);
+
+            // Hide/Show Instructions
+            if (e.code === 'KeyH') {
+                panel.classList.toggle('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
