@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCS Rivalry Matchup Card</title>
+<style>
+    :root {
+        --bg-dark: #0f0f0f;
+        --card-bg: #1a1a1a;
+        --intl-primary: #ff8c00; 
+        --amer-primary: #007bff; 
+        --text-color: #ffffff;
+        --muted-text: #888888;
+        --accent-gold: #ffcc00;
+        --border-color: #333;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-color);
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 40px 0; 
+    }
+
+    #dashboard {
+        width: 1920px;
+        min-height: 1080px; 
+        display: grid;
+        grid-template-rows: 120px 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    header {
+        grid-column: 1 / span 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 3px solid var(--accent-gold);
+        background: rgba(255, 255, 255, 0.02);
+        padding-bottom: 20px;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 56px;
+        text-transform: uppercase;
+        letter-spacing: 8px;
+        color: var(--accent-gold);
+    }
+
+    .division-block {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .division-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        font-size: 28px;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 12px;
+        border-radius: 4px;
+        letter-spacing: 3px;
+    }
+
+    .div-logo {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .intl-block .division-header { border: 2px solid var(--intl-primary); color: var(--intl-primary); }
+    .amer-block .division-header { border: 2px solid var(--amer-primary); color: var(--amer-primary); }
+
+    .matchup-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        min-height: 275px; 
+    }
+
+    /* Teams Row with Logos */
+    .team-row {
+        display: grid;
+        grid-template-columns: 1fr 60px 1fr;
+        align-items: center;
+    }
+
+    .team-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .team-left-container { justify-content: flex-end; text-align: right; }
+    .team-right-container { justify-content: flex-start; text-align: left; }
+
+    .team-logo {
+        height: 45px;
+        width: 45px;
+        object-fit: contain;
+    }
+
+    .team-name {
+        font-size: 26px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Special rule for Ninja's black text to be readable */
+    .ninja-text {
+        color: #000000;
+        text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    }
+
+    .vs-badge {
+        text-align: center;
+        font-weight: 900;
+        color: var(--accent-gold);
+        font-size: 32px;
+    }
+
+    /* Data Row */
+    .data-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .data-box {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        padding: 12px;
+    }
+
+    .data-title {
+        font-size: 14px;
+        color: var(--accent-gold);
+        text-transform: uppercase;
+        font-weight: 800;
+        margin-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 204, 0, 0.2);
+        padding-bottom: 4px;
+    }
+
+    .stat-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .stat-label { color: var(--muted-text); }
+    .stat-val { font-weight: 600; color: #fff; }
+
+    /* Important Notes */
+    .notes-box {
+        background: rgba(255, 204, 0, 0.05);
+        border-left: 4px solid var(--accent-gold);
+        padding: 16px;
+        font-size: 16px;
+        color: #e0e0e0;
+        font-style: italic;
+        flex-grow: 1; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.4;
+    }
+
+</style>
+</head>
+<body>
+
+<div id="dashboard">
+    <header>
+        <h1>CLUTCH COMPETITOR SERIES</h1>
+        <div style="color: #666; font-size: 18px; letter-spacing: 2px;">MATCHDAY RIVALRY BREAKDOWN</div>
+    </header>
+
+    <div class="division-block intl-block">
+        <div class="division-header">
+            <img src="international.png" class="div-logo" alt="Intl">
+            International Division
+            <img src="international.png" class="div-logo" alt="Intl">
+        </div>
+
+        <div class="matchup-card">
+            <div class="team-row">
+                <div class="team-container team-left-container">
+                    <div class="team-name" style="color: #2ecc71;">Fiji Flyers</div>
+                    <img src="flyers.png" class="team-logo" alt="Flyers">
+                </div>
+                <div class="vs-badge">@</div>
+                <div class="team-container team-right-container">
+                    <img src="anglers.png" class="team-logo" alt="Anglers">
+                    <div class="team-name" style="color: teal;">Atlantis Anglers</div>
+                </div>
+            </div>
+            <div class="data-row">
+                <div class="data-box">
+                    <div class="data-title">History</div>
+                    <div class="stat-line"><span class="stat-label">Series:</span><span class="stat-val">FLY 6-4</span></div>
+                    <div class="stat-line"><span class="stat-label">Last Meeting:</span><span class="stat-val">W5 FLY (3-1)</span></div>
+                    <div class="stat-line"><span class="stat-label">Last 3:</span><span class="stat-val">FLY-ANG-ANG</span></div>
+                </div>
+                <div class="data-box">
+                    <div class="data-title">Standings & Stakes</div>
+                    <div class="stat-line"><span class="stat-label">Standings:</span><span class="stat-val">1st / 2nd</span></div>
+                    <div class="stat-line"><span class="stat-label">Series Back:</span><span class="stat-val">-- / 3.0</span></div>
+                    <div class="stat-line"><span class="stat-label">Playoff Status:</span><span class="stat-val">Clinched / In Mix</span></div>
+                </div>
+            </div>
+            <div class="notes-box">"The last time these two teams were #1 and #2 in the international division, they played each other in the season 3 international pennant series!"</div>
+        </div>
+
+        <div class="matchup-card">
+            <div class="team-row">
+                <div class="team-container team-left-container">
+                    <div class="team-name ninja-text">Nepal Ninjas</div>
+                    <img src="ninjas.png" class="team-logo" alt="Ninjas">
+                </div>
+                <div class="vs-badge">@</div>
+                <div class="team-container team-right-container">
+                    <img src="samurai.png" class="team-logo" alt="Samurai">
+                    <div class="team-name" style="color: red;">Shanghai Samurai</div>
+                </div>
+            </div>
+            <div class="data-row">
+                <div class="data-box">
+                    <div class="data-title">History</div>
+                    <div class="stat-line"><span class="stat-label">Series:</span><span class="stat-val">SAM 5-4</span></div>
+                    <div class="stat-line"><span class="stat-label">Last Meeting:</span><span class="stat-val">W4 SAM (3-1)</span></div>
+                    <div class="stat-line"><span class="stat-label">Last 3:</span><span class="stat-val">SAM-NIN-SAM</span></div>
+                </div>
+                <div class="data-box">
+                    <div class="data-title">Standings & Stakes</div>
+                    <div class="stat-line"><span class="stat-label">Standings:</span><span class="stat-val">6th / 4th</span></div>
+                    <div class="stat-line"><span class="stat-label">Series Back:</span><span class="stat-val">5.0 / 4.0</span></div>
+                    <div class="stat-line"><span class="stat-label">Playoff Status:</span><span class="stat-val">Bubble / In Mix</span></div>
+                </div>
+            </div>
+            <div class="notes-box">"Souls played for the Samurai in his rookie season and now plays them again as the owner of the Ninjas!"</div>
+        </div>
+
+        <div class="matchup-card">
+            <div class="team-row">
+                <div class="team-container team-left-container">
+                    <div class="team-name" style="color: white;">Zimbabwe Zebras</div>
+                    <img src="zebras.png" class="team-logo" alt="Zebras">
+                </div>
+                <div class="vs-badge">@</div>
+                <div class="team-container team-right-container">
+                    <img src="vipers.png" class="team-logo" alt="Vipers">
+                    <div class="team-name" style="color: yellow;">Venezuela Vipers</div>
+                </div>
+            </div>
+            <div class="data-row">
+                <div class="data-box">
+                    <div class="data-title">History</div>
+                    <div class="stat-line"><span class="stat-label">Series:</span><span class="stat-val">VIP 3-1</span></div>
+                    <div class="stat-line"><span class="stat-label">Last Meeting:</span><span class="stat-val">W5 VIP (3-2)</span></div>
+                    <div class="stat-line"><span class="stat-label">Last 3:</span><span class="stat-val">VIP-ZEB-VIP</span></div>
+                </div>
+                <div class="data-box">
+                    <div class="data-title">Standings & Stakes</div>
+                    <div class="stat-line"><span class="stat-label">Standings:</span><span class="stat-val">5th / 3rd</span></div>
+                    <div class="stat-line"><span class="stat-label">Series Back:</span><span class="stat-val">5.0 / 4.0</span></div>
+                    <div class="stat-line"><span class="stat-label">Playoff Status:</span><span class="stat-val">Bubble / In Mix</span></div>
+                </div>
+            </div>
+            <div class="notes-box">"These two teams were both introduced in the season 3 expansion and this is the least seen rivalry in the CCS!"</div>
+        </div>
+    </div>
+
+    <div class="division-block amer-block">
+        <div class="division-header">
+            <img src="american.png" class="div-logo" alt="Amer">
+            American Division
+            <img src="american.png" class="div-logo" alt="Amer">
+        </div>
+
+        <div class="matchup-card">
+            <div class="team-row">
+                <div class="team-container team-left-container">
+                    <div class="team-name" style="color: #8b4513;">Palm Beach Pirates</div>
+                    <img src="pirates.png" class="team-logo" alt="Pirates">
+                </div>
+                <div class="vs-badge">@</div>
+                <div class="team-container team-right-container">
+                    <img src="blasters.png" class="team-logo" alt="Blasters">
+                    <div class="team-name" style="color: #ff8c00;">Boston Blasters</div>
+                </div>
+            </div>
+            <div class="data-row">
+                <div class="data-box">
+                    <div class="data-title">History</div>
+                    <div class="stat-line"><span class="stat-label">Series:</span><span class="stat-val">BLA 5-4</span></div>
+                    <div class="stat-line"><span class="stat-label">Last Meeting:</span><span class="stat-val">W4 PIR (3-2)</span></div>
+                    <div class="stat-line"><span class="stat-label">Last 3:</span><span class="stat-val">PIR-PIR-BLA</span></div>
+                </div>
+                <div class="data-box">
+                    <div class="data-title">Standings & Stakes</div>
+                    <div class="stat-line"><span class="stat-label">Standings:</span><span class="stat-val">3rd / 4th</span></div>
+                    <div class="stat-line"><span class="stat-label">Series Back:</span><span class="stat-val">1.0 / 2.0</span></div>
+                    <div class="stat-line"><span class="stat-label">Playoff Status:</span><span class="stat-val">In Mix / In Mix</span></div>
+                </div>
+            </div>
+            <div class="notes-box">"Nirvana and Dyloh play their former organizations! Dyloh spent 2 seasons on the Pirates and Nirvana played for the Marauders last season!"</div>
+        </div>
+
+        <div class="matchup-card">
+            <div class="team-row">
+                <div class="team-container team-left-container">
+                    <div class="team-name" style="color: hotpink;">Houston Howlers</div>
+                    <img src="howlers.png" class="team-logo" alt="Howlers">
+                </div>
+                <div class="vs-badge">@</div>
+                <div class="team-container team-right-container">
+                    <img src="moose.png" class="team-logo" alt="Moose">
+                    <div class="team-name" style="color: tan;">Michigan Moose</div>
+                </div>
+            </div>
+            <div class="data-row">
+                <div class="data-box">
+                    <div class="data-title">History</div>
+                    <div class="stat-line"><span class="stat-label">Series:</span><span class="stat-val">MOO 3-2</span></div>
+                    <div class="stat-line"><span class="stat-label">Last Meeting:</span><span class="stat-val">W4 HOU (3-2)</span></div>
+                    <div class="stat-line"><span class="stat-label">Last 3:</span><span class="stat-val">HOU-MOO-MOO</span></div>
+                </div>
+                <div class="data-box">
+                    <div class="data-title">Standings & Stakes</div>
+                    <div class="stat-line"><span class="stat-label">Standings:</span><span class="stat-val">1st / 2nd</span></div>
+                    <div class="stat-line"><span class="stat-label">Series Back:</span><span class="stat-val">-- / 1.0</span></div>
+                    <div class="stat-line"><span class="stat-label">Playoff Status:</span><span class="stat-val">In Mix / In Mix</span></div>
+                </div>
+            </div>
+            <div class="notes-box">"These two teams were both introduced in the Season 3 expansion, both having 1 playoff appearance each!"</div>
+        </div>
+
+        <div class="matchup-card">
+            <div class="team-row">
+                <div class="team-container team-left-container">
+                    <div class="team-name" style="color: mediumpurple;">Seattle Stars</div>
+                    <img src="stars.png" class="team-logo" alt="Stars">
+                </div>
+                <div class="vs-badge">@</div>
+                <div class="team-container team-right-container">
+                    <img src="shockwave.png" class="team-logo" alt="Shockwave">
+                    <div class="team-name" style="color: #007bff;">SJ Shockwave</div>
+                </div>
+            </div>
+            <div class="data-row">
+                <div class="data-box">
+                    <div class="data-title">History</div>
+                    <div class="stat-line"><span class="stat-label">Series:</span><span class="stat-val">SHO 7-4</span></div>
+                    <div class="stat-line"><span class="stat-label">Last Meeting:</span><span class="stat-val">W5 SHO (3-2)</span></div>
+                    <div class="stat-line"><span class="stat-label">Last 3:</span><span class="stat-val">SHO-SHO-STA</span></div>
+                </div>
+                <div class="data-box">
+                    <div class="data-title">Standings & Stakes</div>
+                    <div class="stat-line"><span class="stat-label">Standings:</span><span class="stat-val">6th / 5th</span></div>
+                    <div class="stat-line"><span class="stat-label">Series Back:</span><span class="stat-val">3.0 / 2.0</span></div>
+                    <div class="stat-line"><span class="stat-label">Playoff Status:</span><span class="stat-val">Battling / Bubble</span></div>
+                </div>
+            </div>
+            <div class="notes-box">"This season was the first time since season 1 these two teams have played each other that wasnt the first, last or a playoff game!"</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
