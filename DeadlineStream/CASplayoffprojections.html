@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAS Playoff Bracket Graphic</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --empty-border: #333;
+            --text-main: #ffffff;
+            
+            /* Division Colors */
+            --american-blue: #1976d2;
+            --international-orange: #d84315; 
+
+            /* CAS Theme Colors */
+            --cas-red: #e53935; /* Fierce CAS Red */
+            --cas-grey: #a0a0a0; 
+        }
+
+        body {
+            background-color: var(--bg-color); 
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #0a0a0a 100%); 
+            font-family: 'Arial Black', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        .bracket-board {
+            display: flex;
+            justify-content: space-between;
+            width: 1500px;
+            height: 850px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            border: 2px solid #222;
+        }
+
+        /* --- COLUMNS --- */
+        .conference {
+            display: flex;
+            flex-direction: column;
+            width: 430px; 
+            height: 100%;
+        }
+
+        .center-stage {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; 
+            align-items: center;
+            position: relative;
+            padding-top: 10px; 
+        }
+
+        /* --- HEADERS --- */
+        .conf-header {
+            text-align: center;
+            padding: 15px;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .american .conf-header { background-color: var(--american-blue); }
+        .international .conf-header { background-color: var(--international-orange); }
+
+        /* --- BRACKET MATCHUPS --- */
+        .matchup {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Bracket Connection Lines */
+        .matchup::after {
+            content: '';
+            position: absolute;
+            top: 50px;
+            bottom: 50px;
+            width: 30px;
+            border-top: 3px solid #444;
+            border-bottom: 3px solid #444;
+        }
+
+        .american .matchup::after {
+            right: -30px;
+            border-right: 3px solid #444;
+        }
+
+        .international .matchup::after {
+            left: -30px;
+            border-left: 3px solid #444;
+        }
+
+        /* --- SLOTS --- */
+        .slot {
+            height: 70px;
+            background-color: var(--panel-bg);
+            border: 3px dashed var(--empty-border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            padding-left: 10px; 
+            padding-right: 20px; 
+            justify-content: flex-start; 
+        }
+
+        .slot .color-accent {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0; 
+            transition: width 0.4s ease;
+            z-index: 1; 
+        }
+
+        .team-logo-img {
+            height: 50px; 
+            width: auto;
+            max-width: 60px; 
+            margin-right: 15px;
+            vertical-align: middle;
+            opacity: 0; 
+            transform: scale(0.8);
+            transition: all 0.4s ease;
+            z-index: 2; 
+            object-fit: contain; 
+        }
+
+        .slot .seed {
+            width: 40px;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #555; 
+            z-index: 3;
+            transition: color 0.4s ease;
+            margin-right: 5px; 
+        }
+
+        /* Container for Name and Record */
+        .visible-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-grow: 1;
+            z-index: 3;
+            padding-left: 10px; 
+        }
+
+        .slot .name {
+            font-size: 1.7rem; 
+            text-transform: uppercase;
+            padding-left: 5px; 
+            z-index: 3;
+            opacity: 0; 
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+            white-space: nowrap; 
+        }
+
+        .slot .record {
+            font-size: 1.4rem; 
+            color: #ccc; 
+            z-index: 3;
+            opacity: 0; 
+            transform: translateX(-10px); 
+            transition: all 0.4s ease;
+            white-space: nowrap; 
+        }
+
+        /* ACTIVE STATE */
+        .slot.active {
+            border: 3px solid #888;
+            background-color: #252525;
+            box-shadow: 0 5px 15px rgba(229, 57, 53, 0.15); 
+        }
+
+        .slot.active .color-accent { width: 12px; }
+        .slot.active .seed { color: var(--cas-red); } 
+        .slot.active .name { opacity: 1; transform: translateX(0); }
+        .slot.active .record { opacity: 1; transform: translateX(0); color: #888; } 
+        .slot.active .team-logo-img { opacity: 1; transform: scale(1); } 
+
+        /* --- MISSED PLAYOFFS SECTION --- */
+        .missed-section {
+            margin-top: auto; 
+            background: rgba(255, 0, 0, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-top: 2px solid #555;
+        }
+
+        .missed-title {
+            text-align: center;
+            color: #ff4444;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .missed-section .slot {
+            height: 50px;
+            margin-bottom: 10px;
+            border: 2px dashed var(--empty-border);
+            padding-left: 5px; 
+            padding-right: 15px; 
+        }
+
+        .missed-logo-img {
+            height: 35px; 
+            width: auto;
+            max-width: 45px;
+            margin-right: 10px;
+            vertical-align: middle;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s ease;
+            object-fit: contain;
+            z-index: 2;
+        }
+        
+        .missed-section .slot.active .missed-logo-img { opacity: 1; transform: scale(1); } 
+
+        .missed-section .slot .seed { font-size: 1.2rem; width: 30px; margin-right: 5px;}
+        .missed-section .slot .name { font-size: 1.4rem; padding-left: 0; }
+        .missed-section .slot .record { font-size: 1.2rem; } 
+        
+        .missed-section .visible-content { padding-left: 5px; } 
+
+        /* --- BRACKET CONNECTION LINES (Center) --- */
+        .line.connect-semi-final {
+            position: absolute;
+            background-color: #444;
+            top: calc(50% - 60px);
+            left: 50%;
+            height: 120px;
+            width: 3px;
+            opacity: 0.5; 
+        }
+
+        /* --- CENTER HEADERS --- */
+        .projections-header {
+            font-size: 1.8rem;
+            color: var(--cas-grey); 
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .central-cas-logo {
+            font-size: 3.5rem;
+            color: var(--cas-red);
+            text-align: center;
+            margin-bottom: 10px; 
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(229, 57, 53, 0.6); 
+        }
+
+        .championship-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* On-Screen Instructions */
+        .controls {
+            position: fixed;
+            bottom: 15px;
+            color: #666;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bracket-board">
+        
+        <div class="conference american">
+            <div class="conf-header">American</div>
+            
+            <div class="matchup">
+                <div class="slot" data-step="6" data-color="#d2b48c"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/black bears.png" class="team-logo-img" alt="">
+                    <div class="seed">1</div>
+                    <div class="visible-content">
+                        <div class="name">Black Bears</div>
+                        <div class="record">9-3</div>
+                    </div>
+                </div>
+                <div class="slot" data-step="3" data-color="#673ab7"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/astronauts.png" class="team-logo-img" alt="">
+                    <div class="seed">4</div>
+                    <div class="visible-content">
+                        <div class="name">Astronauts</div>
+                        <div class="record">6-6</div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="matchup">
+                <div class="slot" data-step="5" data-color="#ff1493"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/wolfpack.png" class="team-logo-img" alt="">
+                    <div class="seed">2</div>
+                    <div class="visible-content">
+                        <div class="name">Wolfpack</div>
+                        <div class="record">6-6</div> 
+                    </div>
+                </div>
+                <div class="slot" data-step="4" data-color="#ff6600"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/cannons.png" class="team-logo-img" alt="">
+                    <div class="seed">3</div>
+                    <div class="visible-content">
+                        <div class="name">Cannons</div>
+                        <div class="record">6-6</div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="missed-section">
+                <div class="missed-title">MISSED PLAYOFFS</div>
+                <div class="slot" data-step="2" data-color="#1976d2"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/surge.png" class="missed-logo-img" alt="">
+                    <div class="seed">5</div>
+                    <div class="visible-content">
+                        <div class="name">Surge</div>
+                        <div class="record">5-7</div> 
+                    </div>
+                </div>
+                <div class="slot" data-step="1" data-color="#5d4037"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/conquerors.png" class="missed-logo-img" alt="">
+                    <div class="seed">6</div>
+                    <div class="visible-content">
+                        <div class="name">Conquerors</div>
+                        <div class="record">3-9</div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="center-stage">
+            <div class="projections-header">Sports' Projections</div> 
+            <div class="central-cas-logo">CAS PLAYOFFS</div> 
+            
+            <div class="line connect-semi-final"></div> 
+            
+            <div class="championship-area">
+                </div>
+        </div>
+
+        <div class="conference international">
+            <div class="conf-header">International</div>
+            
+            <div class="matchup">
+                <div class="slot" data-step="12" data-color="#c1e1c1"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/skyhawks.png" class="team-logo-img" alt="">
+                    <div class="seed">1</div>
+                    <div class="visible-content">
+                        <div class="name">Skyhawks</div>
+                        <div class="record">11-1</div> 
+                    </div>
+                </div>
+                <div class="slot" data-step="9" data-color="#ffffff"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/elephants.png" class="team-logo-img" alt="">
+                    <div class="seed">4</div>
+                    <div class="visible-content">
+                        <div class="name">Elephants</div>
+                        <div class="record">6-6</div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="matchup">
+                <div class="slot" data-step="11" data-color="#000000"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/prowlers.png" class="team-logo-img" alt="">
+                    <div class="seed">2</div>
+                    <div class="visible-content">
+                        <div class="name">Prowlers</div>
+                        <div class="record">8-4</div> 
+                    </div>
+                </div>
+                <div class="slot" data-step="10" data-color="#fbc02d"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/copperheads.png" class="team-logo-img" alt="">
+                    <div class="seed">3</div>
+                    <div class="visible-content">
+                        <div class="name">Copperheads</div>
+                        <div class="record">8-4</div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="missed-section">
+                <div class="missed-title">MISSED PLAYOFFS</div>
+                <div class="slot" data-step="8" data-color="#008080"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/behemoths.png" class="missed-logo-img" alt="">
+                    <div class="seed">5</div>
+                    <div class="visible-content">
+                        <div class="name">Behemoths</div>
+                        <div class="record">3-9</div> 
+                    </div>
+                </div>
+                <div class="slot" data-step="7" data-color="#d32f2f"> <div class="color-accent"></div>
+                    <img src="../CAShtml/CASlogos/shaman.png" class="missed-logo-img" alt="">
+                    <div class="seed">6</div>
+                    <div class="visible-content">
+                        <div class="name">Shaman</div>
+                        <div class="record">1-11</div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="controls">Press UP ARROW to reveal teams. Press DOWN ARROW to hide.</div>
+
+    <script>
+        document.querySelectorAll('.slot').forEach(slot => {
+            const color = slot.getAttribute('data-color');
+            slot.querySelector('.color-accent').style.backgroundColor = color;
+        });
+
+        let currentStep = 0;
+        const maxSteps = 12;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                if (currentStep < maxSteps) {
+                    currentStep++;
+                    const slotToReveal = document.querySelector(`.slot[data-step="${currentStep}"]`);
+                    if (slotToReveal) {
+                        slotToReveal.classList.add('active');
+                    }
+                }
+            }
+            
+            if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                if (currentStep > 0) {
+                    const slotToHide = document.querySelector(`.slot[data-step="${currentStep}"]`);
+                    if (slotToHide) {
+                        slotToHide.classList.remove('active');
+                    }
+                    currentStep--;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

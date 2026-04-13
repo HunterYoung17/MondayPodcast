@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Sports Ticker</title>
+    <style>
+        :root {
+            --primary-color: #000;
+            --accent-color: #ffd700;
+        }
+
+        body {
+            /* PURE CHROMA GREEN BACKGROUND */
+            background-color: #00ff00; 
+            font-family: 'Arial Black', sans-serif;
+            margin: 0;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- CONTROL PANEL --- */
+        .control-panel {
+            margin-top: 30px;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 900px;
+            text-align: center;
+            border: 1px solid #444;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Class to hide the panel during the broadcast */
+        .control-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 8px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.2);
+            border-color: white;
+        }
+
+        .active-label {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #aaa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+        }
+
+        #current-selection {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            padding: 4px 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+        }
+
+        /* --- TICKER STYLES --- */
+        #news-ticker {
+            position: fixed;
+            bottom: -120px;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+        }
+
+        #news-ticker.active { bottom: 0; }
+
+        .ticker-label {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-style: italic;
+            border-right: 6px solid var(--accent-color);
+            white-space: nowrap;
+        }
+
+        .ticker-wrap {
+            flex-grow: 1;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-move {
+            display: flex;
+            align-items: center;
+            padding-left: 100%;
+            color: #111;
+            font-size: 2rem;
+            white-space: nowrap;
+            text-transform: uppercase;
+            animation: ticker-roll 10s linear;
+            animation-play-state: paused;
+        }
+
+        .team-logo {
+            height: 60px;
+            width: auto;
+            margin: 0 20px;
+            vertical-align: middle;
+        }
+
+        @keyframes ticker-roll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        #news-ticker.active .ticker-move { animation-play-state: running; }
+        
+        kbd { background: #555; padding: 2px 6px; border-radius: 4px; font-family: sans-serif; color: white;}
+    </style>
+</head>
+<body>
+
+    <div class="control-panel" id="controls">
+        <h2 style="margin-top:0">BROADCAST CONTROLS</h2>
+        <p>1. Select Team | 2. Press <kbd>SPACE</kbd> to trigger</p>
+        <p style="color: #ffaa00; font-size: 0.9rem;">Press <kbd>H</kbd> to hide/show this panel for the stream</p>
+        
+        <div class="team-grid" id="button-container"></div>
+
+        <div class="active-label">
+            Queued: <span id="current-selection">NEPAL NINJAS</span>
+        </div>
+    </div>
+
+    <div id="news-ticker">
+        <div class="ticker-label">BREAKING NEWS</div>
+        <div class="ticker-wrap">
+            <div class="ticker-move" id="scrolling-text">
+                THE <span id="team-name-span" style="margin-left:15px">NEPAL NINJAS</span> 
+                <img id="dynamic-logo" src="" class="team-logo" alt="">
+                ORG HAS MADE A FREE AGENCY MOVE! 🚨
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const teams = [
+            { name: "Nepal Ninjas", primary: "#000000", accent: "#ffd700", img: "ninjas" },
+            { name: "Shanghai Samurai", primary: "#d32f2f", accent: "#000000", img: "samurai" },
+            { name: "Fiji Flyers", primary: "#2e7d32", accent: "#ffffff", img: "flyers" },
+            { name: "Venezuela Vipers", primary: "#fbc02d", accent: "#0d47a1", img: "vipers" },
+            { name: "Zimbabwe Zebras", primary: "#ffffff", accent: "#000000", img: "zebras" },
+            { name: "Atlantis Anglers", primary: "#008080", accent: "#ffd700", img: "anglers" },
+            { name: "Boston Blasters", primary: "#ff6600", accent: "#808080", img: "blasters" },
+            { name: "Seattle Stars", primary: "#673ab7", accent: "#ffffff", img: "stars" },
+            { name: "San Jose Shockwave", primary: "#1976d2", accent: "#ffffff", img: "shockwave" },
+            { name: "Palm Beach Pirates", primary: "#5d4037", accent: "#ffffff", img: "pirates" },
+            { name: "Houston Howlers", primary: "#e91e63", accent: "#bdbdbd", img: "howlers" },
+            { name: "Michigan Moose", primary: "#d2b48c", accent: "#014421", img: "moose" }
+        ];
+
+        const ticker = document.getElementById('news-ticker');
+        const scrollText = document.getElementById('scrolling-text');
+        const teamNameSpan = document.getElementById('team-name-span');
+        const selectionText = document.getElementById('current-selection');
+        const dynamicLogo = document.getElementById('dynamic-logo');
+        const btnContainer = document.getElementById('button-container');
+        const controlPanel = document.getElementById('controls');
+
+        let isRunning = false;
+
+        // Create Buttons
+        teams.forEach(team => {
+            const btn = document.createElement('button');
+            btn.innerText = team.name.toUpperCase();
+            btn.style.backgroundColor = team.primary;
+            btn.style.color = team.accent;
+            btn.onclick = () => {
+                document.documentElement.style.setProperty('--primary-color', team.primary);
+                document.documentElement.style.setProperty('--accent-color', team.accent);
+                
+                teamNameSpan.innerText = team.name.toUpperCase();
+                selectionText.innerText = team.name.toUpperCase();
+                
+                // Keep your updated path here!
+                dynamicLogo.src = `../CCShtml/CCSlogos/${team.img}.png`;
+            };
+            btnContainer.appendChild(btn);
+        });
+
+        btnContainer.firstChild.click();
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            // Space to trigger ticker
+            if (e.code === 'Space' && !isRunning) {
+                e.preventDefault();
+                isRunning = true;
+                ticker.classList.add('active');
+                
+                scrollText.style.animation = 'none';
+                scrollText.offsetHeight; 
+                scrollText.style.animation = null; 
+            }
+            
+            // 'H' to toggle the control panel
+            if (e.code === 'KeyH') {
+                controlPanel.classList.toggle('hidden');
+            }
+        });
+
+        scrollText.addEventListener('animationend', () => {
+            ticker.classList.remove('active');
+            isRunning = false;
+        });
+    </script>
+</body>
+</html>

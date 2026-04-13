@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Agency Board</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-main: #ffffff;
+            
+            /* League Theme Colors */
+            --ccs-gold: #ffd700;
+            --cpl-orange: #ff7518;
+            --cas-red: #e53935;
+            --cnl-blue: #00a8ff;
+        }
+
+        body {
+            background-color: var(--bg-color); 
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #0a0a0a 100%);
+            font-family: 'Arial Black', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- HEADER SECTION --- */
+        .main-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .network-tag {
+            color: #a0a0a0;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+
+        /* --- BOARD LAYOUT --- */
+        .fa-board {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 1800px;
+            height: 750px;
+        }
+
+        /* --- LEAGUE COLUMNS --- */
+        .league-col {
+            flex: 1;
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            border-top: 6px solid #444; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Column Specific Theme Borders */
+        .col-ccs { border-top-color: var(--ccs-gold); }
+        .col-cpl { border-top-color: var(--cpl-orange); }
+        .col-cas { border-top-color: var(--cas-red); }
+        .col-cnl { border-top-color: var(--cnl-blue); }
+
+        /* --- COLUMN HEADERS --- */
+        .col-header {
+            padding: 15px;
+            text-align: center;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 2px solid #333;
+        }
+
+        .league-name {
+            font-size: 2.2rem;
+            margin: 0;
+            line-height: 1;
+        }
+
+        /* Themed Text Colors */
+        .col-ccs .league-name { color: var(--ccs-gold); text-shadow: 0 0 10px rgba(255,215,0,0.3); }
+        .col-cpl .league-name { color: var(--cpl-orange); text-shadow: 0 0 10px rgba(255,117,24,0.3); }
+        .col-cas .league-name { color: var(--cas-red); text-shadow: 0 0 10px rgba(229,57,53,0.3); }
+        .col-cnl .league-name { color: var(--cnl-blue); text-shadow: 0 0 10px rgba(0,168,255,0.3); }
+
+        .bracket-req {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        /* --- PLAYER LIST --- */
+        .player-list {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .player-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 4px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+        }
+
+        /* Alternating row colors */
+        .player-row:nth-child(even) {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .player-name {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 10px;
+        }
+
+        .player-rating {
+            font-size: 1.2rem;
+            color: #ccc;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        /* CNL tight styling */
+        .col-cnl .player-row {
+            padding: 8px 12px;
+        }
+        .col-cnl .player-name, 
+        .col-cnl .player-rating {
+            font-size: 1.05rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-header">
+        <div class="network-tag">Clutch Competitor Series</div>
+        <h1 class="title">Official Free Agency Board</h1>
+    </div>
+
+    <div class="fa-board">
+        
+        <div class="league-col col-ccs">
+            <div class="col-header">
+                <h2 class="league-name">CCS</h2>
+                <div class="bracket-req">1715+ RATING</div>
+            </div>
+            <div class="player-list">
+                <div class="player-row"><span class="player-name">Knowsis</span><span class="player-rating">1952</span></div>
+                <div class="player-row"><span class="player-name">Tomato</span><span class="player-rating">1800</span></div>
+                <div class="player-row"><span class="player-name">mikey</span><span class="player-rating">1776</span></div>
+                <div class="player-row"><span class="player-name">dxm</span><span class="player-rating">1755</span></div>
+                <div class="player-row"><span class="player-name">silwoe</span><span class="player-rating">1752</span></div>
+                <div class="player-row"><span class="player-name">Cosmik</span><span class="player-rating">1746</span></div>
+                <div class="player-row"><span class="player-name">draft</span><span class="player-rating">1742</span></div>
+                <div class="player-row"><span class="player-name">Hopper</span><span class="player-rating">1719</span></div>
+            </div>
+        </div>
+
+        <div class="league-col col-cpl">
+            <div class="col-header">
+                <h2 class="league-name">CPL</h2>
+                <div class="bracket-req">1550 - 1714</div>
+            </div>
+            <div class="player-list">
+                <div class="player-row"><span class="player-name">ant</span><span class="player-rating">1699</span></div>
+                <div class="player-row"><span class="player-name">airmmv.</span><span class="player-rating">1637</span></div>
+                <div class="player-row"><span class="player-name">Bankai</span><span class="player-rating">1602</span></div>
+                <div class="player-row"><span class="player-name">kicfz</span><span class="player-rating">1600</span></div>
+                <div class="player-row"><span class="player-name">AK</span><span class="player-rating">1597</span></div>
+                <div class="player-row"><span class="player-name">An7iix</span><span class="player-rating">1592</span></div>
+                <div class="player-row"><span class="player-name">rae</span><span class="player-rating">1580</span></div>
+                <div class="player-row"><span class="player-name">s n w y</span><span class="player-rating">1554</span></div>
+            </div>
+        </div>
+
+        <div class="league-col col-cas">
+            <div class="col-header">
+                <h2 class="league-name">CAS</h2>
+                <div class="bracket-req">1415 - 1549</div>
+            </div>
+            <div class="player-list">
+                <div class="player-row"><span class="player-name">Jerome</span><span class="player-rating">1533</span></div>
+                <div class="player-row"><span class="player-name">Carsxnn.</span><span class="player-rating">1519</span></div>
+                <div class="player-row"><span class="player-name">Icey</span><span class="player-rating">1507</span></div>
+                <div class="player-row"><span class="player-name">TOx</span><span class="player-rating">1417</span></div>
+            </div>
+        </div>
+
+        <div class="league-col col-cnl">
+            <div class="col-header">
+                <h2 class="league-name">CNL</h2>
+                <div class="bracket-req">UNDER 1414</div>
+            </div>
+            <div class="player-list">
+                <div class="player-row"><span class="player-name">Reno ._.</span><span class="player-rating">1385</span></div>
+                <div class="player-row"><span class="player-name">DrisonX</span><span class="player-rating">1221</span></div>
+                <div class="player-row"><span class="player-name">FishFridge64</span><span class="player-rating">1126</span></div>
+                <div class="player-row"><span class="player-name">Envi</span><span class="player-rating">1125</span></div>
+                <div class="player-row"><span class="player-name">Jeffrey</span><span class="player-rating">1090</span></div>
+                <div class="player-row"><span class="player-name">raxz</span><span class="player-rating">951</span></div>
+                <div class="player-row"><span class="player-name">tyrone</span><span class="player-rating">929</span></div>
+                <div class="player-row"><span class="player-name">Astrofortune</span><span class="player-rating">861</span></div>
+                <div class="player-row"><span class="player-name">Hollywood</span><span class="player-rating">802</span></div>
+                <div class="player-row"><span class="player-name">doodle</span><span class="player-rating">779</span></div>
+                <div class="player-row"><span class="player-name">Silly_Seaman</span><span class="player-rating">776</span></div>
+                <div class="player-row"><span class="player-name">Digbar Gaming</span><span class="player-rating">412</span></div>
+                <div class="player-row"><span class="player-name">PezHead</span><span class="player-rating">386</span></div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
