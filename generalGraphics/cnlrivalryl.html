@@ -16,25 +16,30 @@
         --border-color: #333;
     }
 
+    /* Lock body to exactly the viewport height to prevent scrolling */
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: var(--bg-dark);
         color: var(--text-color);
         margin: 0;
+        padding: 0;
         display: flex;
         justify-content: center;
-        min-height: 100vh;
-        padding: 40px 0; 
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden; 
     }
 
+    /* Force the dashboard to exactly 1920x1080 */
     #dashboard {
         width: 1920px;
-        min-height: 1080px; 
+        height: 1080px; 
         display: grid;
-        grid-template-rows: 120px 1fr;
+        grid-template-rows: 100px 1fr;
         grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        padding: 40px;
+        gap: 20px;
+        padding: 20px 40px;
         box-sizing: border-box;
     }
 
@@ -46,12 +51,12 @@
         align-items: center;
         border-bottom: 3px solid var(--accent-cnl);
         background: rgba(255, 255, 255, 0.02);
-        padding-bottom: 20px;
+        padding-bottom: 10px;
     }
 
     header h1 {
         margin: 0;
-        font-size: 56px;
+        font-size: 50px;
         text-transform: uppercase;
         letter-spacing: 8px;
         color: var(--accent-cnl);
@@ -60,7 +65,8 @@
     .division-block {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 15px; /* Tightened gap */
+        height: 100%;
     }
 
     .division-header {
@@ -68,16 +74,16 @@
         align-items: center;
         justify-content: center;
         gap: 15px;
-        font-size: 28px;
+        font-size: 24px;
         font-weight: 800;
         text-transform: uppercase;
-        padding: 12px;
+        padding: 10px;
         border-radius: 4px;
         letter-spacing: 3px;
     }
 
     .div-logo {
-        height: 40px;
+        height: 35px;
         width: auto;
         object-fit: contain;
     }
@@ -85,15 +91,16 @@
     .intl-block .division-header { border: 2px solid var(--intl-primary); color: var(--intl-primary); }
     .amer-block .division-header { border: 2px solid var(--amer-primary); color: var(--amer-primary); }
 
+    /* Cards now use flex: 1 to fill available vertical space */
     .matchup-card {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 20px;
+        padding: 15px 20px;
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        min-height: 275px; 
+        gap: 10px;
+        flex: 1; 
     }
 
     .team-row {
@@ -112,13 +119,13 @@
     .team-right-container { justify-content: flex-start; text-align: left; }
 
     .team-logo {
-        height: 45px;
-        width: 45px;
+        height: 40px;
+        width: 40px;
         object-fit: contain;
     }
 
     .team-name {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -134,7 +141,7 @@
         text-align: center;
         font-weight: 900;
         color: var(--accent-cnl);
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .data-row {
@@ -146,7 +153,7 @@
     .data-box {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 6px;
-        padding: 12px;
+        padding: 10px 12px;
     }
 
     .data-title {
@@ -154,7 +161,7 @@
         color: var(--accent-cnl);
         text-transform: uppercase;
         font-weight: 800;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         border-bottom: 1px solid rgba(0, 191, 255, 0.2);
         padding-bottom: 4px;
     }
@@ -162,7 +169,7 @@
     .stat-line {
         display: flex;
         justify-content: space-between;
-        font-size: 15px;
+        font-size: 14px;
         margin-bottom: 4px;
     }
 
@@ -172,8 +179,8 @@
     .notes-box {
         background: rgba(0, 191, 255, 0.05);
         border-left: 4px solid var(--accent-cnl);
-        padding: 16px;
-        font-size: 16px;
+        padding: 12px 16px;
+        font-size: 14px;
         color: #e0e0e0;
         font-style: italic;
         flex-grow: 1; 
@@ -191,7 +198,7 @@
 <div id="dashboard">
     <header>
         <h1>CLUTCH NOVICE LEAGUE</h1>
-        <div style="color: #666; font-size: 18px; letter-spacing: 2px;">MATCHDAY RIVALRY BREAKDOWN</div>
+        <div style="color: #666; font-size: 16px; letter-spacing: 2px;">MATCHDAY RIVALRY BREAKDOWN</div>
     </header>
 
     <div class="division-block intl-block">
