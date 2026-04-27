@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPL Playoff Race - Int Div Week 11</title>
+    <title>CPL Playoff Race - Int Div Week 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -105,15 +105,14 @@
         /* LAYOUT GRIDS */
         .top-row {
             display: grid;
-            grid-template-columns: 1fr 1.35fr;
+            grid-template-columns: 1fr 1.65fr; 
             gap: 20px;
             padding: 0 20px;
             margin-bottom: 20px;
         }
 
         .bottom-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
+            display: flex;
             gap: 20px;
             padding: 0 20px;
         }
@@ -126,7 +125,6 @@
             position: relative;
         }
 
-        /* Panel Headers */
         .panel-header {
             font-size: 18px;
             font-weight: 700;
@@ -141,14 +139,12 @@
             letter-spacing: 1px;
         }
 
-        /* Division Specific Header */
         .panel-header.division-theme {
             color: var(--div-glow);
             background: linear-gradient(90deg, rgba(249, 115, 22, 0.15) 0%, transparent 100%);
             border-bottom: 1px solid var(--div-dim);
         }
 
-        /* STANDINGS TABLE */
         table {
             width: 100%;
             border-collapse: separate;
@@ -214,11 +210,10 @@
             text-transform: uppercase;
             display: inline-block;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            min-width: 65px;
         }
-        .status.mix { background: linear-gradient(180deg, #0051ff 0%, #002b80 100%); border: 1px solid #4da6ff; }
-        .status.bubble { background: linear-gradient(180deg, #00a2ff 0%, #005180 100%); border: 1px solid #80ccff; }
-        .status.battling { background: linear-gradient(180deg, #ff3300 0%, #801a00 100%); border: 1px solid #ff8566; }
         .status.clinched { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); border: 1px solid #4ade80; color: #fff; }
+        .status.eliminated { background: linear-gradient(180deg, #4b5563 0%, #1f2937 100%); border: 1px solid #9ca3af; color: #fff; }
 
         .cutoff-row td {
             padding: 0;
@@ -245,21 +240,21 @@
             z-index: 2;
         }
 
-        /* MATCHUPS PANEL - Adjusted for 5 cards */
+        /* MATCHUPS PANEL */
         .matchups-wrapper {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 15px;
             height: 100%;
         }
 
         .matchup-cards-col {
-            flex: 0 0 50%; /* Adjusted width to give more room to text */
+            flex: 0 0 40%; 
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 4px; 
+            gap: 15px; /* Increased gap for 3 cards */
             height: 100%;
         }
 
@@ -268,7 +263,7 @@
             justify-content: space-between;
             align-items: center;
             border-radius: 6px;
-            padding: 4px 10px; 
+            padding: 8px 12px; 
             border: 1px solid var(--grey-dim);
             position: relative;
             overflow: hidden;
@@ -276,12 +271,12 @@
         }
 
         .matchup-card::before {
-            content: "WEEK 11 MATCHUP";
+            content: "WEEK 12 MATCHUP";
             position: absolute;
-            top: 1px;
+            top: 2px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 7px;
+            font-size: 9px;
             color: var(--league-dim);
             font-weight: 700;
         }
@@ -291,19 +286,18 @@
             flex-direction: column;
             align-items: center;
             width: 40%;
-            text-align: center;
         }
 
         .team-block img {
-            width: 30px; 
-            height: 30px;
+            width: 38px; /* Slightly larger logos for 3 cards */
+            height: 38px;
             object-fit: contain;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
             filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));
         }
 
         .team-block span {
-            font-size: 11px; 
+            font-size: 12px; 
             font-weight: 700;
             text-align: center;
             line-height: 1.1;
@@ -313,18 +307,17 @@
             background: #111;
             border: 2px solid var(--grey-dim);
             color: #fff;
-            width: 22px;
-            height: 22px;
+            width: 24px; /* Slightly larger VS circle */
+            height: 24px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 700;
-            font-size: 9px;
+            font-size: 10px;
             z-index: 2;
         }
 
-        /* ARROW & IMPLICATION BOX STYLES */
         .implication-arrow-col {
             flex: 1;
             display: flex;
@@ -337,8 +330,8 @@
         .arrow-line {
             width: 100%;
             height: 2px;
-            background-color: var(--league-glow);
-            box-shadow: 0 0 8px var(--league-glow);
+            background-color: var(--div-glow);
+            box-shadow: 0 0 8px var(--div-glow);
             position: relative;
         }
 
@@ -350,14 +343,14 @@
             height: 0;
             border-top: 6px solid transparent;
             border-bottom: 6px solid transparent;
-            border-left: 8px solid var(--league-glow);
-            filter: drop-shadow(0 0 5px var(--league-glow));
+            border-left: 8px solid var(--div-glow);
+            filter: drop-shadow(0 0 5px var(--div-glow));
         }
 
         .implication-box-col {
-            flex: 0 0 46%; /* Expanded to fit detailed text */
+            flex: 0 0 55%; 
             background: linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.9) 100%);
-            border: 1px solid var(--league-dim);
+            border: 1px solid var(--div-dim);
             border-radius: 8px;
             padding: 8px 12px;
             box-shadow: inset 0 0 20px rgba(249, 115, 22, 0.05), 0 0 10px rgba(0, 0, 0, 0.8);
@@ -366,55 +359,58 @@
             justify-content: center;
         }
 
+        /* BULLETED LIST IMPLICATION FORMATTING */
         .imp-result {
             color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: 1.25;
             text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .imp-block {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 15px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .imp-block-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .scenario-cat {
+            font-size: 14px;
+            font-weight: 800;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        .scenario-list {
+            margin: 4px 0 6px 0;
+            padding-left: 20px;
+            font-size: 15px;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+        
+        .scenario-list li {
+            margin-bottom: 8px;
         }
 
         /* SCENARIOS BOX (Bottom Row) */
         .scenario-box {
             background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.9) 100%);
-            border: 2px solid var(--league-glow);
+            border: 2px solid var(--div-glow);
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 0 15px rgba(249, 115, 22, 0.15);
         }
 
-        /* SOS Custom Box Overrides */
-        .sos-box {
-            padding-top: 10px; 
-        }
-        
-        .sos-box h3::before {
-            display: none; 
-        }
-
-        /* BRACKET & TIEBREAKER */
-        .bracket-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .bracket-match {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--grey-dim);
-            border-radius: 4px;
-            padding: 10px 20px;
-        }
-
-        .seed-box {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--league-glow);
-        }
-
+        /* TIEBREAKER */
         .tiebreaker-list {
             margin: 0;
             padding-left: 20px;
@@ -426,56 +422,52 @@
             margin-bottom: 4px;
         }
 
-        /* Division Team Colors */
+        /* Color classes */
         .t-red { color: #ef4444; }
-        .t-gold { color: #fbbf24; }
         .t-white { color: #ffffff; }
-        .t-green { color: #22c55e; }
+        .t-black { color: #a1a1aa; } 
         .t-teal { color: #14b8a6; }
+        .t-green { color: #22c55e; }
         .t-yellow { color: #eab308; }
-        .t-brown { color: #a0522d; }
-        .t-purple { color: #c084fc; }
-        .t-blue { color: #38bdf8; }
-        .t-tan { color: #d2b48c; }
-        .t-orange { color: #f97316; }
 
-        /* SOS Tabular Column Layout (2 Remaining Weeks) */
-        .sos-header {
-            display: grid;
-            grid-template-columns: 28% 12% 30% 30%;
-            align-items: flex-end;
-            font-size: 14px;
-            color: var(--league-dim);
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--grey-dim);
-            padding-bottom: 4px;
-            margin-bottom: 4px;
+        /* BRACKET STYLES */
+        .bracket-box {
+            background: rgba(20, 24, 32, 0.9);
+            border: 1px solid var(--grey-dim);
+            border-radius: 6px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
-        
-        .sos-header span {
+        .bracket-seed {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--league-dim);
+            margin-right: 15px;
+            width: 15px;
             text-align: center;
         }
-        .sos-header span:first-child {
-            text-align: left;
+        .bracket-team-img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-right: 15px;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
         }
-
-        .sos-row {
-            display: grid;
-            grid-template-columns: 28% 12% 30% 30%;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 5px 0;
+        .bracket-team-name {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        
-        .sos-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+        .bracket-vs-label {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 2px;
         }
-
-        .sos-team { font-weight: bold; font-size: 15px; }
-        .sos-stat { font-family: monospace; font-size: 17px; font-weight: bold; text-align: center; }
-        .sos-match { font-size: 14px; color: #ffffff; font-weight: bold; text-align: center; line-height: 1.2; }
 
     </style>
 </head>
@@ -487,7 +479,7 @@
         <div class="header-main">
             <h1>CLUTCH PROSPECT LEAGUE</h1>
             <h2>PLAYOFF IMPLICATIONS</h2>
-            <div class="subtitle">International Div. Week 11 Update - The Playoff Push</div>
+            <div class="subtitle">International Div. Week 12 Update - The Final Week</div>
         </div>
     </div>
 
@@ -508,26 +500,26 @@
                     <tr class="team-row">
                         <td class="rank t-red">1</td>
                         <td><div class="team-info"><img src="CPLLogos/warriors.png" alt="" onerror="this.style.display='none'">WUHAN WARRIORS</div></td>
-                        <td class="record" style="text-align: center;">6-4</td>
+                        <td class="record" style="text-align: center;">6-5</td>
                         <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-white">2</td>
-                        <td><div class="team-info"><img src="CPLLogos/buffalo.png" alt="" onerror="this.style.display='none'">BULAWAYO BUFFALO</div></td>
-                        <td class="record" style="text-align: center;">5-5</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-gold">3</td>
+                        <td class="rank t-black">2</td>
                         <td><div class="team-info"><img src="CPLLogos/shadows.png" alt="" onerror="this.style.display='none'">SAKALA SHADOWS</div></td>
-                        <td class="record" style="text-align: center;">5-5</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="record" style="text-align: center;">6-5</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-teal">4</td>
-                        <td><div class="team-info"><img src="CPLLogos/fishermen.png" alt="" onerror="this.style.display='none'">Frenchmen Bay FISHERMEN</div></td>
-                        <td class="record" style="text-align: center;">5-5</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="rank t-teal">3</td>
+                        <td><div class="team-info"><img src="CPLLogos/fishermen.png" alt="" onerror="this.style.display='none'">FRENCHMEN BAY FISHERMEN</div></td>
+                        <td class="record" style="text-align: center;">6-5</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
+                    </tr>
+                    <tr class="team-row">
+                        <td class="rank t-white">4</td>
+                        <td><div class="team-info"><img src="CPLLogos/buffalo.png" alt="" onerror="this.style.display='none'">BULAWAYO BUFFALO</div></td>
+                        <td class="record" style="text-align: center;">5-6</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     
                     <tr class="cutoff-row">
@@ -540,34 +532,34 @@
                     <tr class="team-row">
                         <td class="rank t-green">5</td>
                         <td><div class="team-info"><img src="CPLLogos/lory.png" alt="" onerror="this.style.display='none'">LAUTOKA LORY</div></td>
-                        <td class="record" style="text-align: center;">3-7</td>
-                        <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
+                        <td class="record" style="text-align: center;">3-8</td>
+                        <td style="text-align: center;"><div class="status eliminated">ELIMINATED</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-yellow">6</td>
                         <td><div class="team-info"><img src="CPLLogos/cobras.png" alt="" onerror="this.style.display='none'">CARACAS COBRAS</div></td>
-                        <td class="record" style="text-align: center;">3-7</td>
-                        <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
+                        <td class="record" style="text-align: center;">3-8</td>
+                        <td style="text-align: center;"><div class="status eliminated">ELIMINATED</div></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="panel">
-            <div class="panel-header">WEEK 11 KEY MATCHUPS & CLINCHING SITUATIONS</div>
+            <div class="panel-header">WEEK 12 KEY MATCHUPS & IMPLICATIONS</div>
             
             <div class="matchups-wrapper">
                 
                 <div class="matchup-cards-col">
                     <div class="matchup-card">
                         <div class="team-block">
-                            <img src="CPLLogos/lory.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">LAUTOKA<br>LORY</span>
+                            <img src="CPLLogos/warriors.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-red">WUHAN<br>WARRIORS</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CPLLogos/marauders.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">MIAMI<br>MARAUDERS</span>
+                            <img src="CPLLogos/shadows.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-black">SAKALA<br>SHADOWS</span>
                         </div>
                     </div>
 
@@ -578,44 +570,20 @@
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CPLLogos/supernova.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">SPOKANE<br>SUPERNOVA</span>
+                            <img src="CPLLogos/coyotes.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">COPPER CANYON<br>COYOTES</span>
                         </div>
                     </div>
 
                     <div class="matchup-card">
-                        <div class="team-block">
-                            <img src="CPLLogos/sonic boom.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">SAN DIEGO<br>SONIC BOOM</span>
-                        </div>
-                        <div class="vs-circle">VS</div>
-                        <div class="team-block">
-                            <img src="CPLLogos/shadows.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">SAKALA<br>SHADOWS</span>
-                        </div>
-                    </div>
-
-                    <div class="matchup-card">
-                        <div class="team-block">
-                            <img src="CPLLogos/groundhogs.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">GRAND RAPIDS<br>GROUNDHOGS</span>
-                        </div>
-                        <div class="vs-circle">VS</div>
                         <div class="team-block">
                             <img src="CPLLogos/fishermen.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">FRENCHMEN BAY<br>FISHERMEN</span>
+                            <span class="t-teal">FRENCHMEN BAY<br>FISHERMEN</span>
                         </div>
-                    </div>
-
-                    <div class="matchup-card">
+                        <div class="vs-circle">VS</div>
                         <div class="team-block">
                             <img src="CPLLogos/mortars.png" alt="" onerror="this.style.display='none'">
                             <span class="t-white">MASSACHUSETTS<br>MORTARS</span>
-                        </div>
-                        <div class="vs-circle">VS</div>
-                        <div class="team-block">
-                            <img src="CPLLogos/cobras.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">CARACAS<br>COBRAS</span>
                         </div>
                     </div>
                 </div>
@@ -628,24 +596,19 @@
 
                 <div class="implication-box-col">
                     <div class="imp-result">
-                        <div style="margin-bottom: 5px;">
-                            <span style="color: var(--league-glow);"><span style="color:#ffffff;">BUFFALO</span> & <span style="color:#fbbf24;">SHADOWS</span> CLINCH IF:</span><br>
-                            • They win 1 game OR <span style="color:#22c55e;">LORY</span> lose
+                        
+                        <div class="imp-block" style="border-left: 4px solid var(--div-glow);">
+                            <div class="imp-block-title" style="color: var(--div-glow);">SEEDING BATTLE</div>
+                            
+                            <div class="scenario-cat t-yellow">SEEDS ARE NOT FINALIZED:</div>
+                            <ul class="scenario-list">
+                                <li>All 4 playoff spots have been officially clinched.</li>
+                                <li>However, the final seeding (1 through 4) is still completely up for grabs in Week 12.</li>
+                                <li>The massive <span class="t-red">WARRIORS</span> vs <span class="t-black">SHADOWS</span> head-to-head matchup will heavily dictate who secures the top seeds.</li>
+                            </ul>
+                            
                         </div>
-                        <div style="margin-bottom: 5px;">
-                            <span style="color: var(--league-glow);"><span style="color:#14b8a6;">FISHERMEN</span> CLINCH IF:</span><br>
-                            • Win<br>
-                            • Lose in 4 or 5 AND <span style="color:#22c55e;">LORY</span> lose<br>
-                            • Swept AND <span style="color:#22c55e;">LORY</span> lose AND <span style="color:#eab308;">COBRAS</span> lose 2
-                        </div>
-                        <div style="margin-bottom: 5px;">
-                            <span style="color: var(--league-glow);"><span style="color:#22c55e;">LORY</span> ELIMINATED IF:</span><br>
-                            • <span style="color:#14b8a6;">FISHERMEN</span> win, <span style="color:#ffffff;">BUFFALO</span> win 1, <span style="color:#fbbf24;">SHADOWS</span> win 1, OR <span style="color:#22c55e;">LORY</span> lose
-                        </div>
-                        <div>
-                            <span style="color: var(--league-glow);"><span style="color:#eab308;">COBRAS</span> ELIMINATED IF:</span><br>
-                            • <span style="color:#14b8a6;">FISHERMEN</span> win 1 game OR <span style="color:#eab308;">COBRAS</span> lose 2
-                        </div>
+
                     </div>
                 </div>
 
@@ -656,90 +619,50 @@
 
     <div class="bottom-row">
         
-        <div class="scenario-box sos-box">
-            <h3 style="font-size: 25px; margin-top: 0; margin-bottom: 2px;">🗓️ REMAINING STRENGTH OF SCHEDULE</h3>
-            <div style="font-size: 15px; color: var(--text-muted); margin-bottom: 7px;">
-                Ranked by combined win percentage of remaining opponents.
-            </div>
+        <div class="scenario-box" style="flex: 2;">
+            <h3 style="font-size: 25px; margin-top: 0; margin-bottom: 15px; color: #fff;">🏆 CURRENT PLAYOFF BRACKET</h3>
             
-            <div class="sos-header">
-                <span>Team</span>
-                <span>SOS</span>
-                <span>Week 11</span>
-                <span>Week 12</span>
-            </div>
-            
-            <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-around; align-items: center; gap: 40px;">
                 
-                <div class="sos-row">
-                    <span class="sos-team t-yellow">1. COBRAS <span style="font-size: 10px; color: #ef4444;">(HARDEST)</span></span>
-                    <span class="sos-stat t-white">.700</span>
-                    <span class="sos-match">Mortars (7-3)</span>
-                    <span class="sos-match">Marauders (7-3)</span>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <div class="bracket-box">
+                        <span class="bracket-seed">1</span>
+                        <img src="CPLLogos/warriors.png" class="bracket-team-img" alt="" onerror="this.style.display='none'">
+                        <span class="bracket-team-name t-red">WUHAN WARRIORS</span>
+                    </div>
+                    <div class="bracket-vs-label">VS</div>
+                    <div class="bracket-box">
+                        <span class="bracket-seed">4</span>
+                        <img src="CPLLogos/buffalo.png" class="bracket-team-img" alt="" onerror="this.style.display='none'">
+                        <span class="bracket-team-name t-white">BULAWAYO BUFFALO</span>
+                    </div>
                 </div>
 
-                <div class="sos-row">
-                    <span class="sos-team t-red">T2. WARRIORS</span>
-                    <span class="sos-stat t-white">.600</span>
-                    <span class="sos-match">Coyotes (7-3)</span>
-                    <span class="sos-match">Shadows (5-5)</span>
-                </div>
-
-                <div class="sos-row">
-                    <span class="sos-team t-white">T2. BUFFALO</span>
-                    <span class="sos-stat t-white">.600</span>
-                    <span class="sos-match">Supernova (5-5)</span>
-                    <span class="sos-match">Coyotes (7-3)</span>
-                </div>
-
-                <div class="sos-row">
-                    <span class="sos-team t-gold">T2. SHADOWS</span>
-                    <span class="sos-stat t-white">.600</span>
-                    <span class="sos-match">Sonic Boom (6-4)</span>
-                    <span class="sos-match">Warriors (6-4)</span>
-                </div>
-
-                <div class="sos-row">
-                    <span class="sos-team t-green">T5. LORY</span>
-                    <span class="sos-stat t-white">.400</span>
-                    <span class="sos-match">Marauders (7-3)</span>
-                    <span class="sos-match">Groundhogs (1-9)</span>
-                </div>
-
-                <div class="sos-row">
-                    <span class="sos-team t-teal">T5. FISHERMEN <span style="font-size: 10px; color: var(--div-glow);">(EASIEST)</span></span>
-                    <span class="sos-stat t-white">.400</span>
-                    <span class="sos-match">Groundhogs (1-9)</span>
-                    <span class="sos-match">Mortars (7-3)</span>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <div class="bracket-box">
+                        <span class="bracket-seed">2</span>
+                        <img src="CPLLogos/shadows.png" class="bracket-team-img" alt="" onerror="this.style.display='none'">
+                        <span class="bracket-team-name t-black">SAKALA SHADOWS</span>
+                    </div>
+                    <div class="bracket-vs-label">VS</div>
+                    <div class="bracket-box">
+                        <span class="bracket-seed">3</span>
+                        <img src="CPLLogos/fishermen.png" class="bracket-team-img" alt="" onerror="this.style.display='none'">
+                        <span class="bracket-team-name t-teal">FRENCHMEN BAY FISHERMEN</span>
+                    </div>
                 </div>
 
             </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="panel" style="padding: 10px 15px;">
-                <div class="panel-header" style="font-size: 14px; margin-bottom: 10px;">CPL PLAYOFF BRACKET OUTLINE</div>
-                <div class="bracket-container">
-                    <div class="bracket-match">
-                        <div class="seed-box">SEED 1</div>
-                        <div style="color: #9ca3af; font-size: 12px; align-self: center;">VS</div>
-                        <div class="seed-box">SEED 4</div>
-                    </div>
-                    <div class="bracket-match">
-                        <div class="seed-box">SEED 2</div>
-                        <div style="color: #9ca3af; font-size: 12px; align-self: center;">VS</div>
-                        <div class="seed-box">SEED 3</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel" style="padding: 10px 15px;">
-                <div class="panel-header" style="font-size: 14px; margin-bottom: 5px;">TIEBREAKER EXPLAINED</div>
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <div class="panel" style="padding: 15px 20px; height: 100%; box-sizing: border-box;">
+                <div class="panel-header" style="font-size: 15px; margin-bottom: 15px;">TIEBREAKER EXPLAINED</div>
                 <ol class="tiebreaker-list">
                     <li>Series Record</li>
-                    <li>Game Record</li>
-                    <li>Head to Head</li>
-                    <li>Goal Differential</li>
+                    <li>Individual Game Record</li>
+                    <li>Head to Head Matchup</li>
+                    <li>Total Goal Differential</li>
                 </ol>
             </div>
         </div>
