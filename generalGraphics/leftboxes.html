@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Left Cams Overlay</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: transparent;
+            overflow: hidden;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        .layout-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .column {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Positions this column 40px from the left edge */
+        .column.left {
+            left: 40px;
+        }
+
+        .cam-frame {
+            width: 320px;
+            height: 180px;
+            border: 4px solid #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+            background-color: transparent; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-container">
+        <div class="column left">
+            <div class="cam-frame"></div>
+            <div class="cam-frame"></div>
+            <div class="cam-frame"></div>
+        </div>
+    </div>
+
+</body>
+</html>
