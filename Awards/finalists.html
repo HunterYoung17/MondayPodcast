@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clutch Competitor Series - Award Finalists</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        #presentation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+        
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .league-logo-large {
+            margin-bottom: 20px;
+        }
+
+        .league-logo-large img {
+            max-height: 180px; 
+            width: auto;
+            filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.5));
+        }
+
+        .slide-league-logo {
+            max-height: 70px;
+            width: auto;
+            margin-right: 20px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5));
+        }
+
+        .finalists-grid {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: stretch;
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        .finalist-card {
+            flex: 1;
+            border-radius: 15px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .finalist-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-logo {
+            margin-bottom: 20px;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .team-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5));
+        }
+
+        .player-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        /* Title Screen Logos Container */
+        .title-logos-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .title-logos-container img {
+            max-height: 120px;
+            width: auto;
+            filter: drop-shadow(0px 5px 15px rgba(255, 255, 255, 0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .title-logos-container img:hover {
+            transform: scale(1.1);
+        }
+
+        #counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="presentation-container"></div>
+    <div id="counter"></div>
+
+    <script>
+        // --- 1. DEFINE LEAGUES AND AWARDS ---
+        const leaguesInfo = [
+            { id: "CCS", name: "CCS", color: "#FFD700", logoFolder: "CCSLogos", logoFile: "CCS.png" }, // Gold
+            { id: "CPL", name: "CPL", color: "#FFA500", logoFolder: "CPLLogos", logoFile: "CPL.png" }, // Orange
+            { id: "CAS", name: "CAS", color: "#FF3333", logoFolder: "CASLogos", logoFile: "CAS.png" }, // Red
+            { id: "CNL", name: "CNL", color: "#3366FF", logoFolder: "CNLLogos", logoFile: "CNL.png" }  // Blue
+        ];
+
+        // Awards in OPPOSITE order so MVP is presented last
+        const standardAwards = [
+            "Sharpshooter", 
+            "Rookie of the Year", 
+            "4th Man of the Year", 
+            "Most Improved", 
+            "Golden Clam", 
+            "Best Playmaker", 
+            "Best Scorer", 
+            "MVP"
+        ];
+
+        // --- 2. SPECIFIC LEAGUE DATA ---
+        
+        // CCS Finalists
+        const ccsFinalists = {
+            "Manager of the Year": [
+                { player: "Nate", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" },
+                { player: "Trout", teamColor: "#D2B48C", teamLogo: "CCSLogos/moose.png" },
+                { player: "Sports", teamColor: "#0055A4", teamLogo: "CCSLogos/shockwave.png" }
+            ],
+            "Sharpshooter": [
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" },
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Bennus", teamColor: "#D2B48C", teamLogo: "CCSLogos/moose.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" },
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CCSLogos/pirates.png" },
+                { player: "Laxxin", teamColor: "#6A0DAD", teamLogo: "CCSLogos/stars.png" },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CCSLogos/zebras.png" }
+            ],
+            "Most Improved": [
+                { player: "Cyan", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png" },
+                { player: "Joey", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" },
+                { player: "Poptarts", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png" }
+            ],
+            "Golden Clam": [
+                { player: "Kizvy", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" },
+                { player: "DainBramage", teamColor: "#E0E0E0", teamLogo: "CCSLogos/zebras.png" },
+                { player: "Mini", teamColor: "#FF69B4", teamLogo: "CCSLogos/howlers.png" }
+            ],
+            "Best Playmaker": [
+                { player: "Grizz", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Joey", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" }
+            ],
+            "Best Scorer": [
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Cyan", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png" },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" }
+            ],
+            "MVP": [
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" },
+                { player: "Kizvy", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" }
+            ]
+        };
+
+        // CPL Finalists
+        const cplFinalists = {
+            "Sharpshooter": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Rev", teamColor: "#0055A4", teamLogo: "CPLLogos/sonic boom.png" },
+                { player: "Nlyu", teamColor: "#0055A4", teamLogo: "CPLLogos/sonic boom.png" },
+                { player: "Arctix", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "Aiden", teamColor: "#D2B48C", teamLogo: "CPLLogos/groundhogs.png" },
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CPLLogos/cobras.png" },
+                { player: "Cxrsed", teamColor: "#CC0000", teamLogo: "CPLLogos/warriors.png" }
+            ],
+            "Most Improved": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Slykooper", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" },
+                { player: "BluePhoenix", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" }
+            ],
+            "Golden Clam": [
+                { player: "Slykooper", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" },
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" },
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" }
+            ],
+            "Best Playmaker": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" },
+                { player: "Slayer", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" }
+            ],
+            "Best Scorer": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" }
+            ],
+            "MVP": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" },
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" }
+            ]
+        };
+
+        // CAS Finalists
+        const casFinalists = {
+            "Sharpshooter": [
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png" },
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Hate.", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "DsyrJames", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png" },
+                { player: "JT", teamColor: "#008080", teamLogo: "CASLogos/behemoths.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "Seori", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png" },
+                { player: "Chrome", teamColor: "#E0E0E0", teamLogo: "CASLogos/moisty elephants.png" },
+                { player: "Trout", teamColor: "#D2B48C", teamLogo: "CASLogos/black bears.png" }
+            ],
+            "Most Improved": [
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
+            ],
+            "Golden Clam": [
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "Hate.", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
+            ],
+            "Best Playmaker": [
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "DsyrJames", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png" },
+                { player: "Marchosias", teamColor: "#FF69B4", teamLogo: "CASLogos/wolfpack.png" }
+            ],
+            "Best Scorer": [
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png" },
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "Marchosias", teamColor: "#FF69B4", teamLogo: "CASLogos/wolfpack.png" }
+            ],
+            "MVP": [
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png" },
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
+            ]
+        };
+
+        // CNL Finalists
+        const cnlFinalists = {
+            "Sharpshooter": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png" },
+                { player: "Terbiee", teamColor: "#228B22", teamLogo: "CNLLogos/redwings.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png" },
+                { player: "Jurchao", teamColor: "#1a1a1a", teamLogo: "CNLLogos/thieves.png" },
+                { player: "Nirosat", teamColor: "#008080", teamLogo: "CNLLogos/leviathans.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "Spiral", teamColor: "#CC0000", teamLogo: "CNLLogos/bushido.png" },
+                { player: "Paz", teamColor: "#8B4513", teamLogo: "CNLLogos/shipwreck.png" },
+                { player: "Hamm", teamColor: "#1a1a1a", teamLogo: "CNLLogos/thieves.png" }
+            ],
+            "Most Improved": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Chrome", teamColor: "#E0E0E0", teamLogo: "CNLLogos/moisty rhinos.png" },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png" }
+            ],
+            "Golden Clam": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Kazegurui", teamColor: "#CC0000", teamLogo: "CNLLogos/bushido.png" },
+                { player: "Nirosat", teamColor: "#008080", teamLogo: "CNLLogos/leviathans.png" }
+            ],
+            "Best Playmaker": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Fast Layne", teamColor: "#DAA520", teamLogo: "CNLLogos/anacondas.png" },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png" }
+            ],
+            "Best Scorer": [
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png" },
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Haakonn", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" }
+            ],
+            "MVP": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png" },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png" }
+            ]
+        };
+
+        const leagueDataMap = {
+            "CCS": ccsFinalists,
+            "CPL": cplFinalists,
+            "CAS": casFinalists,
+            "CNL": cnlFinalists
+        };
+
+
+        // --- 3. GENERATE THE DATA STRUCTURE ---
+        const presentationData = [];
+
+        leaguesInfo.forEach(league => {
+            let leagueAwards = [...standardAwards];
+            
+            // Add Manager of the Year to the START of the list for CCS 
+            if (league.id === "CCS") {
+                leagueAwards.unshift("Manager of the Year");
+            }
+
+            const awardsData = leagueAwards.map(awardName => {
+                return {
+                    name: awardName,
+                    finalists: leagueDataMap[league.id][awardName]
+                };
+            });
+
+            presentationData.push({
+                ...league,
+                awards: awardsData
+            });
+        });
+
+        // --- 4. BUILD THE HTML SLIDES ---
+        const container = document.getElementById('presentation-container');
+        let slidesHTML = '';
+
+        // Title Screen with all 4 logos (Instructions removed)
+        slidesHTML += `
+            <div class="slide active">
+                <h1>Clutch Competitor Series</h1>
+                <h2>Award Finalists</h2>
+                
+                <div class="title-logos-container">
+                    <img src="CCSLogos/CCS.png" alt="CCS Logo" onerror="this.style.display='none';">
+                    <img src="CPLLogos/CPL.png" alt="CPL Logo" onerror="this.style.display='none';">
+                    <img src="CASLogos/CAS.png" alt="CAS Logo" onerror="this.style.display='none';">
+                    <img src="CNLLogos/CNL.png" alt="CNL Logo" onerror="this.style.display='none';">
+                </div>
+            </div>
+        `;
+
+        presentationData.forEach(league => {
+            // League Title Screen
+            slidesHTML += `
+                <div class="slide" style="background: radial-gradient(circle, ${league.color} 0%, var(--bg-color) 70%);">
+                    <div class="league-logo-large">
+                        <img src="${league.logoFolder}/${league.logoFile}" alt="${league.name} Logo" onerror="this.style.display='none';">
+                    </div>
+                    <h1 style="color: ${league.color}; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">${league.name}</h1>
+                    <h2>Awards Finalists</h2>
+                </div>
+            `;
+
+            // Award Slides
+            league.awards.forEach(award => {
+                let finalistsHTML = award.finalists.map(f => `
+                    <div class="finalist-card" style="background-color: ${f.teamColor};">
+                        <div class="team-logo">
+                            <img src="${f.teamLogo}" alt="Team Logo" onerror="this.style.display='none';">
+                        </div>
+                        <div class="player-name">${f.player}</div>
+                    </div>
+                `).join('');
+
+                slidesHTML += `
+                    <div class="slide">
+                        <h2 style="color: ${league.color};">
+                            <img src="${league.logoFolder}/${league.logoFile}" class="slide-league-logo" alt="${league.name} Logo" onerror="this.style.display='none';">
+                            <span style="color:white; margin-right: 15px;">${league.name}</span> ${award.name}
+                        </h2>
+                        <div class="finalists-grid">
+                            ${finalistsHTML}
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        container.innerHTML = slidesHTML;
+
+        // --- 5. NAVIGATION LOGIC ---
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+
+        function updateSlide(newIndex) {
+            slides[currentSlideIndex].classList.remove('active');
+            
+            if (newIndex >= slides.length) currentSlideIndex = 0;
+            else if (newIndex < 0) currentSlideIndex = slides.length - 1;
+            else currentSlideIndex = newIndex;
+
+            slides[currentSlideIndex].classList.add('active');
+            counter.innerText = `${currentSlideIndex + 1} / ${slides.length}`;
+        }
+
+        counter.innerText = `1 / ${slides.length}`;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                updateSlide(currentSlideIndex + 1);
+            } else if (e.key === 'ArrowLeft') {
+                updateSlide(currentSlideIndex - 1);
+            }
+        });
+    </script>
+</body>
+</html>
