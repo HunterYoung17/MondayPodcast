@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clutch Competitor Series - Award Show</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        #presentation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+        
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .league-logo-large {
+            margin-bottom: 20px;
+        }
+
+        .league-logo-large img {
+            max-height: 180px; 
+            width: auto;
+            filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.5));
+        }
+
+        .slide-league-logo {
+            max-height: 70px;
+            width: auto;
+            margin-right: 20px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5));
+        }
+
+        /* Inline Award Image Styling */
+        .inline-award-logo {
+            max-height: 75px;
+            width: auto;
+            margin-left: 20px;
+            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.6));
+        }
+
+        .finalists-grid {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: stretch;
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        .finalist-card {
+            flex: 1;
+            border-radius: 15px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .team-logo {
+            margin-bottom: 20px;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .team-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5));
+        }
+
+        .player-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        /* Title Screen Logos Container */
+        .title-logos-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .title-logos-container img {
+            max-height: 120px;
+            width: auto;
+            filter: drop-shadow(0px 5px 15px rgba(255, 255, 255, 0.1));
+        }
+
+        #counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* --- Winner Card Styling --- */
+        .winner-card-large {
+            border-radius: 25px;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.15);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        .slide.active .winner-card-large {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .winner-subtitle {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+        }
+
+        .winner-main-info {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .winner-team-logo {
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .winner-team-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.8));
+        }
+
+        .winner-player-name {
+            font-size: 4rem;
+            font-weight: 900;
+            text-shadow: 3px 5px 15px rgba(0,0,0,0.9);
+            color: white;
+            text-transform: uppercase;
+        }
+
+        /* --- Stat Boxes --- */
+        .winner-stats-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            min-width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #cccccc;
+            text-align: center;
+        }
+
+        /* First/Second Team Winner Cards */
+        .team-winners-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            width: 90%;
+            max-width: 1400px;
+        }
+        
+        .team-winner-card {
+            flex: 1;
+            border-radius: 20px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .slide.active .team-winner-card {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide.active .team-winner-card:nth-child(2) { transition-delay: 0.1s; }
+        .slide.active .team-winner-card:nth-child(3) { transition-delay: 0.2s; }
+    </style>
+</head>
+<body>
+
+    <div id="presentation-container"></div>
+    <div id="counter"></div>
+
+    <script>
+        // --- 1. DEFINE LEAGUES AND STABLE REQUESTED ORDER ---
+        const leaguesInfo = [
+            { id: "CCS", name: "CCS", color: "#FFD700", logoFolder: "CCSLogos", logoFile: "CCS.png" }, 
+            { id: "CPL", name: "CPL", color: "#FFA500", logoFolder: "CPLLogos", logoFile: "CPL.png" }, 
+            { id: "CAS", name: "CAS", color: "#FF3333", logoFolder: "CASLogos", logoFile: "CAS.png" }, 
+            { id: "CNL", name: "CNL", color: "#3366FF", logoFolder: "CNLLogos", logoFile: "CNL.png" }  
+        ];
+
+        // NEW REQUESTED ORDER
+        const standardAwards = [
+            "Sharpshooter", 
+            "Most Improved", 
+            "4th Man of the Year", 
+            "Rookie of the Year", 
+            "Golden Clam", 
+            "Best Playmaker", 
+            "Best Scorer", 
+            "Second Team", 
+            "First Team", 
+            "MVP"
+        ];
+
+        // --- 2. COMPLETE LEAGUE DATA WITH RAW HISTORIC ARRAYS ---
+        
+        // CCS Tier
+        const ccsFinalists = {
+            "Owner of the Year": [
+                { player: "Nate", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png", isWinner: true, stats: [{label: "Record", value: "29-19"}, {label: "Playoff Orgs", value: "3 of 4"}] },
+                { player: "Trout", teamColor: "#D2B48C", teamLogo: "CCSLogos/moose.png" },
+                { player: "Sports", teamColor: "#0055A4", teamLogo: "CCSLogos/shockwave.png" }
+            ],
+            "Sharpshooter": [
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" },
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png", isWinner: true, stats: [{label: "Shots", value: "188"}, {label: "Shots/Game", value: "3.8"}, {label: "Shot %", value: "33%"}] },
+                { player: "Bennus", teamColor: "#D2B48C", teamLogo: "CCSLogos/moose.png" }
+            ],
+            "Most Improved": [
+                { player: "Cyan", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png" },
+                { player: "Joey", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png", isWinner: true, stats: [{label: "S4 MVPR", value: "3.3"}, {label: "S5 MVPR", value: "4.3"}, {label: "S4 Avg", value: "348"}, {label: "S5 Avg", value: "402"}] },
+                { player: "Poptarts", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CCSLogos/pirates.png", isWinner: true, stats: [{label: "Record", value: "2-1"}, {label: "MVPR", value: "3.8"}, {label: "Goals", value: "6"}, {label: "Assists", value: "7"}, {label: "Saves", value: "22"}] },
+                { player: "Laxxin", teamColor: "#6A0DAD", teamLogo: "CCSLogos/stars.png" },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CCSLogos/zebras.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png", isWinner: true, stats: [{label: "MVPR", value: "4.2"}, {label: "Avg Score", value: "436"}, {label: "GPG", value: "1.2"}, {label: "APG", value: "0.7"}, {label: "SPG", value: "1.2"}] },
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" }
+            ],
+            "Golden Clam": [
+                { player: "Kizvy", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png", isWinner: true, stats: [{label: "Saves", value: "88"}, {label: "Saves/Game", value: "1.8"}, {label: "Series High", value: "13"}] },
+                { player: "DainBramage", teamColor: "#E0E0E0", teamLogo: "CCSLogos/zebras.png" },
+                { player: "Mini", teamColor: "#FF69B4", teamLogo: "CCSLogos/howlers.png" }
+            ],
+            "Best Playmaker": [
+                { player: "Grizz", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png", isWinner: true, stats: [{label: "Assists", value: "47"}, {label: "Assists/Game", value: "0.9"}, {label: "Series High", value: "7"}] },
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png" },
+                { player: "Joey", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" }
+            ],
+            "Best Scorer": [
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png", isWinner: true, stats: [{label: "Goals", value: "62"}, {label: "Goals/Game", value: "1.2"}, {label: "Series High", value: "10"}] },
+                { player: "Cyan", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png" },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" }
+            ],
+            "Second Team": [
+                { player: "Wrld", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png", isWinner: true },
+                { player: "Joey", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png", isWinner: true },
+                { player: "Cyan", teamColor: "#DAA520", teamLogo: "CCSLogos/vipers.png", isWinner: true }
+            ],
+            "First Team": [
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png", isWinner: true },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png", isWinner: true },
+                { player: "Kizvy", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png", isWinner: true }
+            ],
+            "MVP": [
+                { player: "Nautikl", teamColor: "#008080", teamLogo: "CCSLogos/anglers.png", isWinner: true, stats: [{label: "MVPR", value: "4.5"}, {label: "Avg Score", value: "427"}, {label: "GPG", value: "1.0"}, {label: "APG", value: "0.9"}, {label: "SPG", value: "1.6"}] },
+                { player: "Cye", teamColor: "#1a1a1a", teamLogo: "CCSLogos/ninjas.png" },
+                { player: "Kizvy", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png" }
+            ]
+        };
+
+        // CPL Tier
+        const cplFinalists = {
+            "Sharpshooter": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png", isWinner: true, stats: [{label: "Shots", value: "175"}, {label: "Shots/Game", value: "3.7"}, {label: "Shot %", value: "35%"}] },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" }
+            ],
+            "Most Improved": [
+                { player: "Slykooper", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" },
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png", isWinner: true, stats: [{label: "S4 MVPR", value: "4.5"}, {label: "S5 MVPR", value: "5.4"}, {label: "S4 Avg", value: "423"}, {label: "S5 Avg", value: "511"}] },
+                { player: "BluePhoenix", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "Aiden", teamColor: "#D2B48C", teamLogo: "CPLLogos/groundhogs.png" },
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CPLLogos/cobras.png", isWinner: true, stats: [{label: "Record", value: "1-1"}, {label: "MVPR", value: "3.4"}, {label: "Goals", value: "7"}, {label: "Assists", value: "6"}, {label: "Saves", value: "15"}] },
+                { player: "Cxrsed", teamColor: "#CC0000", teamLogo: "CPLLogos/warriors.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Nlyu", teamColor: "#0055A4", teamLogo: "CPLLogos/sonic boom.png" },
+                { player: "Rev", teamColor: "#0055A4", teamLogo: "CPLLogos/sonic boom.png", isWinner: true, stats: [{label: "MVPR", value: "3.9"}, {label: "Avg Score", value: "385"}, {label: "GPG", value: "0.9"}, {label: "APG", value: "0.5"}, {label: "SPG", value: "1.6"}] },
+                { player: "Arctix", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" }
+            ],
+            "Golden Clam": [
+                { player: "Slykooper", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" },
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" },
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png", isWinner: true, stats: [{label: "Saves", value: "90"}, {label: "Saves/Game", value: "2.3"}, {label: "Series High", value: "18"}] }
+            ],
+            "Best Playmaker": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png", isWinner: true, stats: [{label: "Assists", value: "35"}, {label: "Assists/Game", value: "0.7"}, {label: "Series High", value: "7"}] },
+                { player: "Slayer", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" }
+            ],
+            "Best Scorer": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png" },
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png", isWinner: true, stats: [{label: "Goals", value: "61"}, {label: "Goals/Game", value: "1.3"}, {label: "Series High", value: "11"}] },
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png" }
+            ],
+            "Second Team": [
+                { player: "Glo", teamColor: "#E0E0E0", teamLogo: "CPLLogos/buffalo.png", isWinner: true },
+                { player: "Slykooper", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png", isWinner: true },
+                { player: "Guccianii", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png", isWinner: true }
+            ],
+            "First Team": [
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png", isWinner: true },
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png", isWinner: true },
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png", isWinner: true }
+            ],
+            "MVP": [
+                { player: "Driftz", teamColor: "#FF69B4", teamLogo: "CPLLogos/coyotes.png" },
+                { player: "Kaza", teamColor: "#FF8C00", teamLogo: "CPLLogos/mortars.png", isWinner: true, stats: [{label: "MVPR", value: "5.4"}, {label: "Avg Score", value: "511"}, {label: "GPG", value: "1.3"}, {label: "APG", value: "0.7"}, {label: "SPG", value: "2.3"}] },
+                { player: "DarkGalaxiess", teamColor: "#8B4513", teamLogo: "CPLLogos/marauders.png" }
+            ]
+        };
+
+        // CAS Tier
+        const casFinalists = {
+            "Sharpshooter": [
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png", isWinner: true, stats: [{label: "Shots", value: "131"}, {label: "Shots/Game", value: "3.1"}, {label: "Shot %", value: "37%"}] },
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" }
+            ],
+            "Most Improved": [
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png", isWinner: true, stats: [{label: "S4 MVPR", value: "3.5"}, {label: "S5 MVPR", value: "4.4"}, {label: "S4 Avg", value: "334"}, {label: "S5 Avg", value: "448"}] },
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "Chrome moisty", teamColor: "#E0E0E0", teamLogo: "CASLogos/elephants.png" },
+                { player: "Seori", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png", isWinner: true, stats: [{label: "Record", value: "2-4"}, {label: "MVPR", value: "4.0"}, {label: "Goals", value: "23"}, {label: "Assists", value: "11"}, {label: "Saves", value: "37"}] },
+                { player: "Trout", teamColor: "#D2B48C", teamLogo: "CASLogos/black bears.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "DsyrJames", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png" },
+                { player: "Hate.", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png", isWinner: true, stats: [{label: "MVPR", value: "4.5"}, {label: "Avg Score", value: "428"}, {label: "GPG", value: "0.9"}, {label: "APG", value: "0.6"}, {label: "SPG", value: "2.0"}] },
+                { player: "JT", teamColor: "#008080", teamLogo: "CASLogos/behemoths.png" }
+            ],
+            "Golden Clam": [
+                { player: "Hate.", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png", isWinner: true, stats: [{label: "Saves", value: "106"}, {label: "Saves/Game", value: "2.0"}, {label: "Series High", value: "18"}] },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
+            ],
+            "Best Playmaker": [
+                { player: "DsyrJames", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png" },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png", isWinner: true, stats: [{label: "Assists", value: "43"}, {label: "Assists/Game", value: "0.8"}, {label: "Series High", value: "7"}] },
+                { player: "Marchosias", teamColor: "#FF69B4", teamLogo: "CASLogos/wolfpack.png" }
+            ],
+            "Best Scorer": [
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" },
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png", isWinner: true, stats: [{label: "Goals", value: "49"}, {label: "Goals/Game", value: "1.2"}, {label: "Series High", value: "8"}] },
+                { player: "Marchosias", teamColor: "#FF69B4", teamLogo: "CASLogos/wolfpack.png" }
+            ],
+            "Second Team": [
+                { player: "Hate.", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png", isWinner: true },
+                { player: "Marchosias", teamColor: "#FF69B4", teamLogo: "CASLogos/wolfpack.png", isWinner: true },
+                { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png", isWinner: true }
+            ],
+            "First Team": [
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png", isWinner: true },
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png", isWinner: true },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png", isWinner: true }
+            ],
+            "MVP": [
+                { player: "JugPanda", teamColor: "#FF8C00", teamLogo: "CASLogos/cannons.png" },
+                { player: "Dr Scrawny", teamColor: "#DAA520", teamLogo: "CASLogos/copperheads.png", isWinner: true, stats: [{label: "MVPR", value: "4.5"}, {label: "Avg Score", value: "436"}, {label: "GPG", value: "1.2"}, {label: "APG", value: "0.6"}, {label: "SPG", value: "1.7"}] },
+                { player: "Meepomic", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
+            ]
+        };
+
+        // CNL Tier
+        const cnlFinalists = {
+            "Sharpshooter": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png", isWinner: true, stats: [{label: "Shots", value: "154"}, {label: "Shots/Game", value: "3.9"}, {label: "Shot %", value: "37%"}] },
+                { player: "Terbiee", teamColor: "#228B22", teamLogo: "CNLLogos/redwings.png" }
+            ],
+            "Most Improved": [
+                { player: "Chrome Moisty", teamColor: "#E0E0E0", teamLogo: "CNLLogos/rhinos.png" },
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png", isWinner: true, stats: [{label: "S4 MVPR", value: "4.3"}, {label: "S5 MVPR", value: "5.3"}, {label: "S4 Avg", value: "394"}, {label: "S5 Avg", value: "504"}] },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png" }
+            ],
+            "4th Man of the Year": [
+                { player: "Spiral", teamColor: "#CC0000", teamLogo: "CNLLogos/bushido.png" },
+                { player: "Paz", teamColor: "#8B4513", teamLogo: "CNLLogos/shipwreck.png", isWinner: true, stats: [{label: "Record", value: "3-1"}, {label: "MVPR", value: "3.6"}, {label: "Goals", value: "6"}, {label: "Assists", value: "3"}, {label: "Saves", value: "12"}] },
+                { player: "Hamm", teamColor: "#1a1a1a", teamLogo: "CNLLogos/thieves.png" }
+            ],
+            "Rookie of the Year": [
+                { player: "Jurchao", teamColor: "#1a1a1a", teamLogo: "CNLLogos/thieves.png" },
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png", isWinner: true, stats: [{label: "MVPR", value: "4.7"}, {label: "Avg Score", value: "466"}, {label: "GPG", value: "1.4"}, {label: "APG", value: "0.7"}, {label: "SPG", value: "1.3"}] },
+                { player: "Nirosat", teamColor: "#008080", teamLogo: "CNLLogos/leviathans.png" }
+            ],
+            "Golden Clam": [
+                { player: "Kazegurui", teamColor: "#CC0000", teamLogo: "CNLLogos/bushido.png" },
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png", isWinner: true, stats: [{label: "Saves", value: "77"}, {label: "Saves/Game", value: "1.9"}, {label: "Series High", value: "13"}] },
+                { player: "Nirosat", teamColor: "#008080", teamLogo: "CNLLogos/leviathans.png" }
+            ],
+            "Best Playmaker": [
+                { player: "Fast Layne", teamColor: "#DAA520", teamLogo: "CNLLogos/anacondas.png" },
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png", isWinner: true, stats: [{label: "Assists", value: "33"}, {label: "Assists/Game", value: "0.8"}, {label: "Series High", value: "7"}] },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png" }
+            ],
+            "Best Scorer": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" },
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png", isWinner: true, stats: [{label: "Goals", value: "57"}, {label: "Goals/Game", value: "1.4"}, {label: "Series High", value: "8"}] },
+                { player: "Haakonn", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png" }
+            ],
+            "Second Team": [
+                { player: "Haakonn", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png", isWinner: true },
+                { player: "Terbiee", teamColor: "#228B22", teamLogo: "CNLLogos/redwings.png", isWinner: true },
+                { player: "Chrome", teamColor: "#E0E0E0", teamLogo: "CNLLogos/moisty rhinos.png", isWinner: true }
+            ],
+            "First Team": [
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png", isWinner: true },
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png", isWinner: true },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png", isWinner: true }
+            ],
+            "MVP": [
+                { player: "Botco", teamColor: "#FF69B4", teamLogo: "CNLLogos/timberwolves.png" },
+                { player: "Deplooped", teamColor: "#FF8C00", teamLogo: "CNLLogos/ballistics.png", isWinner: true, stats: [{label: "MVPR", value: "5.3"}, {label: "Avg Score", value: "503"}, {label: "GPG", value: "1.3"}, {label: "APG", value: "0.8"}, {label: "SPG", value: "1.9"}] },
+                { player: "Eyes", teamColor: "#0055A4", teamLogo: "CNLLogos/sound.png" }
+            ]
+        };
+
+        const leagueDataMap = {
+            "CCS": ccsFinalists,
+            "CPL": cplFinalists,
+            "CAS": casFinalists,
+            "CNL": cnlFinalists
+        };
+
+
+        // --- 3. HELPER FUNCTION FOR IMAGE NAMES ---
+        function getAwardFileName(awardName) {
+            return awardName.toLowerCase().replace(/\s/g, '');
+        }
+
+
+        // --- 4. GENERATE THE DATA STRUCTURE ---
+        const presentationData = [];
+
+        leaguesInfo.forEach(league => {
+            let leagueAwards = [...standardAwards];
+            
+            if (league.id === "CCS") {
+                leagueAwards.unshift("Owner of the Year");
+            }
+
+            const awardsData = leagueAwards.map(awardName => {
+                return {
+                    name: awardName,
+                    finalists: leagueDataMap[league.id][awardName] || []
+                };
+            });
+
+            presentationData.push({
+                ...league,
+                awards: awardsData
+            });
+        });
+
+        // --- 5. BUILD THE HTML SLIDES ---
+        const container = document.getElementById('presentation-container');
+        let slidesHTML = '';
+
+        slidesHTML += `
+            <div class="slide active">
+                <h1>Clutch Competitor Series</h1>
+                <h2>Award Finalists</h2>
+                
+                <div class="title-logos-container">
+                    <img src="CCSLogos/CCS.png" alt="CCS Logo" onerror="this.style.display='none';">
+                    <img src="CPLLogos/CPL.png" alt="CPL Logo" onerror="this.style.display='none';">
+                    <img src="CASLogos/CAS.png" alt="CAS Logo" onerror="this.style.display='none';">
+                    <img src="CNLLogos/CNL.png" alt="CNL Logo" onerror="this.style.display='none';">
+                </div>
+            </div>
+        `;
+
+        presentationData.forEach(league => {
+            slidesHTML += `
+                <div class="slide" style="background: radial-gradient(circle, ${league.color} 0%, var(--bg-color) 70%);">
+                    <div class="league-logo-large">
+                        <img src="${league.logoFolder}/${league.logoFile}" alt="${league.name} Logo" onerror="this.style.display='none';">
+                    </div>
+                    <h1 style="color: ${league.color}; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">${league.name}</h1>
+                    <h2>Awards Show</h2>
+                </div>
+            `;
+
+            league.awards.forEach(award => {
+                if (award.finalists.length === 0) return; 
+
+                const isTeamAward = award.name.includes("Team");
+                const pngFileName = getAwardFileName(award.name);
+
+                // If it's a standard award, show finalists first
+                if (!isTeamAward) {
+                    let finalistsHTML = award.finalists.map(f => `
+                        <div class="finalist-card" style="background-color: ${f.teamColor};">
+                            <div class="team-logo">
+                                <img src="${f.teamLogo}" alt="Team Logo" onerror="this.style.display='none';">
+                            </div>
+                            <div class="player-name">${f.player}</div>
+                        </div>
+                    `).join('');
+
+                    slidesHTML += `
+                        <div class="slide">
+                            <h2 style="color: ${league.color};">
+                                <img src="${league.logoFolder}/${league.logoFile}" class="slide-league-logo" alt="${league.name} Logo" onerror="this.style.display='none';">
+                                <span style="color:white; margin-right: 15px;">${league.name}</span> ${award.name} Finalists
+                                <img src="awardimages/${pngFileName}.png" class="inline-award-logo" alt="${award.name}" onerror="this.style.display='none';">
+                            </h2>
+                            <div class="finalists-grid">
+                                ${finalistsHTML}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Generate Winner Slide
+                if (isTeamAward) {
+                    let teamWinnersHTML = award.finalists.map(w => `
+                        <div class="team-winner-card" style="background-color: ${w.teamColor};">
+                            <div class="team-logo" style="width: 120px; height: 120px;">
+                                <img src="${w.teamLogo}" alt="Team Logo" onerror="this.style.display='none';">
+                            </div>
+                            <div class="player-name" style="font-size: 2.2rem; margin-top: 10px;">${w.player}</div>
+                        </div>
+                    `).join('');
+
+                    slidesHTML += `
+                        <div class="slide">
+                            <h2 style="color: ${league.color};">
+                                <img src="${league.logoFolder}/${league.logoFile}" class="slide-league-logo" alt="${league.name} Logo" onerror="this.style.display='none';">
+                                <span style="color:white; margin-right: 15px;">${league.name}</span> ${award.name}
+                                <img src="awardimages/${pngFileName}.png" class="inline-award-logo" alt="${award.name}" onerror="this.style.display='none';">
+                            </h2>
+                            <div class="team-winners-grid">
+                                ${teamWinnersHTML}
+                            </div>
+                        </div>
+                    `;
+
+                } else {
+                    const winner = award.finalists.find(f => f.isWinner);
+                    if (winner) {
+                        let statsHTML = '';
+                        if (winner.stats) {
+                            statsHTML = `<div class="winner-stats-container">`;
+                            winner.stats.forEach(s => {
+                                statsHTML += `
+                                    <div class="stat-box">
+                                        <div class="stat-value" style="color: ${league.color};">${s.value}</div>
+                                        <div class="stat-label">${s.label}</div>
+                                    </div>
+                                `;
+                            });
+                            statsHTML += `</div>`;
+                        }
+
+                        slidesHTML += `
+                            <div class="slide">
+                                <h2 style="color: ${league.color};">
+                                    <img src="${league.logoFolder}/${league.logoFile}" class="slide-league-logo" alt="${league.name} Logo" onerror="this.style.display='none';">
+                                    <span style="color:white; margin-right: 15px;">${league.name}</span> ${award.name} Winner
+                                    <img src="awardimages/${pngFileName}.png" class="inline-award-logo" alt="${award.name}" onerror="this.style.display='none';">
+                                </h2>
+                                <div class="winner-card-large" style="background-color: ${winner.teamColor}; border-color: ${league.color}; box-shadow: 0 0 60px ${league.color}40;">
+                                    <div class="winner-subtitle" style="color: ${league.color};">Congratulations</div>
+                                    <div class="winner-main-info">
+                                        <div class="winner-team-logo">
+                                            <img src="${winner.teamLogo}" alt="Team Logo" onerror="this.style.display='none';">
+                                        </div>
+                                        <div class="winner-player-name">${winner.player}</div>
+                                    </div>
+                                    ${statsHTML}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+        });
+
+        container.innerHTML = slidesHTML;
+
+        // --- 6. NAVIGATION LOGIC ---
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+
+        function updateSlide(newIndex) {
+            slides[currentSlideIndex].classList.remove('active');
+            
+            if (newIndex >= slides.length) currentSlideIndex = 0;
+            else if (newIndex < 0) currentSlideIndex = slides.length - 1;
+            else currentSlideIndex = newIndex;
+
+            slides[currentSlideIndex].classList.add('active');
+            counter.innerText = `${currentSlideIndex + 1} / ${slides.length}`;
+        }
+
+        counter.innerText = `1 / ${slides.length}`;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                updateSlide(currentSlideIndex + 1);
+            } else if (e.key === 'ArrowLeft') {
+                updateSlide(currentSlideIndex - 1);
+            }
+        });
+    </script>
+</body>
+</html>
