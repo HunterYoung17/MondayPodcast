@@ -293,12 +293,52 @@
     <div id="counter"></div>
 
     <script>
-        // --- 1. DEFINE LEAGUES AND STABLE REQUESTED ORDER ---
+        // --- 1. DEFINE LEAGUES AND CHAMPIONSHIP DATA ---
         const leaguesInfo = [
-            { id: "CCS", name: "CCS", color: "#FFD700", logoFolder: "CCSLogos", logoFile: "CCS.png" }, 
-            { id: "CPL", name: "CPL", color: "#FFA500", logoFolder: "CPLLogos", logoFile: "CPL.png" }, 
-            { id: "CAS", name: "CAS", color: "#FF3333", logoFolder: "CASLogos", logoFile: "CAS.png" }, 
-            { id: "CNL", name: "CNL", color: "#3366FF", logoFolder: "CNLLogos", logoFile: "CNL.png" }  
+            { 
+                id: "CCS", name: "CCS", color: "#FFD700", logoFolder: "CCSLogos", logoFile: "CCS.png",
+                champions: {
+                    teamName: "Nepal Ninjas",
+                    teamLogo: "CCSLogos/ninjas.png",
+                    teamColor: "#1a1a1a",
+                    roster: "Cye, Souls, Oofy",
+                    mvpName: "Cye",
+                    mvpStats: [{label: "Score", value: "2649"}, {label: "Goals", value: "5"}, {label: "Assists", value: "3"}, {label: "Saves", value: "6"}]
+                }
+            }, 
+            { 
+                id: "CPL", name: "CPL", color: "#FFA500", logoFolder: "CPLLogos", logoFile: "CPL.png",
+                champions: {
+                    teamName: "Copper Canyon Coyotes",
+                    teamLogo: "CPLLogos/coyotes.png",
+                    teamColor: "#FF69B4",
+                    roster: "Driftz, Arctix, BluePhoenix",
+                    mvpName: "Driftz",
+                    mvpStats: [{label: "Score", value: "3047"}, {label: "Goals", value: "11"}, {label: "Assists", value: "4"}, {label: "Saves", value: "9"}]
+                }
+            }, 
+            { 
+                id: "CAS", name: "CAS", color: "#FF3333", logoFolder: "CASLogos", logoFile: "CAS.png",
+                champions: {
+                    teamName: "Epworth Elephants",
+                    teamLogo: "CASLogos/elephants.png",
+                    teamColor: "#E0E0E0",
+                    roster: "Calel, Chrome Moisty, ThatOneGuy, Jerome",
+                    mvpName: "Chrome Moisty",
+                    mvpStats: [{label: "Score", value: "2380"}, {label: "Goals", value: "8"}, {label: "Assists", value: "7"}, {label: "Saves", value: "4"}]
+                }
+            }, 
+            { 
+                id: "CNL", name: "CNL", color: "#3366FF", logoFolder: "CNLLogos", logoFile: "CNL.png",
+                champions: {
+                    teamName: "Bedford Ballistics",
+                    teamLogo: "CNLLogos/ballistics.png",
+                    teamColor: "#FF8C00",
+                    roster: "Deplooped, Haakonn, Skelly, Swilly",
+                    mvpName: "Deplooped",
+                    mvpStats: [{label: "Score", value: "2296"}, {label: "Goals", value: "5"}, {label: "Assists", value: "4"}, {label: "Saves", value: "7"}]
+                }
+            }  
         ];
 
         // NEW REQUESTED ORDER
@@ -319,7 +359,7 @@
         
         // CCS Tier
         const ccsFinalists = {
-            "Owner of the Year": [
+            "Manager of the Year": [
                 { player: "Nate", teamColor: "#228B22", teamLogo: "CCSLogos/flyers.png", isWinner: true, stats: [{label: "Record", value: "29-19"}, {label: "Playoff Orgs", value: "3 of 4"}] },
                 { player: "Trout", teamColor: "#D2B48C", teamLogo: "CCSLogos/moose.png" },
                 { player: "Sports", teamColor: "#0055A4", teamLogo: "CCSLogos/shockwave.png" }
@@ -443,7 +483,7 @@
                 { player: "Violence", teamColor: "#228B22", teamLogo: "CASLogos/skyhawks.png" }
             ],
             "4th Man of the Year": [
-                { player: "Chrome moisty", teamColor: "#E0E0E0", teamLogo: "CASLogos/elephants.png" },
+                { player: "Chrome Moisty", teamColor: "#E0E0E0", teamLogo: "CASLogos/elephants.png" },
                 { player: "Seori", teamColor: "#8B4513", teamLogo: "CASLogos/conquerors.png", isWinner: true, stats: [{label: "Record", value: "2-4"}, {label: "MVPR", value: "4.0"}, {label: "Goals", value: "23"}, {label: "Assists", value: "11"}, {label: "Saves", value: "37"}] },
                 { player: "Trout", teamColor: "#D2B48C", teamLogo: "CASLogos/black bears.png" }
             ],
@@ -559,7 +599,7 @@
             let leagueAwards = [...standardAwards];
             
             if (league.id === "CCS") {
-                leagueAwards.unshift("Owner of the Year");
+                leagueAwards.unshift("Manager of the Year");
             }
 
             const awardsData = leagueAwards.map(awardName => {
@@ -594,6 +634,7 @@
         `;
 
         presentationData.forEach(league => {
+            // League Title Slide
             slidesHTML += `
                 <div class="slide" style="background: radial-gradient(circle, ${league.color} 0%, var(--bg-color) 70%);">
                     <div class="league-logo-large">
@@ -604,13 +645,58 @@
                 </div>
             `;
 
+            // --- CHAMPIONSHIP SLIDE ---
+            // MOVED UP to appear immediately after the League Title Screen
+            if (league.champions) {
+                const champs = league.champions;
+                const trophyName = `${league.id.toLowerCase()}trophy.png`;
+
+                slidesHTML += `
+                    <div class="slide">
+                        <h2 style="color: ${league.color};">
+                            <img src="${league.logoFolder}/${league.logoFile}" class="slide-league-logo" alt="${league.name} Logo" onerror="this.style.display='none';">
+                            <span style="color:white; margin-right: 15px;">${league.name}</span> Clutch Series Winners
+                            <img src="awardimages/${trophyName}" class="inline-award-logo" alt="Trophy" onerror="this.style.display='none';">
+                        </h2>
+                        
+                        <div class="winner-card-large" style="background-color: ${champs.teamColor}; border-color: ${league.color}; box-shadow: 0 0 60px ${league.color}40; max-width: 1200px;">
+                            <div class="winner-main-info" style="margin-bottom: 15px;">
+                                <div class="winner-team-logo" style="width: 200px; height: 200px;">
+                                    <img src="${champs.teamLogo}" alt="Team Logo" onerror="this.style.display='none';">
+                                </div>
+                            </div>
+                            
+                            <div class="winner-player-name" style="font-size: 3.5rem; text-align: center; margin-bottom: 10px;">${champs.teamName}</div>
+                            <div style="font-size: 1.4rem; color: #ddd; margin-bottom: 30px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">
+                                Roster: ${champs.roster}
+                            </div>
+                            
+                            <div style="width: 100%; border-top: 2px solid rgba(255,255,255,0.2); padding-top: 25px; display: flex; flex-direction: column; align-items: center;">
+                                <div style="font-size: 1.8rem; text-transform: uppercase; letter-spacing: 4px; color: ${league.color}; margin-bottom: 15px; font-weight: bold; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">
+                                    Clutch Series MVP: <span style="color: white;">${champs.mvpName}</span>
+                                </div>
+                                <div class="winner-stats-container">
+                                    ${champs.mvpStats.map(s => `
+                                        <div class="stat-box">
+                                            <div class="stat-value" style="color: ${league.color};">${s.value}</div>
+                                            <div class="stat-label">${s.label}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Loop Over Standard Awards
             league.awards.forEach(award => {
                 if (award.finalists.length === 0) return; 
 
                 const isTeamAward = award.name.includes("Team");
                 const pngFileName = getAwardFileName(award.name);
 
-                // If it's a standard award, show finalists first
+                // FINALIST SLIDE (Skip for First/Second Team)
                 if (!isTeamAward) {
                     let finalistsHTML = award.finalists.map(f => `
                         <div class="finalist-card" style="background-color: ${f.teamColor};">
@@ -635,7 +721,7 @@
                     `;
                 }
 
-                // Generate Winner Slide
+                // WINNER SLIDE
                 if (isTeamAward) {
                     let teamWinnersHTML = award.finalists.map(w => `
                         <div class="team-winner-card" style="background-color: ${w.teamColor};">
