@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Info Release Overlay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --gold-light: #FFD700;
+            --gold-dark: #B8860B;
+            --text-color: #ffffff;
+            --grey-dark: #2C2C2C;
+            --bg-color: #1a1a1a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1920px;
+            height: 1080px;
+            background-color: transparent; /* Use var(--bg-color) if you want a solid background instead of transparent */
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8);
+            margin-bottom: 60px;
+            border-bottom: 3px solid var(--gold-dark);
+            padding-bottom: 15px;
+        }
+
+        /* --- GRID LAYOUT --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px 80px;
+            width: 1600px;
+        }
+
+        /* --- INTERACTIVE CARDS --- */
+        .info-card {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            background: rgba(44, 44, 44, 0.85);
+            border: 2px solid var(--gold-dark);
+            box-shadow: 0 0 20px rgba(184, 134, 11, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Corner Accents */
+        .info-card::after {
+            content: '';
+            position: absolute;
+            top: -4px; right: -4px;
+            width: 20px; height: 20px;
+            border-top: 3px solid var(--gold-light);
+            border-right: 3px solid var(--gold-light);
+            z-index: 10;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: -4px;
+            width: 20px; height: 20px;
+            border-bottom: 3px solid var(--gold-light);
+            border-left: 3px solid var(--gold-light);
+            z-index: 10;
+        }
+
+        /* --- CARD CONTENT (HIDDEN INITIALLY) --- */
+        .card-content {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        .card-value {
+            font-size: 1.4rem;
+            color: var(--text-color);
+            font-weight: 700;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        .card-subtext {
+            font-size: 1rem;
+            color: #aaaaaa;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* --- THE COVER (THE "CLICK TO REVEAL" OVERLAY) --- */
+        .card-cover {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #2a2a2a 0%, #111111 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            z-index: 5;
+        }
+
+        .cover-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #888888;
+            letter-spacing: 4px;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .info-card:hover .cover-text {
+            color: var(--gold-light);
+        }
+
+        /* --- REVEALED STATE --- */
+        .info-card.revealed .card-cover {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .info-card.revealed .card-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .info-card.revealed {
+            cursor: default;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            border-color: var(--gold-light);
+        }
+
+        .reveal-all-btn {
+            margin-top: 50px;
+            padding: 15px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold-light);
+            background: rgba(44, 44, 44, 0.8);
+            border: 2px solid var(--gold-dark);
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .reveal-all-btn:hover {
+            background: var(--gold-dark);
+            color: #fff;
+            box-shadow: 0 0 15px var(--gold-light);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Season Schedule Release</div>
+
+    <div class="info-grid" id="grid">
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Lottery Date</div>
+                <div class="card-value">July 31st</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Draft Dates</div>
+                <div class="card-value">August 1st & 2nd</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Week 1</div>
+                <div class="card-value">August 4th - 9th</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">All Star Break</div>
+                <div class="card-value">September 15th - 20th</div>
+                <div class="card-subtext">WORLDS</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Week 9</div>
+                <div class="card-value">October 6th - 11th</div>
+                <div class="card-subtext">TRADE DEADLINE</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Playoffs</div>
+                <div class="card-value">November 10th - 15th</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Thanksgiving Break</div>
+                <div class="card-value">Between Pennant Series & Clutch Series</div>
+            </div>
+        </div>
+
+        <div class="info-card" onclick="revealCard(this)">
+            <div class="card-cover"><span class="cover-text">Click to Reveal</span></div>
+            <div class="card-content">
+                <div class="card-title">Clutch Series</div>
+                <div class="card-value">December 1st - 6th</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="reveal-all-btn" onclick="revealAll()">REVEAL ALL</button>
+
+    <script>
+        // Function to reveal individual cards on click
+        function revealCard(element) {
+            element.classList.add('revealed');
+        }
+
+        // Function to reveal all cards at once
+        function revealAll() {
+            const cards = document.querySelectorAll('.info-card');
+            cards.forEach((card, index) => {
+                // Staggered reveal effect
+                setTimeout(() => {
+                    card.classList.add('revealed');
+                }, index * 150); 
+            });
+        }
+    </script>
+</body>
+</html>
