@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Stream Presentation</title>
+    <style>
+        :root {
+            /* Gold and Grey Color Scheme */
+            --bg-color: #262626; /* Dark Grey Background */
+            --text-color: #f5f5f5; /* Off-white text for readability */
+            --accent-color: #D4AF37; /* Metallic Gold */
+            --secondary-bg: #383838; /* Medium Grey for content boxes */
+            --border-color: #555555;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .presentation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            padding: 2rem;
+            box-sizing: border-box;
+            text-align: center;
+            z-index: 0;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #cccccc;
+        }
+
+        .content-box {
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .tier-box {
+            background: #2f2f2f;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .tier-box h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+        }
+
+        .tier-box p {
+            margin: 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .list-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .list-group h3 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            font-size: 1.3rem;
+        }
+
+        ul li {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.5rem 0;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        button {
+            background-color: var(--secondary-bg);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-left: 10px;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .logo-container {
+            background: #2f2f2f;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: border-color 0.3s;
+        }
+
+        .logo-container:hover {
+            border-color: var(--accent-color);
+        }
+
+        .team-logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.2rem;
+            text-align: left;
+        }
+        
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>CLUTCH COMPETITOR SERIES INFO STREAM</h1>
+            <h2>MMRs, New Logs, Lottery odds, and the Big Reveal</h2>
+        </div>
+
+        <!-- Slide 2: MMRs -->
+        <div class="slide">
+            <h1>MMR Caps & Thresholds</h1>
+            <div class="content-box grid-2">
+                <div class="tier-box">
+                    <h3>CCS</h3>
+                    <p><strong>MMRs:</strong> 1740+</p>
+                    <p><strong>MMR Cap:</strong> 5550</p>
+                    <p><strong>MMR Minimum:</strong> 1670</p>
+                </div>
+                <div class="tier-box">
+                    <h3>CPL</h3>
+                    <p><strong>MMRs:</strong> 1600-1739</p>
+                    <p><strong>MMR Cap:</strong> 5000</p>
+                    <p><strong>MMR Minimum:</strong> 1560</p>
+                </div>
+                <div class="tier-box">
+                    <h3>CAS</h3>
+                    <p><strong>MMRs:</strong> 1480-1599</p>
+                    <p><strong>MMR Cap:</strong> 4650</p>
+                    <p><strong>MMR Minimum:</strong> 1450</p>
+                </div>
+                <div class="tier-box">
+                    <h3>CNL</h3>
+                    <p><strong>MMRs:</strong> 1479 and below</p>
+                    <p><strong>MMR Cap:</strong> 4275</p>
+                    <p><strong>MMR Minimum:</strong> None</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Logos -->
+        <div class="slide">
+            <h1>New Team Logos</h1>
+            <div class="content-box grid-4">
+                <div class="logo-container">
+                    <img src="newlogos/newflyers.png" alt="Flyers Logo" class="team-logo">
+                </div>
+                <div class="logo-container">
+                    <img src="newlogos/newfishermen.png" alt="Fishermen Logo" class="team-logo">
+                </div>
+                <div class="logo-container">
+                    <img src="newlogos/newcoyotes.png" alt="Coyotes Logo" class="team-logo">
+                </div>
+                <div class="logo-container">
+                    <img src="newlogos/newsurge.png" alt="Surge Logo" class="team-logo">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Grid Game -->
+        <div class="slide">
+            <h1>Let's Play A Game!</h1>
+            <div class="content-box" style="padding: 4rem;">
+                <h2 style="color: var(--accent-color); font-size: 3rem;">CCS Grid Game</h2>
+                <p style="font-size: 1.5rem;">Chat, get ready...</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: CCS Draft -->
+        <div class="slide">
+            <h1>CCS Draft Lottery Odds</h1>
+            <div class="content-box grid-2">
+                <div class="list-group">
+                    <h3>Playoff Teams</h3>
+                    <ul>
+                        <li><span>Nepal Ninjas</span> <span>4%</span></li>
+                        <li><span>Fiji Flyers</span> <span>7%</span></li>
+                        <li><span>Atlantis Anglers</span> <span>10%</span></li>
+                        <li><span>Michigan Moose</span> <span>12%</span></li>
+                        <li><span>Shanghai Samurai</span> <span>12%</span></li>
+                        <li><span>Palm Beach Pirates</span> <span>17%</span></li>
+                        <li><span>Houston Howlers</span> <span>17%</span></li>
+                        <li><span>San Jose Shockwave</span> <span>21%</span></li>
+                    </ul>
+                </div>
+                <div class="list-group">
+                    <h3>Lottery Teams</h3>
+                    <ul>
+                        <li><span>Venezuela Vipers</span> <span>20%</span></li>
+                        <li><span>Zimbabwe Zebras</span> <span>20%</span></li>
+                        <li><span>Boston Blasters</span> <span>20%</span></li>
+                        <li><span class="highlight">Seattle Stars</span> <span class="highlight">40%</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: CPL Draft -->
+        <div class="slide">
+            <h1>CPL Draft Lottery Odds</h1>
+            <div class="content-box grid-2">
+                <div class="list-group">
+                    <h3>Playoff Teams</h3>
+                    <ul>
+                        <li><span>Copper Canyon Coyotes</span> <span>4%</span></li>
+                        <li><span>Massachusetts Mortars</span> <span>7%</span></li>
+                        <li><span>Miami Marauders</span> <span>10%</span></li>
+                        <li><span>Sakala Shadows</span> <span>12%</span></li>
+                        <li><span>San Diego Sonic Boom</span> <span>12%</span></li>
+                        <li><span>Wuhan Warriors</span> <span>17%</span></li>
+                        <li><span>Frenchmen Bay Fishermen</span> <span>17%</span></li>
+                        <li><span>Bulawayo Buffalo</span> <span>21%</span></li>
+                    </ul>
+                </div>
+                <div class="list-group">
+                    <h3>Lottery Teams</h3>
+                    <ul>
+                        <li><span>Spokane Supernova</span> <span>15%</span></li>
+                        <li><span>Caracas Cobras</span> <span>25%</span></li>
+                        <li><span>Lautoka Lory</span> <span>25%</span></li>
+                        <li><span class="highlight">Grand Rapids Groundhogs</span> <span class="highlight">35%</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: CAS Draft -->
+        <div class="slide">
+            <h1>CAS Draft Lottery Odds</h1>
+            <div class="content-box grid-2">
+                <div class="list-group">
+                    <h3>Playoff Teams</h3>
+                    <ul>
+                        <li><span>Epworth Elephants</span> <span>4%</span></li>
+                        <li><span>Suva Skyhawks</span> <span>6%</span></li>
+                        <li><span>Bad Axe Black Bears</span> <span>9%</span></li>
+                        <li><span>Coro Copperheads</span> <span>11%</span></li>
+                        <li><span>Waco Wolfpack</span> <span>13%</span></li>
+                        <li><span>Palpa Prowlers</span> <span>13%</span></li>
+                        <li><span>San Francisco Surge</span> <span>22%</span></li>
+                        <li><span>Cambridge Cannons</span> <span>22%</span></li>
+                    </ul>
+                </div>
+                <div class="list-group">
+                    <h3>Lottery Teams</h3>
+                    <ul>
+                        <li><span>Aberdeen Astronauts</span> <span>10%</span></li>
+                        <li><span>Bermuda Behemoths</span> <span>20%</span></li>
+                        <li><span>Clearwater Conquerors</span> <span>20%</span></li>
+                        <li><span class="highlight">Shenzhen Shaman</span> <span class="highlight">50%</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: CNL Draft -->
+        <div class="slide">
+            <h1>CNL Draft Lottery Odds</h1>
+            <div class="content-box grid-2">
+                <div class="list-group">
+                    <h3>Playoff Teams</h3>
+                    <ul>
+                        <li><span>Bedford Ballistics</span> <span>4%</span></li>
+                        <li><span>San Bernadino Sound</span> <span>7%</span></li>
+                        <li><span>Redcliff Rhinos</span> <span>12%</span></li>
+                        <li><span>Temple Timberwolves</span> <span>12%</span></li>
+                        <li><span>Rakiraki Redwings</span> <span>12%</span></li>
+                        <li><span>Surfside Shipwreck</span> <span>12%</span></li>
+                        <li><span>Beijing Bushido</span> <span>20%</span></li>
+                        <li><span>Anaco Anacondas</span> <span>21%</span></li>
+                    </ul>
+                </div>
+                <div class="list-group">
+                    <h3>Lottery Teams</h3>
+                    <ul>
+                        <li><span>Detroit Ducks</span> <span>10%</span></li>
+                        <li><span>Lyonesse Leviathans</span> <span>20%</span></li>
+                        <li><span>Tokha Thieves</span> <span>30%</span></li>
+                        <li><span class="highlight">Raymond Rovers</span> <span class="highlight">40%</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: BIG REVEAL -->
+        <div class="slide">
+            <h1 style="font-size: 6rem; text-shadow: 0 0 20px var(--accent-color);">BIG REVEAL</h1>
+        </div>
+
+        <!-- Slide 10: CCS CUP Info -->
+        <div class="slide">
+            <h1>The CCS CUP</h1>
+            <h2>Between Week 10 and Week 11</h2>
+            <div class="content-box">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--accent-color); font-size: 1.5rem;">Day 1: Friday - Group Stages</h3>
+                    <p style="font-size: 1.2rem; line-height: 1.6;"><strong>12 Team Format:</strong> 4 groups of 3 teams (2 American groups, 2 International groups). Everyone plays each other once for a total of 2 games each (3 sets of matches total).</p>
+                    <p style="color: #ff6b6b; font-weight: bold; font-size: 1.2rem;">* Does not count towards regular season record.</p>
+                </div>
+                
+                <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+
+                <div>
+                    <h3 style="color: var(--accent-color); font-size: 1.5rem;">Day 2: Saturday - Bracket Stage</h3>
+                    <p style="font-size: 1.2rem; line-height: 1.6;"><strong>Single Elimination:</strong> 4 teams (each group winner advances).<br> 
+                    <span class="highlight">Prize:</span> Winner of the CCS Cup gets the title and an <strong>Auto-Bid for a playoff spot!</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Q & A -->
+        <div class="slide">
+            <h1 style="font-size: 5rem;">Q & A</h1>
+            <h2>Drop your questions in chat!</h2>
+        </div>
+
+        <div class="controls">
+            <button onclick="prevSlide()">&#10094; Prev</button>
+            <button onclick="nextSlide()">Next &#10095;</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
