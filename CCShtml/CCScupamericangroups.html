@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCS - American Division</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Team Colors */
+            --tan: #DEB887;
+            --brown: #A0522D;
+            --pink: #FF69B4;
+            --purple: #9370DB;
+            --orange: #FF8C00;
+            --blue: #1E90FF;
+            
+            /* League Theme */
+            --ccs-gold: #FFD700;
+            --div-blue: #3b82f6;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 
+           Wrapper to allow the scaled container to sit dead-center 
+           without overflowing the viewport 
+        */
+        #viewport-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* STRICT 1920x1080 BROADCAST CANVAS */
+        #broadcast-container {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background-color: #0b0d14; 
+            transform-origin: center center;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0; /* Prevents flexbox from naturally crushing it before scale */
+        }
+
+        h1, h2, h3, h4, .font-oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            z-index: 1;
+        }
+
+        .logo-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 4px solid #374151;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            font-weight: 700;
+            color: #ffffff;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 10px 15px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        /* Specific text color for light backgrounds */
+        .logo-circle.light-bg {
+            color: #111827;
+            text-shadow: none;
+        }
+
+        .logo-circle img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 10;
+            background-color: transparent;
+        }
+
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .schedule-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="viewport-wrapper">
+        <!-- Main 1920x1080 Container -->
+        <div id="broadcast-container">
+            <div class="bg-grid"></div>
+
+            <div class="relative z-10 w-full h-full flex flex-col p-12 box-border">
+                
+                <!-- Global Header -->
+                <header class="text-center mb-6 mt-2 flex-shrink-0">
+                    <h2 class="font-oswald tracking-[0.4em] text-gray-400 uppercase text-2xl mb-1">Clutch Competitor Series</h2>
+                    <h1 class="font-oswald text-[7rem] leading-none font-bold text-[#FFD700] tracking-widest drop-shadow-lg uppercase italic">
+                        CCS Cup
+                    </h1>
+                </header>
+
+                <!-- Division Banner -->
+                <div class="bg-[#0f1629] border-l-[12px] border-blue-600 rounded-r-lg p-5 mb-8 shadow-xl flex-shrink-0 mx-4">
+                    <h3 class="font-oswald text-5xl font-bold text-white uppercase tracking-widest pl-4">American Division</h3>
+                </div>
+
+                <!-- Groups Container -->
+                <div class="flex-grow flex gap-12 mx-4 pb-4">
+                    
+                    <!-- ================= GROUP 1 ================= -->
+                    <div class="flex-1 bg-[#121621] border-l-[10px] rounded-xl flex flex-col overflow-hidden shadow-2xl relative" style="border-left-color: var(--div-blue);">
+                        <div class="absolute inset-0 border border-gray-700/30 rounded-r-xl pointer-events-none"></div>
+                        
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h4 class="font-oswald text-4xl text-white mb-10 tracking-wider">GROUP 1</h4>
+                            
+                            <!-- Teams Row - Fixed Smushing with w-1/3 and whitespace-nowrap -->
+                            <div class="flex justify-between items-start mb-auto w-full">
+                                <!-- Team 1 -->
+                                <div class="flex flex-col items-center w-1/3 px-2">
+                                    <div class="logo-circle light-bg" style="background-color: var(--tan);">
+                                        <span>M</span>
+                                        <img src="CCSlogos/moose.png" alt="Moose Logo" onerror="this.onerror=null; this.style.opacity=0;">
+                                    </div>
+                                    <div class="text-[#e5e7eb] font-bold text-[1.7rem] uppercase mt-5 whitespace-nowrap tracking-wider text-center w-full">
+                                        <span class="text-gray-500 mr-2">1</span>MOOSE
+                                    </div>
+                                </div>
+                                <!-- Team 2 -->
+                                <div class="flex flex-col items-center w-1/3 px-2">
+                                    <div class="logo-circle" style="background-color: var(--brown);">
+                                        <span>P</span>
+                                        <img src="CCSlogos/pirates.png" alt="Pirates Logo" onerror="this.onerror=null; this.style.opacity=0;">
+                                    </div>
+                                    <div class="text-[#e5e7eb] font-bold text-[1.7rem] uppercase mt-5 whitespace-nowrap tracking-wider text-center w-full">
+                                        <span class="text-gray-500 mr-2">4</span>PIRATES
+                                    </div>
+                                </div>
+                                <!-- Team 3 -->
+                                <div class="flex flex-col items-center w-1/3 px-2">
+                                    <div class="logo-circle" style="background-color: var(--pink);">
+                                        <span>H</span>
+                                        <img src="CCSlogos/howlers.png" alt="Howlers Logo" onerror="this.onerror=null; this.style.opacity=0;">
+                                    </div>
+                                    <div class="text-[#e5e7eb] font-bold text-[1.7rem] uppercase mt-5 whitespace-nowrap tracking-wider text-center w-full">
+                                        <span class="text-gray-500 mr-2">5</span>HOWLERS
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Schedule Box -->
+                            <div class="mt-12 bg-black/60 rounded-xl p-8 border border-gray-800">
+                                <div class="schedule-row">
+                                    <span class="text-[#FFD700] font-bold text-[1.6rem] tracking-wide w-48 shrink-0">8 PM EST</span>
+                                    <div class="flex-grow flex justify-end items-center gap-6 whitespace-nowrap">
+                                        <span class="text-[2rem] font-bold" style="color: var(--tan);">Moose</span>
+                                        <span class="text-gray-500 font-normal text-xl">vs</span>
+                                        <span class="text-[2rem] font-bold" style="color: var(--brown);">Pirates</span>
+                                    </div>
+                                </div>
+                                <div class="schedule-row">
+                                    <span class="text-[#FFD700] font-bold text-[1.6rem] tracking-wide w-48 shrink-0">9 PM EST</span>
+                                    <div class="flex-grow flex justify-end items-center gap-6 whitespace-nowrap">
+                                        <span class="text-[2rem] font-bold" style="color: var(--tan);">Moose</span>
+                                        <span class="text-gray-500 font-normal text-xl">vs</span>
+                                        <span class="text-[2rem] font-bold" style="color: var(--pink);">Howlers</span>
+                                    </div>
+                                </div>
+                                <div class="schedule-row">
+                                    <span class="text-[#FFD700] font-bold text-[1.6rem] tracking-wide w-48 shrink-0">10 PM EST</span>
+                                    <div class="flex-grow flex justify-end items-center gap-6 whitespace-nowrap">
+                                        <span class="text-[2rem] font-bold" style="color: var(--brown);">Pirates</span>
+                                        <span class="text-gray-500 font-normal text-xl">vs</span>
+                                        <span class="text-[2rem] font-bold" style="color: var(--pink);">Howlers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================= GROUP 2 ================= -->
+                    <div class="flex-1 bg-[#121621] border-l-[10px] rounded-xl flex flex-col overflow-hidden shadow-2xl relative" style="border-left-color: var(--div-blue);">
+                        <div class="absolute inset-0 border border-gray-700/30 rounded-r-xl pointer-events-none"></div>
+                        
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h4 class="font-oswald text-4xl text-white mb-10 tracking-wider">GROUP 2</h4>
+                            
+                            <!-- Teams Row - Fixed Smushing -->
+                            <div class="flex justify-between items-start mb-auto w-full">
+                                <!-- Team 1 -->
+                                <div class="flex flex-col items-center w-1/3 px-2">
+                                    <div class="logo-circle" style="background-color: var(--purple);">
+                                        <span>S</span>
+                                        <img src="CCSlogos/stars.png" alt="Stars Logo" onerror="this.onerror=null; this.style.opacity=0;">
+                                    </div>
+                                    <div class="text-[#e5e7eb] font-bold text-[1.7rem] uppercase mt-5 whitespace-nowrap tracking-wider text-center w-full">
+                                        <span class="text-gray-500 mr-2">2</span>STARS
+                                    </div>
+                                </div>
+                                <!-- Team 2 -->
+                                <div class="flex flex-col items-center w-1/3 px-2">
+                                    <div class="logo-circle" style="background-color: var(--orange);">
+                                        <span>B</span>
+                                        <img src="CCSlogos/blasters.png" alt="Blasters Logo" onerror="this.onerror=null; this.style.opacity=0;">
+                                    </div>
+                                    <div class="text-[#e5e7eb] font-bold text-[1.7rem] uppercase mt-5 whitespace-nowrap tracking-wider text-center w-full">
+                                        <span class="text-gray-500 mr-2">3</span>BLASTERS
+                                    </div>
+                                </div>
+                                <!-- Team 3 -->
+                                <div class="flex flex-col items-center w-1/3 px-2">
+                                    <div class="logo-circle" style="background-color: var(--blue);">
+                                        <span>S</span>
+                                        <img src="CCSlogos/shockwave.png" alt="Shockwave Logo" onerror="this.onerror=null; this.style.opacity=0;">
+                                    </div>
+                                    <div class="text-[#e5e7eb] font-bold text-[1.7rem] uppercase mt-5 whitespace-nowrap tracking-wider text-center w-full">
+                                        <span class="text-gray-500 mr-2">6</span>SHOCKWAVE
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Schedule Box -->
+                            <div class="mt-12 bg-black/60 rounded-xl p-8 border border-gray-800">
+                                <div class="schedule-row">
+                                    <span class="text-[#FFD700] font-bold text-[1.6rem] tracking-wide w-48 shrink-0">8 PM EST</span>
+                                    <div class="flex-grow flex justify-end items-center gap-6 whitespace-nowrap">
+                                        <span class="text-[2rem] font-bold" style="color: var(--purple);">Stars</span>
+                                        <span class="text-gray-500 font-normal text-xl">vs</span>
+                                        <span class="text-[2rem] font-bold" style="color: var(--orange);">Blasters</span>
+                                    </div>
+                                </div>
+                                <div class="schedule-row">
+                                    <span class="text-[#FFD700] font-bold text-[1.6rem] tracking-wide w-48 shrink-0">9 PM EST</span>
+                                    <div class="flex-grow flex justify-end items-center gap-6 whitespace-nowrap">
+                                        <span class="text-[2rem] font-bold" style="color: var(--purple);">Stars</span>
+                                        <span class="text-gray-500 font-normal text-xl">vs</span>
+                                        <span class="text-[2rem] font-bold" style="color: var(--blue);">Shockwave</span>
+                                    </div>
+                                </div>
+                                <div class="schedule-row">
+                                    <span class="text-[#FFD700] font-bold text-[1.6rem] tracking-wide w-48 shrink-0">10 PM EST</span>
+                                    <div class="flex-grow flex justify-end items-center gap-6 whitespace-nowrap">
+                                        <span class="text-[2rem] font-bold" style="color: var(--orange);">Blasters</span>
+                                        <span class="text-gray-500 font-normal text-xl">vs</span>
+                                        <span class="text-[2rem] font-bold" style="color: var(--blue);">Shockwave</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT SCALER (Fixes the zoomed-in browser issue) -->
+    <script>
+        function scaleGraphic() {
+            const container = document.getElementById('broadcast-container');
+            const wrapper = document.getElementById('viewport-wrapper');
+            
+            // Calculate scale based on wrapper size versus 1920x1080 target
+            const scaleX = wrapper.clientWidth / 1920;
+            const scaleY = wrapper.clientHeight / 1080;
+            
+            // Use the smaller scale factor to ensure it fits entirely on screen
+            const scale = Math.min(scaleX, scaleY);
+            
+            // Apply scale
+            container.style.transform = `scale(${scale})`;
+        }
+
+        // Run scaling on load and whenever window is resized
+        window.addEventListener('resize', scaleGraphic);
+        window.addEventListener('DOMContentLoaded', scaleGraphic);
+    </script>
+</body>
+</html>
