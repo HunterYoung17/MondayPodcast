@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNL Cup Standings - International Division</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        /* Color Scheme Variables */
+        :root {
+            --cnl-blue: #0073e6; /* Main Accent Color for CNL Cup */
+            --cnl-black: #0a0a0a; /* Deep Black Background */
+            --cnl-dark-grey: #171717;
+            --cnl-grey: #262626;
+            --international-orange: #FF6600; /* Division Color */
+            --text-light: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cnl-black);
+            color: var(--text-light);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--cnl-blue);
+            padding-bottom: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .header h1 {
+            color: var(--cnl-blue);
+            margin: 0;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .header h2 {
+            color: white;
+            margin: 15px 0 0 0;
+            font-size: 1.8em;
+            background-color: var(--international-orange); /* Division Color: Orange */
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 8px;
+            border: 2px solid white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Standings Container - SIDE BY SIDE */
+        .standings-container {
+            display: flex;
+            flex-direction: row; 
+            justify-content: center;
+            flex-wrap: wrap; 
+            gap: 40px;
+            width: 100%;
+            max-width: 1600px; 
+        }
+
+        /* Group Section */
+        .group-section {
+            flex: 1; 
+            min-width: 500px; 
+            background-color: var(--cnl-grey);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,115,230,0.2); /* Slight blue glow for CNL */
+            border: 2px solid var(--cnl-blue);
+        }
+
+        .group-title {
+            background-color: var(--cnl-blue);
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--cnl-dark-grey);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #000;
+            color: var(--cnl-blue);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s ease;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        tr:last-child {
+            border-bottom: none;
+        }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Logo Styling */
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            padding: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* International Team Text Colors */
+        .color-white { color: #FFFFFF; }
+        .color-black { 
+            color: #000000; 
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8), -1px -1px 2px rgba(255,255,255,0.8); 
+        }
+        .color-green { color: #00FF55; }
+        .color-teal { color: #00FFFF; }
+        .color-yellow { color: #FFEA00; }
+        .color-red { color: #FF3333; }
+
+        /* Mobile adjustments */
+        @media (max-width: 600px) {
+            .group-section {
+                min-width: 100%;
+            }
+            .team-cell {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>CNL Cup</h1>
+        <h2>International Division</h2>
+    </div>
+
+    <div class="standings-container">
+        <!-- Group 1 -->
+        <div class="group-section">
+            <h3 class="group-title">Group 1</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Team</th>
+                        <th>SP</th>
+                        <th>Series Wins</th>
+                        <th>Series Losses</th>
+                        <th>Game Wins</th>
+                        <th>Game Losses</th>
+                        <th>GD</th>
+                    </tr>
+                </thead>
+                <tbody id="group1-body">
+                    <!-- Populated dynamically via JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Group 2 -->
+        <div class="group-section">
+            <h3 class="group-title">Group 2</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Team</th>
+                        <th>SP</th>
+                        <th>Series Wins</th>
+                        <th>Series Losses</th>
+                        <th>Game Wins</th>
+                        <th>Game Losses</th>
+                        <th>GD</th>
+                    </tr>
+                </thead>
+                <tbody id="group2-body">
+                    <!-- Populated dynamically via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // CNL Cup Google Sheets CSV URL
+        const baseSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTIh2jPL9IneKVTfx7PNFhGNMPblgpe8DEguR3ARETvwoDyDSV8u5W9Gm9dlWQojE8iCFUkJC3B35ID/pub?gid=1208078583&single=true&output=csv";
+        
+        // Cache-buster for manual refreshing
+        const sheetUrl = baseSheetUrl + "&_cache=" + new Date().getTime();
+
+        // Target Teams for CNL International Division
+        const group1Names = ["Anaco Anacondas", "Redcliff Rhinos", "Lyonesse Leviathans"];
+        const group2Names = ["Beijing Bushido", "Rakiraki Redwings", "Tokha Thieves"];
+
+        // Team Styles (Colors and Logo paths from CNLlogos folder)
+        const teamStyles = {
+            "Anaco Anacondas": { colorClass: "color-yellow", logo: "CNLlogos/anacondas.png" },
+            "Redcliff Rhinos": { colorClass: "color-white", logo: "CNLlogos/rhinos.png" },
+            "Lyonesse Leviathans": { colorClass: "color-teal", logo: "CNLlogos/leviathans.png" },
+            "Beijing Bushido": { colorClass: "color-red", logo: "CNLlogos/bushido.png" },
+            "Rakiraki Redwings": { colorClass: "color-green", logo: "CNLlogos/redwings.png" },
+            "Tokha Thieves": { colorClass: "color-black", logo: "CNLlogos/thieves.png" }
+        };
+
+        // Map an array row (from CSV) to a usable object
+        function mapRowToTeam(row) {
+            if (!row || !row[3]) return null; 
+            return {
+                TeamName: row[3].trim(),
+                SP: row[4],
+                SeriesWins: row[5],
+                SeriesLosses: row[6],
+                GameWins: row[7],
+                GameLosses: row[8],
+                GD: row[9]
+            };
+        }
+
+        // Fetch and parse the CSV once when the page loads
+        Papa.parse(sheetUrl, {
+            download: true,
+            header: false,
+            skipEmptyLines: true,
+            complete: function(results) {
+                const rows = results.data;
+                
+                // Map all rows into objects, removing empty ones
+                const allTeams = rows.map(mapRowToTeam).filter(team => team !== null);
+                
+                // Find teams by name
+                const group1Data = allTeams.filter(team => group1Names.includes(team.TeamName));
+                const group2Data = allTeams.filter(team => group2Names.includes(team.TeamName));
+
+                // SORTING LOGIC: Series Record -> Games Record -> Goal Differential
+                const sortStandings = (a, b) => {
+                    // 1. Check Series Record
+                    const seriesWinsA = parseInt(a.SeriesWins) || 0;
+                    const seriesWinsB = parseInt(b.SeriesWins) || 0;
+                    if (seriesWinsA !== seriesWinsB) return seriesWinsB - seriesWinsA; // Highest series wins first
+                    
+                    const seriesLossesA = parseInt(a.SeriesLosses) || 0;
+                    const seriesLossesB = parseInt(b.SeriesLosses) || 0;
+                    if (seriesLossesA !== seriesLossesB) return seriesLossesA - seriesLossesB; // Lowest series losses first
+
+                    // 2. Check Games Record (If series records are tied)
+                    const gameWinsA = parseInt(a.GameWins) || 0;
+                    const gameWinsB = parseInt(b.GameWins) || 0;
+                    if (gameWinsA !== gameWinsB) return gameWinsB - gameWinsA; // Highest game wins first
+
+                    const gameLossesA = parseInt(a.GameLosses) || 0;
+                    const gameLossesB = parseInt(b.GameLosses) || 0;
+                    if (gameLossesA !== gameLossesB) return gameLossesA - gameLossesB; // Lowest game losses first
+                    
+                    // 3. Check Goal Differential (If everything else is tied)
+                    const gdA = parseInt(a.GD) || 0;
+                    const gdB = parseInt(b.GD) || 0;
+                    return gdB - gdA; // Highest GD first
+                };
+
+                group1Data.sort(sortStandings);
+                group2Data.sort(sortStandings);
+
+                // Render logic
+                function renderTable(groupData, tbodyId) {
+                    const tbody = document.getElementById(tbodyId);
+                    
+                    groupData.forEach(team => {
+                        const teamName = team.TeamName;
+                        const styleInfo = teamStyles[teamName] || { colorClass: "", logo: "CNLlogos/default.png" };
+                        
+                        const fallbackImg = "data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'45\\' height=\\'45\\'%3E%3Ccircle cx=\\'22.5\\' cy=\\'22.5\\' r=\\'22.5\\' fill=\\'%23555\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dy=\\'.3em\\' fill=\\'%23fff\\' font-family=\\'sans-serif\\' font-size=\\'12\\'%3E?%3C/text%3E%3C/svg%3E";
+                        
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>
+                                <div class="team-cell">
+                                    <img src="${styleInfo.logo}" alt="${teamName} logo" class="team-logo" onerror="this.src='${fallbackImg}'">
+                                    <span class="${styleInfo.colorClass}">${teamName}</span>
+                                </div>
+                            </td>
+                            <td><strong>${team.SP || 0}</strong></td>
+                            <td>${team.SeriesWins || 0}</td>
+                            <td>${team.SeriesLosses || 0}</td>
+                            <td>${team.GameWins || 0}</td>
+                            <td>${team.GameLosses || 0}</td>
+                            <td><strong>${team.GD || 0}</strong></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+
+                renderTable(group1Data, "group1-body");
+                renderTable(group2Data, "group2-body");
+            },
+            error: function(err) {
+                console.error("Error parsing Google Sheets CSV:", err);
+                document.getElementById("group1-body").innerHTML = "<tr><td colspan='7'>Error loading standings data. Check console.</td></tr>";
+                document.getElementById("group2-body").innerHTML = "<tr><td colspan='7'>Error loading standings data. Check console.</td></tr>";
+            }
+        });
+    </script>
+</body>
+</html>
