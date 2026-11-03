@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAS Playoff Race - American Div Week 10</title>
+    <title>CAS Playoff Race - American Div Update</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -214,7 +214,7 @@
         }
         .status.clinched { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); border: 1px solid #4ade80; color: #fff; }
         .status.mix { background: linear-gradient(180deg, #0051ff 0%, #002b80 100%); border: 1px solid #4da6ff; color: #fff; }
-        .status.battling { background: linear-gradient(180deg, #ff3300 0%, #801a00 100%); border: 1px solid #ff8566; color: #fff; }
+        .status.eliminated { background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%); border: 1px solid #ef4444; color: #fff; }
 
         .cutoff-row td {
             padding: 0;
@@ -272,7 +272,7 @@
         }
 
         .matchup-card::before {
-            content: "WEEK 10 MATCHUP";
+            content: "KEY MATCHUP";
             position: absolute;
             top: 2px;
             left: 50%;
@@ -359,6 +359,7 @@
             flex-direction: column;
             justify-content: center;
             min-height: 100px;
+            gap: 12px;
         }
 
         .imp-result {
@@ -390,12 +391,68 @@
             line-height: 1.4;
             font-weight: 600;
         }
-        
-        .imp-note {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-top: 4px;
+
+        /* BRACKET LAYOUT */
+        .bracket-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 5px;
+            gap: 15px;
+        }
+
+        .bracket-matchup {
+            flex: 1 1 0; 
+            min-width: 0; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .bracket-team {
+            background: linear-gradient(135deg, rgba(30, 35, 45, 0.5) 0%, rgba(20, 24, 32, 0.8) 100%);
+            border: 1px solid var(--grey-dim);
+            border-radius: 8px;
+            padding: 10px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bracket-matchup-vs {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--grey-dim);
+            text-transform: uppercase;
+        }
+
+        .bracket-seed {
+            font-size: 14px;
+            font-weight: 700;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .bracket-logo {
+            width: 32px; 
+            height: 32px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            flex-shrink: 0;
+        }
+
+        .bracket-name {
+            font-size: 14px; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
         }
 
         /* TIEBREAKER */
@@ -421,17 +478,8 @@
         .t-green { color: #22c55e; }
         .t-white { color: #ffffff; }
         .t-yellow { color: #eab308; }
-
-        /* SOS specific styles */
-        .sos-cell {
-            font-size: 15px;
-            font-weight: 600;
-        }
-        .sos-value {
-            color: var(--league-glow);
-            font-family: monospace;
-            font-size: 18px;
-        }
+        .t-grey { color: #9ca3af; }
+        .t-gold { color: #fbbf24; }
 
     </style>
 </head>
@@ -443,14 +491,14 @@
         <div class="header-main">
             <h1>CAS LEAGUE</h1>
             <h2>PLAYOFF IMPLICATIONS</h2>
-            <div class="subtitle">American Div. Week 10 Update</div>
+            <div class="subtitle">American Div. Update Week 12 of 12</div>
         </div>
     </div>
 
     <div class="top-row">
         
         <div class="panel">
-            <div class="panel-header division-theme">AMERICAN DIV. STANDINGS & PLAYOFF PICTURE</div>
+            <div class="panel-header division-theme">AMERICAN DIV. STANDINGS</div>
             <table>
                 <thead>
                     <tr>
@@ -464,26 +512,26 @@
                     <tr class="team-row">
                         <td class="rank t-pink">1</td>
                         <td><div class="team-info"><img src="CASlogos/wolfpack.png" alt="" onerror="this.style.display='none'">WACO WOLFPACK</div></td>
-                        <td class="record" style="text-align: center;">7-2</td>
+                        <td class="record" style="text-align: center;">8-3</td>
                         <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-brown">2</td>
-                        <td><div class="team-info"><img src="CASlogos/conquerors.png" alt="" onerror="this.style.display='none'">CLEARWATER CONQUERORS</div></td>
-                        <td class="record" style="text-align: center;">6-3</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="rank t-purple">2</td>
+                        <td><div class="team-info"><img src="CASlogos/astronauts.png" alt="" onerror="this.style.display='none'">ABERDEEN ASTRONAUTS</div></td>
+                        <td class="record" style="text-align: center;">7-4</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-purple">3</td>
-                        <td><div class="team-info"><img src="CASlogos/astronauts.png" alt="" onerror="this.style.display='none'">ABERDEEN ASTRONAUTS</div></td>
-                        <td class="record" style="text-align: center;">5-4</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="rank t-brown">3</td>
+                        <td><div class="team-info"><img src="CASlogos/conquerors.png" alt="" onerror="this.style.display='none'">CLEARWATER CONQUERORS</div></td>
+                        <td class="record" style="text-align: center;">7-4</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-tan">4</td>
                         <td><div class="team-info"><img src="CASlogos/black bears.png" alt="" onerror="this.style.display='none'">BAD AXE BLACK BEARS</div></td>
-                        <td class="record" style="text-align: center;">5-4</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="record" style="text-align: center;">6-5</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
 
                     <tr class="cutoff-row">
@@ -496,65 +544,65 @@
                     <tr class="team-row">
                         <td class="rank t-blue">5</td>
                         <td><div class="team-info"><img src="CASlogos/surge.png" alt="" onerror="this.style.display='none'">SAN FRANCISCO SURGE</div></td>
-                        <td class="record" style="text-align: center;">3-6</td>
-                        <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
+                        <td class="record" style="text-align: center;">4-7</td>
+                        <td style="text-align: center;"><div class="status eliminated">ELIMINATED</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-orange">6</td>
                         <td><div class="team-info"><img src="CASlogos/cannons.png" alt="" onerror="this.style.display='none'">CAMBRIDGE CANNONS</div></td>
-                        <td class="record" style="text-align: center;">3-6</td>
-                        <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
+                        <td class="record" style="text-align: center;">3-8</td>
+                        <td style="text-align: center;"><div class="status eliminated">ELIMINATED</div></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="panel">
-            <div class="panel-header">WEEK 10 KEY MATCHUPS & IMPLICATIONS</div>
+            <div class="panel-header">KEY MATCHUPS & CLINCHING SITUATIONS</div>
             
             <div class="matchups-wrapper">
                 
                 <div class="matchup-cards-col">
                     <div class="matchup-card">
                         <div class="team-block">
-                            <img src="CASlogos/conquerors.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-brown">CLEARWATER<br>CONQUERORS</span>
+                            <img src="CASlogos/behemoths.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">BERMUDA<br>BEHEMOTHS</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CASlogos/surge.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-blue">SAN FRANCISCO<br>SURGE</span>
+                            <img src="CASlogos/conquerors.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-brown">CLEARWATER<br>CONQUERORS</span>
                         </div>
                     </div>
                     
                     <div class="matchup-card">
+                        <div class="team-block">
+                            <img src="CASlogos/skyhawks.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">SUVA<br>SKYHAWKS</span>
+                        </div>
+                        <div class="vs-circle">VS</div>
                         <div class="team-block">
                             <img src="CASlogos/black bears.png" alt="" onerror="this.style.display='none'">
                             <span class="t-tan">BAD AXE<br>BLACK BEARS</span>
                         </div>
-                        <div class="vs-circle">VS</div>
-                        <div class="team-block">
-                            <img src="CASlogos/wolfpack.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-pink">WACO<br>WOLFPACK</span>
-                        </div>
                     </div>
                     
                     <div class="matchup-card">
                         <div class="team-block">
-                            <img src="CASlogos/astronauts.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-purple">ABERDEEN<br>ASTRONAUTS</span>
+                            <img src="CASlogos/prowlers.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">PALPA<br>PROWLERS</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CASlogos/shaman.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-white">SHENZHEN<br>SHAMAN</span>
+                            <img src="CASlogos/astronauts.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-purple">ABERDEEN<br>ASTRONAUTS</span>
                         </div>
                     </div>
 
                     <div class="matchup-card">
                         <div class="team-block">
-                            <img src="CASlogos/cannons.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-orange">CAMBRIDGE<br>CANNONS</span>
+                            <img src="CASlogos/wolfpack.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-pink">WACO<br>WOLFPACK</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
@@ -573,14 +621,15 @@
                 <div class="implication-box-col">
                     <div class="imp-result">
                         <div class="imp-block">
-                            <div class="imp-block-title">CLINCHING SCENARIOS</div>
-                            <div class="imp-block-item">IF <span class="t-brown">CONQUERORS</span> WIN AND <span class="t-orange">CANNONS</span> LOSE: <span class="t-brown">CONQUERORS</span> <span class="t-green">CLINCH</span></div>
+                            <div class="imp-block-title">PLAYOFF SEEDING IMPLICATIONS</div>
+                            <div class="imp-block-item">IF <span class="t-pink">WOLFPACK</span> WIN:</div>
+                            <div class="imp-block-item" style="padding-left: 20px; font-weight: 500;"><span class="t-pink">WOLFPACK</span> CLINCH <span class="t-gold">#1 SEED</span></div>
                         </div>
                         
-                        <div class="imp-block" style="border-left-color: #ef4444;">
-                            <div class="imp-block-title" style="color: #ef4444;">ELIMINATION SCENARIOS</div>
-                            <div class="imp-block-item">IF <span class="t-blue">SURGE</span> LOSE AND BOTH <span class="t-tan">BLACK BEARS</span> &amp; <span class="t-purple">ASTRONAUTS</span> WIN: <span class="t-blue">SURGE</span> pend <span class="t-red">ELIMINATION</span></div>
-                            <div class="imp-block-item" style="margin-top: 8px;">IF <span class="t-orange">CANNONS</span> LOSE AND BOTH <span class="t-tan">BLACK BEARS</span> &amp; <span class="t-purple">ASTRONAUTS</span> WIN: <span class="t-orange">CANNONS</span> pend <span class="t-red">ELIMINATION</span></div>
+                        <div class="imp-block">
+                            <div class="imp-block-title" style="color: var(--div-glow);"></div>
+                            <div class="imp-block-item">IF <span class="t-purple">ASTRONAUTS</span> WIN & <span class="t-pink">WOLFPACK</span> LOSE:</div>
+                            <div class="imp-block-item" style="padding-left: 20px; font-weight: 500;"><span class="t-purple">ASTRONAUTS</span> <span class="t-gold">#1 SEED</span>, <span class="t-pink">WOLFPACK</span> <span class="t-gold">#2 SEED</span></div>
                         </div>
                     </div>
                 </div>
@@ -593,69 +642,41 @@
     <div class="bottom-row">
         
         <div class="panel" style="flex: 2;">
-            <div class="panel-header division-theme">STRENGTH OF SCHEDULE</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="th-division" style="width: 40px; text-align: center;">RANK</th>
-                        <th class="th-division">TEAM NAME</th>
-                        <th class="th-division" style="text-align: center;">SOS</th>
-                        <th class="th-division">WEEK 10</th>
-                        <th class="th-division">WEEK 11</th>
-                        <th class="th-division">WEEK 12</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="team-row">
-                        <td class="rank t-purple">1</td>
-                        <td><div class="team-info"><img src="CASlogos/astronauts.png" alt="" onerror="this.style.display='none'">ASTRONAUTS</div></td>
-                        <td class="sos-value" style="text-align: center;">.704</td>
-                        <td class="sos-cell">Shaman (5-4)</td>
-                        <td class="sos-cell">Wolfpack (7-2)</td>
-                        <td class="sos-cell">Prowlers (7-2)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-pink">2</td>
-                        <td><div class="team-info"><img src="CASlogos/wolfpack.png" alt="" onerror="this.style.display='none'">WOLFPACK</div></td>
-                        <td class="sos-value" style="text-align: center;">.593</td>
-                        <td class="sos-cell">Black Bears (5-4)</td>
-                        <td class="sos-cell">Astronauts (5-4)</td>
-                        <td class="sos-cell">Copperheads (6-3)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-tan">3</td>
-                        <td><div class="team-info"><img src="CASlogos/black bears.png" alt="" onerror="this.style.display='none'">BLACK BEARS</div></td>
-                        <td class="sos-value" style="text-align: center;">.556</td>
-                        <td class="sos-cell">Wolfpack (7-2)</td>
-                        <td class="sos-cell">Conquerors (6-3)</td>
-                        <td class="sos-cell">Skyhawks (2-7)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-orange">4</td>
-                        <td><div class="team-info"><img src="CASlogos/cannons.png" alt="" onerror="this.style.display='none'">CANNONS</div></td>
-                        <td class="sos-value" style="text-align: center;">.444</td>
-                        <td class="sos-cell">Copperheads (6-3)</td>
-                        <td class="sos-cell">Behemoths (3-6)</td>
-                        <td class="sos-cell">Surge (3-6)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-blue">5</td>
-                        <td><div class="team-info"><img src="CASlogos/surge.png" alt="" onerror="this.style.display='none'">SURGE</div></td>
-                        <td class="sos-value" style="text-align: center;">.407</td>
-                        <td class="sos-cell">Conquerors (6-3)</td>
-                        <td class="sos-cell">Elephants (2-7)</td>
-                        <td class="sos-cell">Cannons (3-6)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-brown">5</td>
-                        <td><div class="team-info"><img src="CASlogos/conquerors.png" alt="" onerror="this.style.display='none'">CONQUERORS</div></td>
-                        <td class="sos-value" style="text-align: center;">.407</td>
-                        <td class="sos-cell">Surge (3-6)</td>
-                        <td class="sos-cell">Black Bears (5-4)</td>
-                        <td class="sos-cell">Behemoths (3-6)</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="panel-header division-theme">AMERICAN DIV. PLAYOFF BRACKET</div>
+            
+            <div class="bracket-container">
+                
+                <!-- Matchup 1v4 -->
+                <div class="bracket-matchup">
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#1</span>
+                        <img class="bracket-logo" src="CASlogos/CAS.png" alt="League Logo">
+                        <span class="bracket-name t-grey">WOLFPACK / ASTRONAUTS</span>
+                    </div>
+                    <div class="bracket-matchup-vs">VS</div>
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#4</span>
+                        <img class="bracket-logo" src="CASlogos/CAS.png" alt="League Logo">
+                        <span class="bracket-name t-grey" style="font-size: 11px;">ASTRONAUTS / CONQUERORS / BLACK BEARS</span>
+                    </div>
+                </div>
+
+                <!-- Matchup 2v3 -->
+                <div class="bracket-matchup">
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#2</span>
+                        <img class="bracket-logo" src="CASlogos/CAS.png" alt="League Logo">
+                        <span class="bracket-name t-grey" style="font-size: 11px;">WOLFPACK / ASTRONAUTS / CONQUERORS / BLACK BEARS</span>
+                    </div>
+                    <div class="bracket-matchup-vs">VS</div>
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#3</span>
+                        <img class="bracket-logo" src="CASlogos/CAS.png" alt="League Logo">
+                        <span class="bracket-name t-grey" style="font-size: 11px;">ASTRONAUTS / CONQUERORS / BLACK BEARS</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <div style="flex: 1; display: flex; flex-direction: column;">

@@ -215,7 +215,9 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
             min-width: 65px;
         }
+        .status.locked { background: linear-gradient(180deg, #ca8a04 0%, #713f12 100%); border: 1px solid #facc15; color: #fff; }
         .status.clinched { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); border: 1px solid #4ade80; color: #fff; }
+        .status.eliminated { background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%); border: 1px solid #ef4444; color: #fff; }
         .status.mix { background: linear-gradient(180deg, #0051ff 0%, #002b80 100%); border: 1px solid #4da6ff; color: #fff; }
         .status.bubble { background: linear-gradient(180deg, #00a2ff 0%, #005180 100%); border: 1px solid #80ccff; color: #fff; }
         .status.battling { background: linear-gradient(180deg, #ff3300 0%, #801a00 100%); border: 1px solid #ff8566; color: #fff; }
@@ -259,7 +261,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 10px; 
+            gap: 15px; 
             height: 100%;
         }
 
@@ -268,7 +270,7 @@
             justify-content: space-between;
             align-items: center;
             border-radius: 6px;
-            padding: 6px 12px; 
+            padding: 15px; 
             border: 1px solid var(--grey-dim);
             position: relative;
             overflow: hidden;
@@ -281,7 +283,7 @@
             top: 2px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 8px;
+            font-size: 10px;
             color: var(--gold-dim);
             font-weight: 700;
         }
@@ -294,15 +296,15 @@
         }
 
         .team-block img {
-            width: 32px; 
-            height: 32px;
+            width: 48px; 
+            height: 48px;
             object-fit: contain;
-            margin-bottom: 2px;
+            margin-bottom: 6px;
             filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));
         }
 
         .team-block span {
-            font-size: 12px; 
+            font-size: 14px; 
             font-weight: 700;
             text-align: center;
             line-height: 1.1;
@@ -312,14 +314,14 @@
             background: #111;
             border: 2px solid var(--grey-dim);
             color: #fff;
-            width: 22px;
-            height: 22px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 700;
-            font-size: 10px;
+            font-size: 11px;
             z-index: 2;
         }
 
@@ -363,6 +365,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            gap: 6px; /* Added explicit gap to separate implication items slightly better */
         }
 
         .imp-result {
@@ -372,20 +375,20 @@
             text-align: left;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .imp-block {
             background: rgba(0, 0, 0, 0.4);
             border-left: 3px solid var(--gold-glow);
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: 0 6px 6px 0;
         }
 
         .imp-block-title {
             color: var(--gold-glow);
             font-size: 13px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             letter-spacing: 0.5px;
         }
 
@@ -393,6 +396,69 @@
             font-size: 14px;
             line-height: 1.4;
             padding-left: 8px;
+        }
+
+        /* BRACKET LAYOUT */
+        .bracket-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 5px;
+            gap: 15px;
+        }
+
+        .bracket-matchup {
+            flex: 1 1 0; 
+            min-width: 0; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .bracket-team {
+            background: linear-gradient(135deg, rgba(30, 35, 45, 0.5) 0%, rgba(20, 24, 32, 0.8) 100%);
+            border: 1px solid var(--grey-dim);
+            border-radius: 8px;
+            padding: 10px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bracket-matchup-vs {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--grey-dim);
+            text-transform: uppercase;
+        }
+
+        .bracket-seed {
+            font-size: 14px;
+            font-weight: 700;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .bracket-logo {
+            width: 32px; 
+            height: 32px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            flex-shrink: 0;
+        }
+
+        .bracket-name {
+            font-size: 16px; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
         }
 
         /* TIEBREAKER */
@@ -414,19 +480,10 @@
         .t-white { color: #ffffff; }
         .t-yellow { color: #eab308; }
         .t-teal { color: #14b8a6; }
-        .t-black { color: #9ca3af; } /* Utilizing lighter grey so it remains visible on dark background */
+        .t-black { color: #9ca3af; } 
         .t-brown { color: #d97706; }
-
-        /* SOS specific styles */
-        .sos-cell {
-            font-size: 15px;
-            font-weight: 600;
-        }
-        .sos-value {
-            color: var(--gold-glow);
-            font-family: monospace;
-            font-size: 18px;
-        }
+        .t-tan { color: #d2b48c; }
+        .t-grey { color: #9ca3af; }
 
     </style>
 </head>
@@ -438,7 +495,7 @@
         <div class="header-main">
             <h1>CLUTCH COMPETITOR SERIES</h1>
             <h2>PLAYOFF IMPLICATIONS</h2>
-            <div class="subtitle">International Div. Update - Week 10 of 12</div>
+            <div class="subtitle">International Div. Update - Week 12 of 12</div>
         </div>
     </div>
 
@@ -459,25 +516,25 @@
                     <tr class="team-row">
                         <td class="rank t-white">1</td>
                         <td><div class="team-info"><img src="CCSlogos/zebras.png" alt="" onerror="this.style.display='none'">ZIMBABWE ZEBRAS</div></td>
-                        <td class="record" style="text-align: center;">7-2</td>
+                        <td class="record" style="text-align: center;">8-3</td>
                         <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-yellow">2</td>
                         <td><div class="team-info"><img src="CCSlogos/vipers.png" alt="" onerror="this.style.display='none'">VENEZUELA VIPERS</div></td>
-                        <td class="record" style="text-align: center;">6-3</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
+                        <td class="record" style="text-align: center;">8-4</td>
+                        <td style="text-align: center;"><div class="status clinched">CLINCHED</div></td>
                     </tr>
                     <tr class="team-row">
-                        <td class="rank t-teal">3</td>
-                        <td><div class="team-info"><img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">ATLANTISANGLERS</div></td>
-                        <td class="record" style="text-align: center;">5-4</td>
-                        <td style="text-align: center;"><div class="status mix">IN MIX</div></td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-green">4</td>
+                        <td class="rank t-green">3</td>
                         <td><div class="team-info"><img src="CCSlogos/flyers.png" alt="" onerror="this.style.display='none'">FIJI FLYERS</div></td>
-                        <td class="record" style="text-align: center;">4-5</td>
+                        <td class="record" style="text-align: center;">6-6</td>
+                        <td style="text-align: center;"><div class="status locked">LOCKED</div></td>
+                    </tr>
+                    <tr class="team-row">
+                        <td class="rank t-teal">4</td>
+                        <td><div class="team-info"><img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">ATLANTIS ANGLERS</div></td>
+                        <td class="record" style="text-align: center;">5-6</td>
                         <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
 
@@ -491,14 +548,14 @@
                     <tr class="team-row">
                         <td class="rank t-black">5</td>
                         <td><div class="team-info"><img src="CCSlogos/ninjas.png" alt="" onerror="this.style.display='none'">NEPAL NINJAS</div></td>
-                        <td class="record" style="text-align: center;">3-6</td>
+                        <td class="record" style="text-align: center;">5-6</td>
                         <td style="text-align: center;"><div class="status bubble">BUBBLE</div></td>
                     </tr>
                     <tr class="team-row">
                         <td class="rank t-red">6</td>
                         <td><div class="team-info"><img src="CCSlogos/samurai.png" alt="" onerror="this.style.display='none'">SHANGHAI SAMURAI</div></td>
-                        <td class="record" style="text-align: center;">1-8</td>
-                        <td style="text-align: center;"><div class="status battling">BATTLING</div></td>
+                        <td class="record" style="text-align: center;">2-10</td>
+                        <td style="text-align: center;"><div class="status eliminated">ELIMINATED</div></td>
                     </tr>
                 </tbody>
             </table>
@@ -510,41 +567,31 @@
             <div class="matchups-wrapper">
                 
                 <div class="matchup-cards-col">
+                    
                     <div class="matchup-card">
-                        <div class="team-block">
-                            <img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-teal">ATLANTIS<br>ANGLERS</span>
-                        </div>
-                        <div class="vs-circle">VS</div>
-                        <div class="team-block">
-                            <img src="CCSlogos/vipers.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-yellow">VENEZUELA<br>VIPERS</span>
-                        </div>
-                    </div>
-
-                    <div class="matchup-card">
-                        <div class="team-block">
-                            <img src="CCSlogos/samurai.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-red">SHANGHAI<br>SAMURAI</span>
-                        </div>
-                        <div class="vs-circle">VS</div>
                         <div class="team-block">
                             <img src="CCSlogos/ninjas.png" alt="" onerror="this.style.display='none'">
                             <span class="t-black">NEPAL<br>NINJAS</span>
                         </div>
+                        <div class="vs-circle">VS</div>
+                        <div class="team-block">
+                            <img src="CCSlogos/moose.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-tan">MICHIGAN<br>MOOSE</span>
+                        </div>
                     </div>
 
                     <div class="matchup-card">
                         <div class="team-block">
-                            <img src="CCSlogos/pirates.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-brown">PALM BEACH<br>PIRATES</span>
+                            <img src="CCSlogos/zebras.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-white">ZIMBABWE<br>ZEBRAS</span>
                         </div>
                         <div class="vs-circle">VS</div>
                         <div class="team-block">
-                            <img src="CCSlogos/flyers.png" alt="" onerror="this.style.display='none'">
-                            <span class="t-green">FIJI<br>FLYERS</span>
+                            <img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">
+                            <span class="t-teal">ATLANTIS<br>ANGLERS</span>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="implication-arrow-col">
@@ -557,18 +604,23 @@
                     <div class="imp-result">
                         
                         <div class="imp-block">
-                            <div class="imp-block-title">IF <span class="t-yellow">VIPERS</span> WIN OR <span class="t-black">NINJAS</span> LOSE:</div>
-                            <div class="imp-block-item"><span class="t-yellow">VIPERS</span> <span class="t-green">CLINCH</span></div>
+                            <div class="imp-block-title">IF <span class="t-white">ZEBRAS</span> WIN:</div>
+                            <div class="imp-block-item"><span class="t-white">ZEBRAS</span> <span class="t-gold">#1 SEED</span>, <span class="t-yellow">VIPERS</span> <span class="t-gold">#2 SEED</span></div>
                         </div>
 
                         <div class="imp-block">
-                            <div class="imp-block-title">IF <span class="t-teal">ANGLERS</span> WIN AND <span class="t-black">NINJAS</span> LOSE:</div>
-                            <div class="imp-block-item"><span class="t-teal">ANGLERS</span> <span class="t-green">CLINCH</span></div>
+                            <div class="imp-block-title">IF <span class="t-white">ZEBRAS</span> LOSE:</div>
+                            <div class="imp-block-item"><span class="t-yellow">VIPERS</span> <span class="t-gold">#1 SEED</span>, <span class="t-white">ZEBRAS</span> <span class="t-gold">#2 SEED</span></div>
                         </div>
 
                         <div class="imp-block" style="border-left-color: var(--orange-glow);">
-                            <div class="imp-block-title">IF <span class="t-green">FLYERS</span> WIN OR <span class="t-red">SAMURAI</span> LOSE:</div>
-                            <div class="imp-block-item"><span class="t-red">SAMURAI</span> pend <span class="t-red">ELIMINATION</span></div>
+                            <div class="imp-block-title">IF <span class="t-teal">ANGLERS</span> WIN OR BOTH LOSE:</div>
+                            <div class="imp-block-item"><span class="t-teal">ANGLERS</span> GET <span class="t-gold">#4 SEED</span></div>
+                        </div>
+                        
+                        <div class="imp-block" style="border-left-color: var(--orange-glow);">
+                            <div class="imp-block-title">IF <span class="t-black">NINJAS</span> WIN & <span class="t-teal">ANGLERS</span> LOSE:</div>
+                            <div class="imp-block-item"><span class="t-black">NINJAS</span> GET <span class="t-gold">#4 SEED</span></div>
                         </div>
 
                     </div>
@@ -582,69 +634,41 @@
     <div class="bottom-row">
         
         <div class="panel" style="flex: 2;">
-            <div class="panel-header division-theme">STRENGTH OF SCHEDULE</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="th-division" style="width: 40px; text-align: center;">RANK</th>
-                        <th class="th-division">TEAM NAME</th>
-                        <th class="th-division" style="text-align: center;">SOS</th>
-                        <th class="th-division">WEEK 10</th>
-                        <th class="th-division">WEEK 11</th>
-                        <th class="th-division">WEEK 12</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="team-row">
-                        <td class="rank t-teal">1</td>
-                        <td><div class="team-info"><img src="CCSlogos/anglers.png" alt="" onerror="this.style.display='none'">ANGLERS</div></td>
-                        <td class="sos-value" style="text-align: center;">.630</td>
-                        <td class="sos-cell">Vipers (6-3)</td>
-                        <td class="sos-cell">Flyers (4-5)</td>
-                        <td class="sos-cell">Zebras (7-2)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-red">2</td>
-                        <td><div class="team-info"><img src="CCSlogos/samurai.png" alt="" onerror="this.style.display='none'">SAMURAI</div></td>
-                        <td class="sos-value" style="text-align: center;">.593</td>
-                        <td class="sos-cell">Ninjas (3-6)</td>
-                        <td class="sos-cell">Stars (7-2)</td>
-                        <td class="sos-cell">Vipers (6-3)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-green">2</td>
-                        <td><div class="team-info"><img src="CCSlogos/flyers.png" alt="" onerror="this.style.display='none'">FLYERS</div></td>
-                        <td class="sos-value" style="text-align: center;">.593</td>
-                        <td class="sos-cell">Pirates (4-5)</td>
-                        <td class="sos-cell">Anglers (5-4)</td>
-                        <td class="sos-cell">Stars (7-2)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-black">4</td>
-                        <td><div class="team-info"><img src="CCSlogos/ninjas.png" alt="" onerror="this.style.display='none'">NINJAS</div></td>
-                        <td class="sos-value" style="text-align: center;">.519</td>
-                        <td class="sos-cell">Samurai (1-8)</td>
-                        <td class="sos-cell">Blasters (5-4)</td>
-                        <td class="sos-cell">Moose (8-1)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-white">4</td>
-                        <td><div class="team-info"><img src="CCSlogos/zebras.png" alt="" onerror="this.style.display='none'">ZEBRAS</div></td>
-                        <td class="sos-value" style="text-align: center;">.519</td>
-                        <td class="sos-cell">Shockwave (1-8)</td>
-                        <td class="sos-cell">Moose (8-1)</td>
-                        <td class="sos-cell">Anglers (5-4)</td>
-                    </tr>
-                    <tr class="team-row">
-                        <td class="rank t-yellow">6</td>
-                        <td><div class="team-info"><img src="CCSlogos/vipers.png" alt="" onerror="this.style.display='none'">VIPERS</div></td>
-                        <td class="sos-value" style="text-align: center;">.333</td>
-                        <td class="sos-cell">Anglers (5-4)</td>
-                        <td class="sos-cell">Howlers (3-6)</td>
-                        <td class="sos-cell">Samurai (1-8)</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="panel-header division-theme">INTERNATIONAL DIV. PLAYOFF BRACKET</div>
+            
+            <div class="bracket-container">
+                
+                <!-- Matchup 1v4 -->
+                <div class="bracket-matchup">
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#1</span>
+                        <img class="bracket-logo" src="CCSlogos/CCS.png" alt="League Logo">
+                        <span class="bracket-name t-grey">ZEBRAS / VIPERS</span>
+                    </div>
+                    <div class="bracket-matchup-vs">VS</div>
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#4</span>
+                        <img class="bracket-logo" src="CCSlogos/CCS.png" alt="League Logo">
+                        <span class="bracket-name t-grey">ANGLERS / NINJAS</span>
+                    </div>
+                </div>
+
+                <!-- Matchup 2v3 -->
+                <div class="bracket-matchup">
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-grey">#2</span>
+                        <img class="bracket-logo" src="CCSlogos/CCS.png" alt="League Logo">
+                        <span class="bracket-name t-grey">ZEBRAS / VIPERS</span>
+                    </div>
+                    <div class="bracket-matchup-vs">VS</div>
+                    <div class="bracket-team">
+                        <span class="bracket-seed t-green">#3</span>
+                        <img class="bracket-logo" src="CCSlogos/flyers.png" alt="Flyers">
+                        <span class="bracket-name t-white">FIJI FLYERS</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <div style="flex: 1; display: flex; flex-direction: column;">
