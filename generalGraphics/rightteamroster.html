@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Right Team Full Screen</title>
+    <title>Left Team Full Screen</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%); 
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             box-sizing: border-box;
@@ -31,14 +31,17 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 50px;
-            max-width: 1700px; 
-            padding: 40px;
+            gap: 3vw; 
+            width: 90%;
+            padding: 20px;
         }
 
         .cam-frame {
-            width: 480px;
-            height: 270px;
+            width: calc(33.33% - 3vw); 
+            max-width: 480px;
+            aspect-ratio: 16 / 9; 
+            height: auto; 
+            
             border: 4px solid #ffffff;
             border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
@@ -77,14 +80,12 @@
             z-index: 2; 
         }
 
-        /* Sleek Broadcast Footer - Flipped for Right Team */
         .footer {
             height: 140px;
             width: 100%;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
             display: flex;
-            flex-direction: row-reverse; /* Flips the logo and text sides */
             justify-content: space-between;
             align-items: center;
             padding: 0 80px;
@@ -100,7 +101,6 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            text-align: right;
         }
 
         .team-logo {
@@ -120,15 +120,13 @@
     </div>
 
     <div class="footer" id="broadcast-footer">
-        <!-- Update this to the current opponent's name -->
-        <div class="team-title">OPPONENT CAMS</div>
-        <!-- Replace src with your actual transparent logo link -->
-        <img src="https://via.placeholder.com/100?text=LOGO" class="team-logo" alt="Team Logo">
+        <div class="team-title" id="team-title-text">TEAM CAMS</div>
+        <img src="" id="team-logo-img" class="team-logo" alt="Team Logo">
     </div>
 
     <script>
         const sheetId = '1jO-rzUmCeklTLTV9w_uHkZH0C5oxV9Hc-7jtNFWj2Eo'; 
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=1501803735`;
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=0`;
 
         async function loadCams() {
             try {
@@ -139,21 +137,38 @@
                 const container = document.getElementById('cam-container');
                 container.innerHTML = ''; 
 
-                let firstColorFound = false;
+                let firstConfigFound = false;
 
                 json.table.rows.slice(1).forEach(row => {
                     const name = row.c[0] ? row.c[0].v : '';
-                    if (!name) return; // Skip empty rows
+                    if (!name) return; 
 
-                    const bgColor = row.c[1] ? row.c[1].v : 'rgba(244, 30, 27, 0.85)'; 
+                    const bgColor = row.c[1] ? row.c[1].v : 'rgba(255, 152, 17, 0.9)'; 
                     const sourceUrl = row.c[2] ? row.c[2].v : '';
                     const imageUrl = row.c[3] ? row.c[3].v : '';
-                    const textColor = row.c[4] ? row.c[4].v : '#ffffff'; 
-
-                    // Set footer accent to match the first player's team color
-                    if (!firstColorFound) {
+                    const textColor = row.c[4] ? row.c[4].v : '#000000'; 
+                    
+                    if (!firstConfigFound) {
                         document.getElementById('broadcast-footer').style.borderTopColor = bgColor;
-                        firstColorFound = true;
+                        
+                        let teamName = row.c[5] ? row.c[5].v : 'TEAM';
+                        
+                        // Enforce consistent league naming conventions automatically
+                        const rawName = teamName.toLowerCase();
+                        if (rawName.includes('atlantis anglers')) {
+                            teamName = 'Anglers';
+                        } else if (rawName === 'bushio') {
+                            teamName = 'Bushido';
+                        } else if (rawName === 'pb pirates') {
+                            teamName = 'Palm Beach Pirates';
+                        }
+                        
+                        document.getElementById('team-title-text').innerText = teamName.toUpperCase() + ' CAMS';
+                        
+                        // Set the logo to be entirely lowercase
+                        document.getElementById('team-logo-img').src = teamName.toLowerCase() + '.png';
+                        
+                        firstConfigFound = true;
                     }
 
                     const frame = document.createElement('div');
