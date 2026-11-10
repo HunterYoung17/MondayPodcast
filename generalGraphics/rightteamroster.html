@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Left Team Full Screen</title>
+    <title>Right Team Full Screen</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%); 
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             box-sizing: border-box;
@@ -86,6 +86,7 @@
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
             display: flex;
+            flex-direction: row-reverse; 
             justify-content: space-between;
             align-items: center;
             padding: 0 80px;
@@ -101,6 +102,7 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            text-align: right;
         }
 
         .team-logo {
@@ -126,7 +128,7 @@
 
     <script>
         const sheetId = '1jO-rzUmCeklTLTV9w_uHkZH0C5oxV9Hc-7jtNFWj2Eo'; 
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=0`;
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=1501803735`;
 
         async function loadCams() {
             try {
@@ -143,11 +145,11 @@
                     const name = row.c[0] ? row.c[0].v : '';
                     if (!name) return; 
 
-                    const bgColor = row.c[1] ? row.c[1].v : 'rgba(255, 152, 17, 0.9)'; 
+                    const bgColor = row.c[1] ? row.c[1].v : 'rgba(244, 30, 27, 0.85)'; 
                     const sourceUrl = row.c[2] ? row.c[2].v : '';
                     const imageUrl = row.c[3] ? row.c[3].v : '';
-                    const textColor = row.c[4] ? row.c[4].v : '#000000'; 
-                    
+                    const textColor = row.c[4] ? row.c[4].v : '#ffffff'; 
+
                     if (!firstConfigFound) {
                         document.getElementById('broadcast-footer').style.borderTopColor = bgColor;
                         
