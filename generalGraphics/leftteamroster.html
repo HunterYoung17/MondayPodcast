@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Left Team Full Screen</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%); /* Sleek dark broadcast background */
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cams-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .cams-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            max-width: 1700px; /* Forces wrap after 3 boxes */
+            padding: 40px;
+        }
+
+        .cam-frame {
+            width: 480px;
+            height: 270px;
+            border: 4px solid #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            background-color: #1a1a1a;
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative; 
+            overflow: hidden; 
+            transition: transform 0.3s ease;
+        }
+
+        .cam-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 1;
+        }
+
+        .nameplate {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            z-index: 2; 
+        }
+
+        /* Sleek Broadcast Footer */
+        .footer {
+            height: 140px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 80px;
+            box-sizing: border-box;
+            border-top: 6px solid #ffffff; /* Color dynamically updated by JS */
+        }
+
+        .team-title {
+            color: #ffffff;
+            font-size: 64px;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .team-logo {
+            height: 100px;
+            width: 100px;
+            object-fit: contain;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cams-wrapper">
+        <div class="cams-container" id="cam-container"></div>
+    </div>
+
+    <div class="footer" id="broadcast-footer">
+        <div class="team-title">ANGLERS CAMS</div>
+        <!-- Replace src with your actual transparent logo link -->
+        <img src="https://via.placeholder.com/100?text=LOGO" class="team-logo" alt="Team Logo">
+    </div>
+
+    <script>
+        const sheetId = '1jO-rzUmCeklTLTV9w_uHkZH0C5oxV9Hc-7jtNFWj2Eo'; 
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=0`;
+
+        async function loadCams() {
+            try {
+                const response = await fetch(url);
+                const data = await response.text();
+                const jsonText = data.substring(47).slice(0, -2);
+                const json = JSON.parse(jsonText);
+                const container = document.getElementById('cam-container');
+                container.innerHTML = ''; 
+
+                let firstColorFound = false;
+
+                json.table.rows.slice(1).forEach(row => {
+                    const name = row.c[0] ? row.c[0].v : '';
+                    if (!name) return; // Skip empty rows
+
+                    const bgColor = row.c[1] ? row.c[1].v : 'rgba(255, 152, 17, 0.9)'; 
+                    const sourceUrl = row.c[2] ? row.c[2].v : '';
+                    const imageUrl = row.c[3] ? row.c[3].v : '';
+                    const textColor = row.c[4] ? row.c[4].v : '#000000'; 
+
+                    // Set footer accent to match the first player's team color
+                    if (!firstColorFound) {
+                        document.getElementById('broadcast-footer').style.borderTopColor = bgColor;
+                        firstColorFound = true;
+                    }
+
+                    const frame = document.createElement('div');
+                    frame.className = 'cam-frame';
+
+                    if (imageUrl) {
+                        frame.style.backgroundImage = `url('${imageUrl}')`;
+                    }
+
+                    let innerHTML = '';
+                    if (sourceUrl) {
+                        innerHTML += `<iframe class="cam-iframe" src="${sourceUrl}" allow="autoplay; camera; microphone"></iframe>`;
+                    }
+                    
+                    innerHTML += `<div class="nameplate" style="background-color: ${bgColor}; color: ${textColor};">${name}</div>`;
+                    
+                    frame.innerHTML = innerHTML;
+                    container.appendChild(frame);
+                });
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+            }
+        }
+
+        loadCams();
+    </script>
+</body>
+</html>

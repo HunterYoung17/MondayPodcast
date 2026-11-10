@@ -41,19 +41,29 @@
             border: 4px solid #ffffff;
             border-radius: 12px;
             box-shadow: 0 15px 25px rgba(0,0,0,0.4);
-            background-color: transparent; 
+            background-color: #1a1a1a; 
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center;
             position: relative; 
             overflow: hidden; 
         }
 
-        /* Nameplate Styling */
+        .cam-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 1;
+        }
+
         .nameplate {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: rgba(244, 30, 27, 0.85); 
-            color: #ffffff;
             text-align: center;
             padding: 6px 0;
             font-size: 18px;
@@ -61,24 +71,62 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             border-top: 2px solid rgba(255, 255, 255, 0.2); 
+            z-index: 2;
         }
     </style>
 </head>
 <body>
 
     <div class="layout-container">
-        <div class="column right">
-            <div class="cam-frame">
-                <div class="nameplate">FireNinja(C)</div>
-            </div>
-            <div class="cam-frame">
-                <div class="nameplate">Kazegurui</div>
-            </div>
-            <div class="cam-frame">
-                <div class="nameplate">Mup</div>
-            </div>
-        </div>
+        <div class="column right" id="cam-container"></div>
     </div>
 
+    <script>
+        const sheetId = '1jO-rzUmCeklTLTV9w_uHkZH0C5oxV9Hc-7jtNFWj2Eo'; 
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=1501803735`;
+
+        async function loadCams() {
+            try {
+                const response = await fetch(url);
+                const data = await response.text();
+                const jsonText = data.substring(47).slice(0, -2);
+                const json = JSON.parse(jsonText);
+                const container = document.getElementById('cam-container');
+                container.innerHTML = ''; 
+
+                // slice(1, 4) grabs exactly rows 2, 3, and 4 from the sheet
+                json.table.rows.slice(1, 4).forEach(row => {
+                    const name = row.c[0] ? row.c[0].v : '';
+                    if (!name) return;
+
+                    const bgColor = row.c[1] ? row.c[1].v : 'rgba(244, 30, 27, 0.85)'; 
+                    const sourceUrl = row.c[2] ? row.c[2].v : '';
+                    const imageUrl = row.c[3] ? row.c[3].v : '';
+                    const textColor = row.c[4] ? row.c[4].v : '#ffffff'; 
+
+                    const frame = document.createElement('div');
+                    frame.className = 'cam-frame';
+
+                    if (imageUrl) {
+                        frame.style.backgroundImage = `url('${imageUrl}')`;
+                    }
+
+                    let innerHTML = '';
+                    if (sourceUrl) {
+                        innerHTML += `<iframe class="cam-iframe" src="${sourceUrl}" allow="autoplay; camera; microphone"></iframe>`;
+                    }
+                    
+                    innerHTML += `<div class="nameplate" style="background-color: ${bgColor}; color: ${textColor};">${name}</div>`;
+                    
+                    frame.innerHTML = innerHTML;
+                    container.appendChild(frame);
+                });
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+            }
+        }
+
+        loadCams();
+    </script>
 </body>
 </html>
